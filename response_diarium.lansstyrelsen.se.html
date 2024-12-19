@@ -1,0 +1,832 @@
+
+<!DOCTYPE HTML>
+<HTML class="sv-no-js" lang="sv">
+<HEAD><meta content="IE=11.0000" http-equiv="X-UA-Compatible" /><meta charset="UTF-8" /><title>
+	Länsstyrelsernas diarium
+</title><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, shrink-to-fit=no" /><meta name="dcterms.identifier" content="&lt;%= Server.HtmlEncode(GetAppRootUrl(false)) %>" /><meta name="dcterms.language" content="sv" /><meta name="dcterms.format" content="text/html" /><meta name="dcterms.type" content="text" /><link href="Styles/lst/lst-responsive-grids.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="Styles/lst/lst-spacing.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="Styles/lst/lst.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="Styles/lst/lst(1).css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="Styles/lst/lst_static-min.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="Styles/lst/css.css" rel="stylesheet" type="text/css" media="all" /><link href="Styles/lst/css(1).css" rel="stylesheet" type="text/css" media="all" /><link href="Styles/lst/sv-template-asset.css" rel="stylesheet" type="text/css" /><link href="Content/themes/base/jquery-ui.min.css" rel="stylesheet" /><link href="Content/bootstrap.min.css" rel="stylesheet" /><link href="Content/footable.bootstrap.min.css" rel="stylesheet" type="text/css" /><link href="Styles/FormPipe.css" rel="stylesheet" type="text/css" /><link href="Content/font-awesome.min.css" rel="stylesheet" /><link rel="icon" href="data:;base64,=" />
+
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/jquery-3.5.0.min.js"></script>
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/jquery-ui-i18n.min.js" ></script>
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/bootstrap.min.js"></script> 
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/moment.min.js"></script>
+    <script src="https://diarium.lansstyrelsen.se/Scripts/footable2.min.js"></script>
+    <SCRIPT src="https://diarium.lansstyrelsen.se/Scripts/lst/lst_cookie_banner.js"></SCRIPT>
+    <SCRIPT src="https://diarium.lansstyrelsen.se/Scripts/lst/TabFocus.js"></SCRIPT>
+
+    <meta content="Webbdiariet" property="og:title" /><meta content="- Länsstyrelsernas webbdiarium" property="og:description" /><meta name="description" content="Länsstyrelsernas webbdiarium" />
+
+    <!-- Matomo -->
+<script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function () {
+        var u = "https://analytics.lansstyrelsen.se/";
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '72']);
+        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+    })();
+</script>
+<!-- End Matomo Code -->
+
+</HEAD>
+<BODY class="sv-responsive">
+    <form method="post" action="./" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTQyNTU4MjM1NQ9kFgJmD2QWAgIDD2QWBGYPPCsADQEADxYCHgtfIURhdGFCb3VuZGdkZAICD2QWAgIBD2QWBgIBDxAPFgYeDURhdGFUZXh0RmllbGQFBXRpdGxlHg5EYXRhVmFsdWVGaWVsZAUHZGlhcnlJRB8AZ2QQFRYVW1bDpGxqIEzDpG5zc3R5cmVsc2VdHkzDpG5zc3R5cmVsc2VuIGkgQmxla2luZ2UgbMOkbh5Mw6Ruc3N0eXJlbHNlbiBpIERhbGFybmFzIGzDpG4eTMOkbnNzdHlyZWxzZW4gaSBHb3RsYW5kcyBsw6RuIUzDpG5zc3R5cmVsc2VuIGkgR8OkdmxlYm9yZ3MgbMOkbh5Mw6Ruc3N0eXJlbHNlbiBpIEhhbGxhbmRzIGzDpG4gTMOkbnNzdHlyZWxzZW4gaSBKw6RtdGxhbmRzIGzDpG4iTMOkbnNzdHlyZWxzZW4gaSBKw7Zua8O2cGluZ3MgbMOkbhxMw6Ruc3N0eXJlbHNlbiBpIEthbG1hciBsw6RuIEzDpG5zc3R5cmVsc2VuIGkgS3Jvbm9iZXJncyBsw6RuIUzDpG5zc3R5cmVsc2VuIGkgTm9ycmJvdHRlbnMgbMOkbhxMw6Ruc3N0eXJlbHNlbiBpIFNrw6VuZSBsw6RuIEzDpG5zc3R5cmVsc2VuIGkgU3RvY2tob2xtcyBsw6RuJEzDpG5zc3R5cmVsc2VuIGkgU8O2ZGVybWFubGFuZHMgbMOkbh1Mw6Ruc3N0eXJlbHNlbiBpIFVwcHNhbGEgbMOkbiBMw6Ruc3N0eXJlbHNlbiBpIFbDpHJtbGFuZHMgbMOkbiRMw6Ruc3N0eXJlbHNlbiBpIFbDpHN0ZXJib3R0ZW5zIGzDpG4mTMOkbnNzdHlyZWxzZW4gaSBWw6RzdGVybm9ycmxhbmRzIGzDpG4jTMOkbnNzdHlyZWxzZW4gaSBWw6RzdG1hbmxhbmRzIGzDpG4oTMOkbnNzdHlyZWxzZW4gaSBWw6RzdHJhIEfDtnRhbGFuZHMgbMOkbh1Mw6Ruc3N0eXJlbHNlbiBpIMOWcmVicm8gbMOkbiVMw6Ruc3N0eXJlbHNlbiBpIMOWc3RlcmfDtnRsYW5kcyBsw6RuFRYBMAE5AjE2ATgCMTcCMTECMTkBNgIyMgE3AjIxAjEwATIBNAEzAjEzAjIwAjE4AjE1AjEyAjE0ATUUKwMWZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2RkAggPEA8WBh8BBQN0eHQfAgUMZGVwYXJ0bWVudElEHwBnZBAVARpbVsOkbGogb3JnYW5pc2F0aW9uc2VuaGV0XRUBATAUKwMBZ2RkAgoPEA8WBh8BBQRuYW1uHwIFDm11bmljaXBhbGl0eUlEHwBnZBAVowIOW1bDpGxqIGtvbW11bl0DQWxlCUFsaW5nc8OlcwdBbHZlc3RhBUFuZWJ5BkFyYm9nYQhBcmplcGxvZwpBcnZpZHNqYXVyBkFydmlrYQlBc2tlcnN1bmQGQXZlc3RhCkJlbmd0c2ZvcnMEQmVyZwhCanVyaG9sbQRCanV2BUJvZGVuCUJvbGxlYnlnZAhCb2xsbsOkcwhCb3JnaG9sbQlCb3Jsw6RuZ2UGQm9yw6VzCEJvdGt5cmthB0JveGhvbG0JQnJvbcO2bGxhB0Jyw6Rja2UHQnVybMO2dgdCw6VzdGFkB0RhbHMtRWQIRGFuZGVyeWQJRGVnZXJmb3JzB0Rvcm90ZWEDRWRhBkVrZXLDtgZFa3Nqw7YIRW1tYWJvZGEJRW5rw7ZwaW5nCkVza2lsc3R1bmEGRXNsw7Z2B0Vzc3VuZ2EIRmFnZXJzdGEKRmFsa2VuYmVyZwpGYWxrw7ZwaW5nBUZhbHVuCUZpbGlwc3RhZAlGaW5zcMOlbmcERmxlbghGb3JzaGFnYQtGw6RyZ2VsYW5kYQZHYWduZWYIR2lzbGF2ZWQGR25lc3RhB0dub3Nqw7YHR290bGFuZAVHcnVtcwlHcsOkc3RvcnAKR3VsbHNww6VuZwpHw6RsbGl2YXJlBkfDpHZsZQlHw7Z0ZWJvcmcHR8O2dGVuZQRIYWJvB0hhZ2ZvcnMJSGFsbHNiZXJnDUhhbGxzdGFoYW1tYXIISGFsbXN0YWQISGFtbWFyw7YHSGFuaW5nZQlIYXBhcmFuZGEESGVieQhIZWRlbW9yYQtIZWxzaW5nYm9yZwpIZXJybGp1bmdhA0hqbwZIb2ZvcnMISHVkZGluZ2UKSHVkaWtzdmFsbAlIdWx0c2ZyZWQFSHlsdGUFSMOlYm8KSMOkbGxlZm9ycwtIw6RyamVkYWxlbgtIw6RybsO2c2FuZAhIw6RycnlkYQtIw6Rzc2xlaG9sbQlIw7ZnYW7DpHMHSMO2Z3NieQZIw7ZyYnkGSMO2w7ZyCEpva2ttb2trCkrDpHJmw6RsbGELSsO2bmvDtnBpbmcFS2FsaXgGS2FsbWFyCUthcmxzYm9yZwlLYXJsc2hhbW4JS2FybHNrb2dhCkthcmxza3JvbmEIS2FybHN0YWQLS2F0cmluZWhvbG0DS2lsBUtpbmRhBktpcnVuYQdLbGlwcGFuB0tuaXZzdGEIS3JhbWZvcnMMS3Jpc3RpYW5zdGFkDEtyaXN0aW5laGFtbgZLcm9rb20FS3VtbGEKS3VuZ3NiYWNrYQhLdW5nc8O2cghLdW5nw6RsdglLw6R2bGluZ2UHS8O2cGluZwZMYWhvbG0KTGFuZHNrcm9uYQVMYXjDpQhMZWtlYmVyZwdMZWtzYW5kBUxlcnVtB0xlc3NlYm8ITGlkaW5nw7YKTGlka8O2cGluZwpMaWxsYSBFZGV0CkxpbmRlc2JlcmcKTGlua8O2cGluZwdManVuZ2J5B0xqdXNkYWwMTGp1c25hcnNiZXJnBUxvbW1hB0x1ZHZpa2EGTHVsZcOlBEx1bmQITHlja3NlbGUHTHlzZWtpbAZNYWxtw7YNTWFsdW5nLVPDpGxlbgVNYWzDpQlNYXJpZXN0YWQETWFyawhNYXJrYXJ5ZAhNZWxsZXJ1ZAdNasO2bGJ5BE1vcmEGTW90YWxhCE11bGxzasO2CE11bmtlZGFsCE11bmtmb3JzCE3DtmxuZGFsC03Dtm5zdGVyw6VzDE3DtnJieWzDpW5nYQVOYWNrYQROb3JhB05vcmJlcmcKTm9yZGFuc3RpZwpOb3JkbWFsaW5nC05vcnJrw7ZwaW5nCk5vcnJ0w6RsamUHTm9yc2rDtgVOeWJybwdOeWt2YXJuCU55a8O2cGluZwpOeW7DpHNoYW1uCE7DpHNzasO2B09ja2VsYm8KT2xvZnN0csO2bQRPcnNhBU9ydXN0BE9zYnkKT3NrYXJzaGFtbglPdmFuw6VrZXIKT3hlbMO2c3VuZAZQYWphbGEIUGFydGlsbGUIUGVyc3RvcnAGUGl0ZcOlB1JhZ3VuZGELUm9iZXJ0c2ZvcnMHUm9ubmVieQhSw6R0dHZpawRTYWxhBVNhbGVtCVNhbmR2aWtlbgdTaWd0dW5hClNpbXJpc2hhbW4GU2rDtmJvBVNrYXJhC1NrZWxsZWZ0ZcOlD1NraW5uc2thdHRlYmVyZwZTa3VydXAHU2vDtnZkZQxTbWVkamViYWNrZW4KU29sbGVmdGXDpQpTb2xsZW50dW5hBVNvbG5hB1NvcnNlbGUIU290ZW7DpHMMU3RhZmZhbnN0b3JwC1N0ZW51bmdzdW5kCVN0b2NraG9sbQhTdG9yZm9ycwhTdG9ydW1hbgtTdHLDpG5nbsOkcwpTdHLDtm1zdGFkClN0csO2bXN1bmQKU3VuZGJ5YmVyZwlTdW5kc3ZhbGwFU3VubmUKU3VyYWhhbW1hcgdTdmFsw7Z2B1N2ZWRhbGEKU3ZlbmxqdW5nYQdTw6RmZmxlBlPDpHRlcghTw6R2c2rDtgpTw7ZkZXJoYW1uDVPDtmRlcmvDtnBpbmcMU8O2ZGVydMOkbGplC1PDtmx2ZXNib3JnBVRhbnVtBVRpYnJvCFRpZGFob2xtBVRpZXJwBlRpbXLDpQhUaW5nc3J5ZAZUasO2cm4JVG9tZWxpbGxhBlRvcnNieQdUb3Jzw6VzB1RyYW5lbW8HVHJhbsOlcwpUcmVsbGVib3JnDFRyb2xsaMOkdHRhbgVUcm9zYQdUeXJlc8O2BVTDpGJ5CVTDtnJlYm9kYQlVZGRldmFsbGEKVWxyaWNlaGFtbgVVbWXDpQ9VcHBsYW5kcyBWw6RzYnkMVXBwbGFuZHMtQnJvB1VwcHNhbGEKVXBwdmlkaW5nZQhWYWRzdGVuYQhWYWdnZXJ5ZAxWYWxkZW1hcnN2aWsKVmFsbGVudHVuYQdWYW5zYnJvBFZhcmEHVmFyYmVyZwdWYXhob2xtCFZlbGxpbmdlCFZldGxhbmRhClZpbGhlbG1pbmEIVmltbWVyYnkHVmluZGVsbglWaW5nw6VrZXIKVsOlcmfDpXJkYQtWw6RuZXJzYm9yZwhWw6RubsOkcwhWw6RybWTDtghWw6RybmFtbwpWw6RzdGVydmlrClbDpHN0ZXLDpXMHVsOkeGrDtgRZZHJlBVlzdGFkBsOFbcOlbAXDhW5nZQTDhXJlCMOFcmrDpG5nBsOFc2VsZQfDhXN0b3JwC8OFdHZpZGFiZXJnCMOEbG1odWx0CcOEbHZkYWxlbgvDhGx2a2FybGVieQjDhGx2c2J5bgrDhG5nZWxob2xtCMOWY2tlcsO2CcOWZGVzaMO2ZwfDlnJlYnJvDMOWcmtlbGxqdW5nYQ7DlnJuc2vDtmxkc3ZpawrDlnN0ZXJzdW5kC8OWc3RlcsOla2VyCsOWc3RoYW1tYXIOw5ZzdHJhIEfDtmluZ2UKw5Z2ZXJrYWxpeAzDlnZlcnRvcm5lw6UVowICLTEDMTQ3AzE2MAI2OAI1NAMyMTkDMjY5AzI2OAMxOTUDMjA1AzIzMwMxNTIDMjUwAzI1NAMxMDgDMjc5AzE1MAMyNDMCODQDMjMwAzE2MQE4AjQ0Ajk0AzI0NgMxMDYCOTkDMTQ1AjE0AzIwMAMyNjEDMTgyATYCNjMCNzgCMzACMzgDMTIxAzE2NQMyMTcDMTI3AzE4MAMyMjkDMTkzAjQ2AjM2AzE4NwMxNDYDMjIyAjU2AjMzAjU1Ajg1AzE4OAMxNjQDMTY5AzI3NQMyNDADMTM5AzE3MQMxNjcDMTk0AzE5OQMyMTMDMTI1AzE4NQIxMAMyODADMjExAzIzMgMxMTkDMTU3AzE3OAMyMzYBNwMyNDQCNzYDMTI0AjI2AzIwMQMyNTEDMjg0AzEzMAMxMDMDMTIwAjczAzExNAMxMTUDMjcwATUCNTgDMjcyAjc5AzE2OAI4OQMyMDYCODcDMTkxAjM3AzE4MQI0MwMyODECOTcDMjgyAzI4NgMxMDADMTkyAzI0NwMyMDQDMTI5AzIxMgMxNDEDMTA5AzIxOAMxMjYDMTE4AzE5OAMxOTcDMjIzAzE0OAI2NgIyMQMxNzUDMTU0AzIwOAI0OAI3MgMyMzkDMjAyAzExMAMyMzQDMjc3AzExNwMyNjYDMTQyAzExNgMyMjEDMjU4AzE3NAMxNTUCNzADMTUzAjUzAzIyOAI1MQMxNjYDMTM3AzE4NgMxNDACNzcCNzUCMTgDMjA3AzIxNAMyMzgDMjUzAjQ5AjIzAzI1NwI4MAMyOTACMzQCMjUCNTkDMjM1Ajg2AzIyNQMxMzUCOTUCODEDMjM3AjM1AzI3NAMxMzECOTYDMjc4AzI0NQMyNTYCODgDMjI0AzIxNgE5AzI0MQIyNAMxMDEDMTEzAzE3NgMyNjcDMjA5AzExMgMxNzcDMjI3AzI4NwIxNQIyMAMyNjADMTM2AzEwNQMxMzMCMTYDMTg0AzI1OQIzOQMxNDQDMjQ4AjE5AzI4NQMxOTADMjEwAzEwNAMxMTEDMTU2AzE5NgMyMzECNjEDMjQyAjUwAjE3AjkwAzEzOAMxNzIDMTc5AjI4AzI4MwI2NwMxMzQCOTMDMTgzAjc0AzE1MQI2NAMxMjMDMTU5AjQwAjExAjEzAzE3MwMxNDMDMTYyAzI2NQExAjEyAjI5AjY1AjUyAjU3AjQ3ATIDMjIwAzE3MAMxMjgCMjIDMTA3AjYyAzI2MwI4MwMyNTUCMzIDMTQ5AzE1OAMyNjIBNAI2MAI4MgMyMTUCNzECNDIDMTIyAzE2MwMyODkDMjQ5AzE4OQMyNjQCOTgCNDUCNjkDMjI2AjI3AzI3NgMxMDIDMTMyAjQxAzIwMwI5MgMyODgDMjUyATMCMzECOTEDMjcxAzI3MxQrA6MCZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZGRkYbp1UVgnRznrtCrBCOipvPzUoKfxFPNhlqB+VmBcYSI=" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=2cNo1-LrDZeVD05299AGTTWUoS2a4pX4cnmWhaobsbTAb8X92mTdhb4asAunOHUGn_LqRGwaLxYn0Ya8ZHg-qwMCJKD62xYnSftGSJKJv7k1&amp;t=638628279619783110" type="text/javascript"></script>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="CA0B0334" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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" />
+</div>
+    <DIV class="sv-layout" >
+        <DIV class="sv-vertical sv-layout sv-hide-sv-bp-tablet sv-hide-sv-bp-phone ielayoutfix sv-template-layout c5765">
+            <DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-skip-spacer sv-template-layout">
+                <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                    <NAV class="sv-layout sv-skip-spacer sv-column-5 sv-template-layout" >
+                    </NAV>
+                    
+                </DIV>
+            </DIV>
+        </DIV>
+        <DIV class="sv-vertical sv-layout sv-template-layout">
+            <DIV class="sv-vertical sv-layout sv-view sv-skip-spacer sv-template-layout" >
+                <DIV class="sv-script-portlet sv-portlet sv-skip-spacer">
+                    <DIV id="Cookiebanner"><!-- Cookiebanner --></DIV>
+                    <DIV class="lst-cookie-banner--hide lst-sidepadding" id="lst-cookie-banner" aria-label="Cookie banner">
+                        <DIV class="lst-cookie-banner__container">
+                            <DIV class="lst-cookie-banner__information">
+                                <P>
+                                    Den här webbplatsen använder kakor (cookies) för att ge dig en bättre
+                                    upplevelse av webbplatsen. En del av dessa kakor är tredjepartskakor. Genom att
+                                    använda vår webbplats accepterar du att kakor används.          <A class="lst-cookie-banner__readmore"  href="https://diarium.lansstyrelsen.se/about-cookies.aspx">
+                                        Läs
+                                        mer om kakor och hur du kan stänga av dem.
+                                    </A>
+                                </P>
+                            </DIV>
+                            <DIV class="lst-cookie-banner__actions">
+                                <A class="lst-cookie-banner__close"
+                                   href="https://diarium.lansstyrelsen.se#">
+                                    Stäng<IMG class="lst-cookie-banner__icon" alt="Stäng cookie" src="https://diarium.lansstyrelsen.se/Content/lst/kryss_black.svg">
+                                </A>
+                            </DIV>
+                        </DIV>
+                    </DIV>
+                </DIV>
+            </DIV>
+        </DIV>
+        
+        
+        <HEADER class="sv-vertical sv-layout sv-template-layout" >
+            <DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst_header-parent lst-sidepadding sv-skip-spacer sv-template-layout c5795">
+                <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                    <DIV class="sv-layout sv-skip-spacer sv-column-7 sv-template-layout" >
+                        <DIV class="sv-script-portlet sv-portlet lst-header-logo sv-skip-spacer">
+                            <DIV id="LoggaSkript"><!-- Logga - Skript --></DIV><A href="https://diarium.lansstyrelsen.se/">
+                                <IMG alt="Länsstyrelsernas diarium, till startsidan" src="https://diarium.lansstyrelsen.se/img/lst_topplogo.gif">
+                            </A>
+                        </DIV>
+                    </DIV>
+                    <DIV class="sv-layout isGlobal sv-column-5 sv-template-layout">
+                    </DIV>
+                </DIV>
+            </DIV>
+        </HEADER>
+        <DIV class="sv-vertical sv-layout sv-visible-sv-bp-tablet sv-visible-sv-bp-phone ielayoutfix sv-template-layout c5771"
+             id="svid10_2baa5e3e161e6f2218922cb5">
+           
+            <DIV class="sv-layout" >
+                <DIV id="menu"><!-- menu --></DIV>
+                <DIV class="sv-script-portlet sv-portlet sv-skip-spacer ">
+                    <DIV id="lstmobilemenu2"><!-- lst-mobile-menu-2 --></DIV>
+                  
+                </DIV>
+            </DIV>
+        </DIV>
+       
+        <DIV class="sv-vertical sv-layout sv-hide-sv-bp-tablet sv-hide-sv-bp-phone sv-template-layout">
+            <DIV class="sv-vertical sv-layout sv-view sv-skip-spacer sv-template-layout" >
+                
+                <div class="sv-vertical sv-layout lst-topnav--blue ielayoutfix sv-template-layout c5809" >
+                    <div class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-skip-spacer sv-template-layout" >
+                        <div class="sv-row sv-layout sv-hide-sv-bp-tablet sv-hide-sv-bp-phone sv-skip-spacer sv-template-layout" >
+                            <div class="sv-layout sv-skip-spacer sv-column-12 sv-template-layout" ></div>
+                        </div>
+                    </div>
+                </div>
+            </DIV>
+        </DIV>
+        
+        <main class="sv-vertical sv-layout lst-changes-background sv-template-layout">
+            <DIV >
+                <DIV class="sv-layout sv-skip-spacer sv-template-portlet&#10;" >
+                    <DIV id="Hallarefornavigationutanmus"><!-- Hållare för navigation utan mus --></DIV>
+                    <DIV class="sv-html-portlet sv-portlet sv-skip-spacer">
+                        <DIV id="HarlandarduomduhopparovernavigationHTML"><!-- Här landar du om du hoppar över navigation - HTML --></DIV>
+                        <DIV id="hopptillinnehall"></DIV>
+                    </DIV>
+                </DIV>
+
+                 <div class="PortalContent" >
+                                    <!-- Menu -->
+                                    
+                                    
+                                    <!-- Main -->
+                                    
+    
+
+<script type="text/javascript">
+    function Search() {
+        var ddDiaryID = document.all.SearchPlaceHolder_CaseSearch_ddDiaryID;
+        document.all.SearchPlaceHolder_CaseSearch_txtHiddenDiaryID.value = ddDiaryID.options[ddDiaryID.options.selectedIndex].value;
+        document.all.SearchPlaceHolder_CaseSearch_btnHiddenSearch.click();
+    }
+
+    function ddDiaryIndexChange() {
+        var ddDiaryID = document.all.SearchPlaceHolder_CaseSearch_ddDiaryID;
+        var ddOrgUnit = document.all.SearchPlaceHolder_CaseSearch_ddlOrgUnit;
+        document.all.SearchPlaceHolder_CaseSearch_txtHiddenDiaryID.value = ddDiaryID.options[ddDiaryID.options.selectedIndex].value;
+        document.all.SearchPlaceHolder_CaseSearch_txtHiddenOrgUnit.value = ddOrgUnit.options[ddOrgUnit.options.selectedIndex].value;
+        document.all.SearchPlaceHolder_CaseSearch_btnUpdateOrgUnit.click();
+    }
+
+    function ddOrgUnitIndexChange() {
+        var ddOrgUnit = document.all.SearchPlaceHolder_CaseSearch_ddlOrgUnit;
+		    document.all.SearchPlaceHolder_CaseSearch_txtHiddenOrgUnit.value = ddOrgUnit.options[ddOrgUnit.options.selectedIndex].value;
+		}
+</script>
+
+<DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-template-layout c5797" >
+                    <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                        <DIV class="sv-spacer-1_8emvt sv-layout sv-skip-spacer sv-column-8 sv-template-layout" >
+                           
+                            
+                               
+                               
+                        <div class="ProvincialGovernments Clearfix">
+    <div class="ProvincialGovernments-Content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-sm-11">
+                    <DIV class="pagecontent sv-layout sv-spacer-1_8emvt sv-skip-spacer" >
+                                <DIV id="Innehall"><!-- Innehåll --></DIV>
+                                <DIV class="sv-text-portlet sv-use-margins sv-skip-spacer" >
+                                    <DIV id="Rubrik"><!-- Rubrik --></DIV>
+                                    <DIV class="sv-text-portlet-content">
+                                        <H1 class="heading">Länsstyrelsernas diarier</H1>
+                                    </DIV>
+                                </DIV>
+                                
+                               
+                            
+                                <DIV class="sv-text-portlet sv-use-margins">
+                                    <DIV id="Text"><!-- Text --></DIV>
+                                    <DIV class="sv-text-portlet-content" style="padding-bottom:25px;">
+
+                                        <p class="normal"><strong>Här kan du bland annat söka fram:</strong></p>
+                                        <ul class=" normal"><li>Vilka ärenden som har kommit in till länsstyrelserna</li><li>Ärenden som länsstyrelsen tagit initiativ till</li><li>Information om inkomna och utgående handlingar i pågående ärenden</li><li>När beslut fattats i ärenden</li></ul>
+                                        
+                                    </DIV>
+                                </DIV>
+                            </DIV>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span id="SearchPlaceHolder_CaseSearch_lblDiary">Diarium *</span><a class="helpService" data-toggle="modal" name="diaryhelp" data-helptitle="Sökfält för Diarium" data-helptext="Välj vilken länsstyrelses ärenden du vill söka. Du kan bara söka på en länsstyrelse åt gången."><i class="fa fa-question-circle helpServicesDesc"></i></a>
+                </div>
+                <div class="col-sm-8">
+                    <select name="ctl00$SearchPlaceHolder$CaseSearch$ddDiaryID" id="SearchPlaceHolder_CaseSearch_ddDiaryID" class="form-control" aria-label="ddDiaryID" onchange="ddDiaryIndexChange()">
+	<option value="0">[V&#228;lj L&#228;nsstyrelse]</option>
+	<option value="9">L&#228;nsstyrelsen i Blekinge l&#228;n</option>
+	<option value="16">L&#228;nsstyrelsen i Dalarnas l&#228;n</option>
+	<option value="8">L&#228;nsstyrelsen i Gotlands l&#228;n</option>
+	<option value="17">L&#228;nsstyrelsen i G&#228;vleborgs l&#228;n</option>
+	<option value="11">L&#228;nsstyrelsen i Hallands l&#228;n</option>
+	<option value="19">L&#228;nsstyrelsen i J&#228;mtlands l&#228;n</option>
+	<option value="6">L&#228;nsstyrelsen i J&#246;nk&#246;pings l&#228;n</option>
+	<option value="22">L&#228;nsstyrelsen i Kalmar l&#228;n</option>
+	<option value="7">L&#228;nsstyrelsen i Kronobergs l&#228;n</option>
+	<option value="21">L&#228;nsstyrelsen i Norrbottens l&#228;n</option>
+	<option value="10">L&#228;nsstyrelsen i Sk&#229;ne l&#228;n</option>
+	<option value="2">L&#228;nsstyrelsen i Stockholms l&#228;n</option>
+	<option value="4">L&#228;nsstyrelsen i S&#246;dermanlands l&#228;n</option>
+	<option value="3">L&#228;nsstyrelsen i Uppsala l&#228;n</option>
+	<option value="13">L&#228;nsstyrelsen i V&#228;rmlands l&#228;n</option>
+	<option value="20">L&#228;nsstyrelsen i V&#228;sterbottens l&#228;n</option>
+	<option value="18">L&#228;nsstyrelsen i V&#228;sternorrlands l&#228;n</option>
+	<option value="15">L&#228;nsstyrelsen i V&#228;stmanlands l&#228;n</option>
+	<option value="12">L&#228;nsstyrelsen i V&#228;stra G&#246;talands l&#228;n</option>
+	<option value="14">L&#228;nsstyrelsen i &#214;rebro l&#228;n</option>
+	<option value="5">L&#228;nsstyrelsen i &#214;sterg&#246;tlands l&#228;n</option>
+
+</select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">Diarienummer<a class="helpService" data-toggle="modal" name="diarynumberhelp" data-helptitle="Sökfält för Diarienummer" data-helptext="Våra diarienummer består ibland av tre grupper av siffror till exempel 403-12345-2016. I fältet diarienummer skriver du bara in de två sista grupperna, det vill säga 12345-2016 i detta exempel."><i class="fa fa-question-circle helpServicesDesc"></i></a></div>
+                <div class="col-sm-8">
+                    <input name="ctl00$SearchPlaceHolder$CaseSearch$diaryNO" type="text" id="SearchPlaceHolder_CaseSearch_diaryNO" title="Diarienummer" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span id="SearchPlaceHolder_CaseSearch_lblSearchTitle">Ärenderubrik<a class="helpService" name="titlehelp" data-toggle=modal data-helptitle="Sökfält för Ärenderubrik" data-helptext="I rubrik kan du söka på vad ärendet handlar om, till exempel Medborgarskap eller Farligt avfall."><i class="fa fa-question-circle helpServicesDesc" ></i></a></span>
+                </div>
+                <div class="col-sm-8">
+                    <input name="ctl00$SearchPlaceHolder$CaseSearch$title" type="text" id="SearchPlaceHolder_CaseSearch_title" title="Ärenderubrik" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span id="SearchPlaceHolder_CaseSearch_lblStatus">Ärendets status<a class="helpService" name="statushelp" data-toggle=modal data-helptitle="Sökfält för Status" data-helptext="Handläggning innebär att arbete på går i ärendet, Beslutat innebär att länsstyrelsen tagit beslut i ärendet, Avslutat innebär att inga ytterligare åtgärder sker i ärendet."><i class="fa fa-question-circle helpServicesDesc" ></i></a></span>
+                </div>
+                <div class="col-sm-8">
+                    <select name="ctl00$SearchPlaceHolder$CaseSearch$ddlStatus" id="SearchPlaceHolder_CaseSearch_ddlStatus" class="form-control" aria-label="Ärendets status">
+	<option selected="selected" value="0">[V&#228;lj]</option>
+	<option value="Handläggning">Handl&#228;ggning</option>
+	<option value="Beslutat">Beslutat</option>
+	<option value="Avslutat">Avslutat</option>
+
+</select>
+                </div>
+            </div>
+            <div class="row" style="display: none">
+                <div class="col-sm-4">
+                    <span id="SearchPlaceHolder_CaseSearch_lblOrgUnit">Organisationsenhet</span>
+                </div>
+                <div class="col-sm-8">
+                    <select name="ctl00$SearchPlaceHolder$CaseSearch$ddlOrgUnit" id="SearchPlaceHolder_CaseSearch_ddlOrgUnit" class="form-control" aria-label="Organisationsenhet" onchange="ddOrgUnitIndexChange()" style="width:300px;">
+	<option value="0">[V&#228;lj organisationsenhet]</option>
+
+</select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span id="SearchPlaceHolder_CaseSearch_lblMunicipality">Kommun<a class="helpService" name="municipalityhelp" data-toggle=modal data-helptitle="Sökfält för Kommun" data-helptext="Välj om du vill söka ärenden i en viss kommun. Gör du inget val så söker du på alla kommuner."><i class="fa fa-question-circle helpServicesDesc" ></i></a></span>
+                </div>
+                <div class="col-sm-8">
+                    <select name="ctl00$SearchPlaceHolder$CaseSearch$ddMunicipality" id="SearchPlaceHolder_CaseSearch_ddMunicipality" class="form-control" aria-label="Kommun">
+	<option value="-1">[V&#228;lj kommun]</option>
+	<option value="147">Ale</option>
+	<option value="160">Alings&#229;s</option>
+	<option value="68">Alvesta</option>
+	<option value="54">Aneby</option>
+	<option value="219">Arboga</option>
+	<option value="269">Arjeplog</option>
+	<option value="268">Arvidsjaur</option>
+	<option value="195">Arvika</option>
+	<option value="205">Askersund</option>
+	<option value="233">Avesta</option>
+	<option value="152">Bengtsfors</option>
+	<option value="250">Berg</option>
+	<option value="254">Bjurholm</option>
+	<option value="108">Bjuv</option>
+	<option value="279">Boden</option>
+	<option value="150">Bollebygd</option>
+	<option value="243">Bolln&#228;s</option>
+	<option value="84">Borgholm</option>
+	<option value="230">Borl&#228;nge</option>
+	<option value="161">Bor&#229;s</option>
+	<option value="8">Botkyrka</option>
+	<option value="44">Boxholm</option>
+	<option value="94">Brom&#246;lla</option>
+	<option value="246">Br&#228;cke</option>
+	<option value="106">Burl&#246;v</option>
+	<option value="99">B&#229;stad</option>
+	<option value="145">Dals-Ed</option>
+	<option value="14">Danderyd</option>
+	<option value="200">Degerfors</option>
+	<option value="261">Dorotea</option>
+	<option value="182">Eda</option>
+	<option value="6">Eker&#246;</option>
+	<option value="63">Eksj&#246;</option>
+	<option value="78">Emmaboda</option>
+	<option value="30">Enk&#246;ping</option>
+	<option value="38">Eskilstuna</option>
+	<option value="121">Esl&#246;v</option>
+	<option value="165">Essunga</option>
+	<option value="217">Fagersta</option>
+	<option value="127">Falkenberg</option>
+	<option value="180">Falk&#246;ping</option>
+	<option value="229">Falun</option>
+	<option value="193">Filipstad</option>
+	<option value="46">Finsp&#229;ng</option>
+	<option value="36">Flen</option>
+	<option value="187">Forshaga</option>
+	<option value="146">F&#228;rgelanda</option>
+	<option value="222">Gagnef</option>
+	<option value="56">Gislaved</option>
+	<option value="33">Gnesta</option>
+	<option value="55">Gnosj&#246;</option>
+	<option value="85">Gotland</option>
+	<option value="188">Grums</option>
+	<option value="164">Gr&#228;storp</option>
+	<option value="169">Gullsp&#229;ng</option>
+	<option value="275">G&#228;llivare</option>
+	<option value="240">G&#228;vle</option>
+	<option value="139">G&#246;teborg</option>
+	<option value="171">G&#246;tene</option>
+	<option value="167">Habo</option>
+	<option value="194">Hagfors</option>
+	<option value="199">Hallsberg</option>
+	<option value="213">Hallstahammar</option>
+	<option value="125">Halmstad</option>
+	<option value="185">Hammar&#246;</option>
+	<option value="10">Haninge</option>
+	<option value="280">Haparanda</option>
+	<option value="211">Heby</option>
+	<option value="232">Hedemora</option>
+	<option value="119">Helsingborg</option>
+	<option value="157">Herrljunga</option>
+	<option value="178">Hjo</option>
+	<option value="236">Hofors</option>
+	<option value="7">Huddinge</option>
+	<option value="244">Hudiksvall</option>
+	<option value="76">Hultsfred</option>
+	<option value="124">Hylte</option>
+	<option value="26">H&#229;bo</option>
+	<option value="201">H&#228;llefors</option>
+	<option value="251">H&#228;rjedalen</option>
+	<option value="284">H&#228;rn&#246;sand</option>
+	<option value="130">H&#228;rryda</option>
+	<option value="103">H&#228;ssleholm</option>
+	<option value="120">H&#246;gan&#228;s</option>
+	<option value="73">H&#246;gsby</option>
+	<option value="114">H&#246;rby</option>
+	<option value="115">H&#246;&#246;r</option>
+	<option value="270">Jokkmokk</option>
+	<option value="5">J&#228;rf&#228;lla</option>
+	<option value="58">J&#246;nk&#246;ping</option>
+	<option value="272">Kalix</option>
+	<option value="79">Kalmar</option>
+	<option value="168">Karlsborg</option>
+	<option value="89">Karlshamn</option>
+	<option value="206">Karlskoga</option>
+	<option value="87">Karlskrona</option>
+	<option value="191">Karlstad</option>
+	<option value="37">Katrineholm</option>
+	<option value="181">Kil</option>
+	<option value="43">Kinda</option>
+	<option value="281">Kiruna</option>
+	<option value="97">Klippan</option>
+	<option value="282">Knivsta</option>
+	<option value="286">Kramfors</option>
+	<option value="100">Kristianstad</option>
+	<option value="192">Kristinehamn</option>
+	<option value="247">Krokom</option>
+	<option value="204">Kumla</option>
+	<option value="129">Kungsbacka</option>
+	<option value="212">Kungs&#246;r</option>
+	<option value="141">Kung&#228;lv</option>
+	<option value="109">K&#228;vlinge</option>
+	<option value="218">K&#246;ping</option>
+	<option value="126">Laholm</option>
+	<option value="118">Landskrona</option>
+	<option value="198">Lax&#229;</option>
+	<option value="197">Lekeberg</option>
+	<option value="223">Leksand</option>
+	<option value="148">Lerum</option>
+	<option value="66">Lessebo</option>
+	<option value="21">Liding&#246;</option>
+	<option value="175">Lidk&#246;ping</option>
+	<option value="154">Lilla Edet</option>
+	<option value="208">Lindesberg</option>
+	<option value="48">Link&#246;ping</option>
+	<option value="72">Ljungby</option>
+	<option value="239">Ljusdal</option>
+	<option value="202">Ljusnarsberg</option>
+	<option value="110">Lomma</option>
+	<option value="234">Ludvika</option>
+	<option value="277">Lule&#229;</option>
+	<option value="117">Lund</option>
+	<option value="266">Lycksele</option>
+	<option value="142">Lysekil</option>
+	<option value="116">Malm&#246;</option>
+	<option value="221">Malung-S&#228;len</option>
+	<option value="258">Mal&#229;</option>
+	<option value="174">Mariestad</option>
+	<option value="155">Mark</option>
+	<option value="70">Markaryd</option>
+	<option value="153">Mellerud</option>
+	<option value="53">Mj&#246;lby</option>
+	<option value="228">Mora</option>
+	<option value="51">Motala</option>
+	<option value="166">Mullsj&#246;</option>
+	<option value="137">Munkedal</option>
+	<option value="186">Munkfors</option>
+	<option value="140">M&#246;lndal</option>
+	<option value="77">M&#246;nster&#229;s</option>
+	<option value="75">M&#246;rbyl&#229;nga</option>
+	<option value="18">Nacka</option>
+	<option value="207">Nora</option>
+	<option value="214">Norberg</option>
+	<option value="238">Nordanstig</option>
+	<option value="253">Nordmaling</option>
+	<option value="49">Norrk&#246;ping</option>
+	<option value="23">Norrt&#228;lje</option>
+	<option value="257">Norsj&#246;</option>
+	<option value="80">Nybro</option>
+	<option value="290">Nykvarn</option>
+	<option value="34">Nyk&#246;ping</option>
+	<option value="25">Nyn&#228;shamn</option>
+	<option value="59">N&#228;ssj&#246;</option>
+	<option value="235">Ockelbo</option>
+	<option value="86">Olofstr&#246;m</option>
+	<option value="225">Orsa</option>
+	<option value="135">Orust</option>
+	<option value="95">Osby</option>
+	<option value="81">Oskarshamn</option>
+	<option value="237">Ovan&#229;ker</option>
+	<option value="35">Oxel&#246;sund</option>
+	<option value="274">Pajala</option>
+	<option value="131">Partille</option>
+	<option value="96">Perstorp</option>
+	<option value="278">Pite&#229;</option>
+	<option value="245">Ragunda</option>
+	<option value="256">Robertsfors</option>
+	<option value="88">Ronneby</option>
+	<option value="224">R&#228;ttvik</option>
+	<option value="216">Sala</option>
+	<option value="9">Salem</option>
+	<option value="241">Sandviken</option>
+	<option value="24">Sigtuna</option>
+	<option value="101">Simrishamn</option>
+	<option value="113">Sj&#246;bo</option>
+	<option value="176">Skara</option>
+	<option value="267">Skellefte&#229;</option>
+	<option value="209">Skinnskatteberg</option>
+	<option value="112">Skurup</option>
+	<option value="177">Sk&#246;vde</option>
+	<option value="227">Smedjebacken</option>
+	<option value="287">Sollefte&#229;</option>
+	<option value="15">Sollentuna</option>
+	<option value="20">Solna</option>
+	<option value="260">Sorsele</option>
+	<option value="136">Soten&#228;s</option>
+	<option value="105">Staffanstorp</option>
+	<option value="133">Stenungsund</option>
+	<option value="16">Stockholm</option>
+	<option value="184">Storfors</option>
+	<option value="259">Storuman</option>
+	<option value="39">Str&#228;ngn&#228;s</option>
+	<option value="144">Str&#246;mstad</option>
+	<option value="248">Str&#246;msund</option>
+	<option value="19">Sundbyberg</option>
+	<option value="285">Sundsvall</option>
+	<option value="190">Sunne</option>
+	<option value="210">Surahammar</option>
+	<option value="104">Sval&#246;v</option>
+	<option value="111">Svedala</option>
+	<option value="156">Svenljunga</option>
+	<option value="196">S&#228;ffle</option>
+	<option value="231">S&#228;ter</option>
+	<option value="61">S&#228;vsj&#246;</option>
+	<option value="242">S&#246;derhamn</option>
+	<option value="50">S&#246;derk&#246;ping</option>
+	<option value="17">S&#246;dert&#228;lje</option>
+	<option value="90">S&#246;lvesborg</option>
+	<option value="138">Tanum</option>
+	<option value="172">Tibro</option>
+	<option value="179">Tidaholm</option>
+	<option value="28">Tierp</option>
+	<option value="283">Timr&#229;</option>
+	<option value="67">Tingsryd</option>
+	<option value="134">Tj&#246;rn</option>
+	<option value="93">Tomelilla</option>
+	<option value="183">Torsby</option>
+	<option value="74">Tors&#229;s</option>
+	<option value="151">Tranemo</option>
+	<option value="64">Tran&#229;s</option>
+	<option value="123">Trelleborg</option>
+	<option value="159">Trollh&#228;ttan</option>
+	<option value="40">Trosa</option>
+	<option value="11">Tyres&#246;</option>
+	<option value="13">T&#228;by</option>
+	<option value="173">T&#246;reboda</option>
+	<option value="143">Uddevalla</option>
+	<option value="162">Ulricehamn</option>
+	<option value="265">Ume&#229;</option>
+	<option value="1">Upplands V&#228;sby</option>
+	<option value="12">Upplands-Bro</option>
+	<option value="29">Uppsala</option>
+	<option value="65">Uppvidinge</option>
+	<option value="52">Vadstena</option>
+	<option value="57">Vaggeryd</option>
+	<option value="47">Valdemarsvik</option>
+	<option value="2">Vallentuna</option>
+	<option value="220">Vansbro</option>
+	<option value="170">Vara</option>
+	<option value="128">Varberg</option>
+	<option value="22">Vaxholm</option>
+	<option value="107">Vellinge</option>
+	<option value="62">Vetlanda</option>
+	<option value="263">Vilhelmina</option>
+	<option value="83">Vimmerby</option>
+	<option value="255">Vindeln</option>
+	<option value="32">Ving&#229;ker</option>
+	<option value="149">V&#229;rg&#229;rda</option>
+	<option value="158">V&#228;nersborg</option>
+	<option value="262">V&#228;nn&#228;s</option>
+	<option value="4">V&#228;rmd&#246;</option>
+	<option value="60">V&#228;rnamo</option>
+	<option value="82">V&#228;stervik</option>
+	<option value="215">V&#228;ster&#229;s</option>
+	<option value="71">V&#228;xj&#246;</option>
+	<option value="42">Ydre</option>
+	<option value="122">Ystad</option>
+	<option value="163">&#197;m&#229;l</option>
+	<option value="289">&#197;nge</option>
+	<option value="249">&#197;re</option>
+	<option value="189">&#197;rj&#228;ng</option>
+	<option value="264">&#197;sele</option>
+	<option value="98">&#197;storp</option>
+	<option value="45">&#197;tvidaberg</option>
+	<option value="69">&#196;lmhult</option>
+	<option value="226">&#196;lvdalen</option>
+	<option value="27">&#196;lvkarleby</option>
+	<option value="276">&#196;lvsbyn</option>
+	<option value="102">&#196;ngelholm</option>
+	<option value="132">&#214;cker&#246;</option>
+	<option value="41">&#214;desh&#246;g</option>
+	<option value="203">&#214;rebro</option>
+	<option value="92">&#214;rkelljunga</option>
+	<option value="288">&#214;rnsk&#246;ldsvik</option>
+	<option value="252">&#214;stersund</option>
+	<option value="3">&#214;ster&#229;ker</option>
+	<option value="31">&#214;sthammar</option>
+	<option value="91">&#214;stra G&#246;inge</option>
+	<option value="271">&#214;verkalix</option>
+	<option value="273">&#214;vertorne&#229;</option>
+
+</select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <span id="SearchPlaceHolder_CaseSearch_Label1"><br />Ärendet Inkommet/Upprättat<a class="helpService" name="dateinkomhelp" data-toggle=modal data-helptitle="Sökfält för Inkommet/Upprättat" data-helptext="Om du vet ungefär när ärendet kom in till länsstyrelsen eller initierades av länsstyrelsen kan du ange ett datumintervall för att minska antalet sökresultat."><i class="fa fa-question-circle helpServicesDesc" ></i></a></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">fr.o.m. - t.o.m.:</div>
+                <div class="col-sm-8 input-group" style="padding-left: 15px; padding-right: 15px;">
+                    <input name="ctl00$SearchPlaceHolder$CaseSearch$ddDatefrom" type="text" id="SearchPlaceHolder_CaseSearch_ddDatefrom" title="fr.o.m." class="form-control datePicker" aria-label="Ärendet inkommet datum från" placeholder="åååå-mm-dd" />
+                    <div class="input-group-addon" style="cursor: pointer;" onclick="$('#SearchPlaceHolder_CaseSearch_ddDatefrom').focus();">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <div class="input-group-sep">-</div>
+                    <input name="ctl00$SearchPlaceHolder$CaseSearch$ddDateto" type="text" id="SearchPlaceHolder_CaseSearch_ddDateto" title="t.o.m." class="form-control datePicker" aria-label="Ärendet inkommet datum till" placeholder="åååå-mm-dd" />
+                    <div class="input-group-addon" style="cursor: pointer;" onclick="$('#SearchPlaceHolder_CaseSearch_ddDateto').focus();">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <span id="SearchPlaceHolder_CaseSearch_Label4"><br />Ärendets beslutsdatum<a class="helpService" name="datedechelp"  data-toggle=modal data-helptitle="Sökfält för beslutsdatum" data-helptext="Om du söker ärenden beslutade under en viss period kan du ange ett datumintervall för att minska antalet sökresultat."><i class="fa fa-question-circle helpServicesDesc" ></i></a></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">fr.o.m. - t.o.m.:</div>
+                <div class="col-sm-8 input-group" style="padding-left: 15px; padding-right: 15px;">
+                    <input name="ctl00$SearchPlaceHolder$CaseSearch$ddlDatefrom" type="text" id="SearchPlaceHolder_CaseSearch_ddlDatefrom" title="fr.o.m." class="form-control datePicker" aria-label="Ärendet beslutat datum från" placeholder="åååå-mm-dd" />
+                    <div class="input-group-addon" style="cursor: pointer;" onclick="$('#SearchPlaceHolder_CaseSearch_ddlDatefrom').focus();">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <div class="input-group-sep">-</div>
+                    <input name="ctl00$SearchPlaceHolder$CaseSearch$ddlDateto" type="text" id="SearchPlaceHolder_CaseSearch_ddlDateto" title="t.o.m." class="form-control datePicker" aria-label="Ärendet beslutat datum till" placeholder="åååå-mm-dd" />
+                    <div class="input-group-addon" style="cursor: pointer;" onclick="$('#SearchPlaceHolder_CaseSearch_ddlDateto').focus();">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <b>
+                    </b>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2" style="padding-top: 20px;">
+
+                    <input name="ctl00$SearchPlaceHolder$CaseSearch$btnSearch" type="button" id="SearchPlaceHolder_CaseSearch_btnSearch" class="LstBtn" style="width: 100%; margin-right: 5px" value="Sök" onclick="Search()" accesskey="s" />
+                    <input type="submit" name="ctl00$SearchPlaceHolder$CaseSearch$btnHiddenSearch" value="" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$SearchPlaceHolder$CaseSearch$btnHiddenSearch&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="SearchPlaceHolder_CaseSearch_btnHiddenSearch" class="hidden" aria-label="btnHiddenSearch" />
+                    <input type="submit" name="ctl00$SearchPlaceHolder$CaseSearch$btnUpdateOrgUnit" value="" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$SearchPlaceHolder$CaseSearch$btnUpdateOrgUnit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="SearchPlaceHolder_CaseSearch_btnUpdateOrgUnit" class="hidden" aria-label="btnUpdateOrgUnit" />
+
+                    <input name="ctl00$SearchPlaceHolder$CaseSearch$txtHiddenDiaryID" type="text" value="0" id="SearchPlaceHolder_CaseSearch_txtHiddenDiaryID" class="hidden" aria-label="txtHiddenDiaryID" />
+                    <input name="ctl00$SearchPlaceHolder$CaseSearch$txtHiddenOrgUnit" type="text" id="SearchPlaceHolder_CaseSearch_txtHiddenOrgUnit" class="hidden" aria-label="txtHiddenOrgUnit" />
+                    </div>
+                <div class="col-sm-3" style="padding-top: 20px;">
+                    <input type="button" value="Rensa sökval" class="LstBtn" style="width: 100%; margin-right: 5px" onclick="location.href = './';" />
+
+                    </div>
+                <div class="col-sm-3" style="padding-top: 20px;">
+
+                    <input onclick="if (typeof(Page_ClientValidate) == 'function') Page_ClientValidate(''); __doPostBack('ctl00$SearchPlaceHolder$CaseSearch$btnCurrentWeek','')" name="ctl00$SearchPlaceHolder$CaseSearch$btnCurrentWeek" type="button" id="SearchPlaceHolder_CaseSearch_btnCurrentWeek" class="button" value="Veckans ärenden" accesskey="v" style="display: none" />
+
+                    <input onclick="if (typeof(Page_ClientValidate) == 'function') Page_ClientValidate(''); __doPostBack('ctl00$SearchPlaceHolder$CaseSearch$btnCurrentDay','')" name="ctl00$SearchPlaceHolder$CaseSearch$btnCurrentDay" type="button" id="SearchPlaceHolder_CaseSearch_btnCurrentDay" class="LstBtn" style="width:100%; min-width:145px;" value="Dagens nya ärenden" accesskey="d" />
+                    </div>
+                <div class="col-sm-4" style="padding-top: 20px;">
+                    <input onclick="if (typeof(Page_ClientValidate) == 'function') Page_ClientValidate(''); __doPostBack('ctl00$SearchPlaceHolder$CaseSearch$Button1','')" name="ctl00$SearchPlaceHolder$CaseSearch$Button1" type="button" id="SearchPlaceHolder_CaseSearch_Button1" class="LstBtn" style="width:100%" value="Dagens nya handlingar " accesskey="h" />
+
+
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="HelpServiceDialog" tabindex="-1" role="dialog" aria-labelledby="helpTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title" id="helpTitle" >Hjälptextrubrik</h3>
+
+                            </div>
+                            <div class="modal-body">
+                                <span class="modalHelpText" aria-label="Hjälptext" id="helpText" >Hjälptext</span>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="LstBtn" style="width: 110px;" data-dismiss="modal">Stäng</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</DIV>
+                          
+                           
+                         
+                        </DIV>
+                        <DIV class="sv-spacer-3_7emvt sv-layout lst-print sv-column-4 sv-template-layout" >
+                          
+                            
+                            <DIV class="sv-spacer-3_7emvt sv-vertical sv-layout sv-template-layout" >
+                                <DIV class="pagecontent sv-layout sv-spacer-3_7emvt sv-skip-spacer" >
+                                    <DIV id="Hogerspalt"><!-- Högerspalt --></DIV>
+                                    
+                                    
+                                    <DIV class="sv-spacer-1_2emvt sv-vertical sv-layout" >
+                                        <DIV class="sv-spacer-1_2emvt sv-vertical sv-layout ielayoutfix sv-skip-spacer c5796">
+                                            <DIV class="sv-vertical sv-layout sv-skip-spacer sv-decoration-content">
+                                                <DIV class="sv-text-portlet sv-use-margins sv-skip-spacer c54" >
+                                                    <DIV id="Rubrikmedlinje-3"><!-- Rubrik med linje --></DIV>
+                                                    <DIV class="sv-text-portlet-content">
+                                                        <H2 class="sv-font-under-struken-rubrik-h2" id="h-Varraddomnaturen">Webbdiariet</H2>
+                                                    </DIV>
+                                                </DIV>
+                                                <DIV class="sv-text-portlet sv-use-margins">
+                                                    <DIV id="Text1-1"><!-- Text 1 --></DIV>
+                                                    <DIV class="sv-text-portlet-content">
+                                                        <P class="normal">I webbdiariet visas ärenden vi handlägger. Efter att ett ärende beslutats eller avslutats finns det tillgängligt i sex månader.<br />Du kan se vilka handlingar som inkommit i ett ärende men dokumenten går inte att läsa i webbdiariet.<br /><br /><b>Hittar du inte ditt ärende?</b><br />Vissa ärenden och handlingar visas inte i webbdiariet utan kan vara registrerade i andra system eller ordnade på annat sätt.<br /><br />Har du frågor kring ärenden som inte finns i webbdiariet eller vill du ta del av ett dokument?<br /><a href="http://www.lansstyrelsen.se">Kontakta ansvarig Länsstyrelse. </a><br /><br />Alla uppgifter som visas i webbdiariet är offentliga.
+                                                          
+                                                        </DIV>
+                                                </DIV>
+
+                                            </DIV>
+                                        </DIV>
+                                    </DIV>
+                                </DIV>
+                            </DIV>
+                            
+                        </DIV>
+                    </DIV>
+                    
+                </DIV>
+
+
+
+
+
+
+<script>
+    $(function () {
+
+        $("#SearchPlaceHolder_CaseSearch_ddDatefrom").datepicker({
+        });
+
+        $("#SearchPlaceHolder_CaseSearch_ddDateto").datepicker({
+        });
+
+        $("#SearchPlaceHolder_CaseSearch_ddlDatefrom").datepicker({
+        });
+
+        $("#SearchPlaceHolder_CaseSearch_ddlDateto").datepicker({
+        });
+
+
+        $.datepicker.setDefaults(
+        $.extend(
+        { 'dateFormat': 'dd-mm-yy' },
+        $.datepicker.regional['sv']
+        )
+        );
+    });
+
+    $(document).ready(function () {
+        $(".helpService").click(function () { // Click to only happen on brokerService
+            $("#helpTitle").text($(this).data('helptitle'));
+            $("#helpText").text($(this).data('helptext'));
+            $('#HelpServiceDialog').modal('show');
+        });
+    });
+</script>
+
+
+
+                                </div>
+
+                
+            </DIV>
+        </main>
+        <DIV class="sv-html-portlet sv-portlet lst-changes-background">
+            <DIV id="SidfotsdekorationHTML"><!-- Sidfotsdekoration - HTML --></DIV>
+            <DIV class="lst-footer-decoration"></DIV>
+        </DIV>
+        
+        
+      <FOOTER class="sv-vertical sv-layout ielayoutfix sv-template-layout c5785" >
+            <DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-skip-spacer sv-template-layout">
+                <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                    <DIV class="sv-layout sv-skip-spacer sv-column-12 sv-template-layout" >
+                        <DIV class="sv-vertical sv-layout lst-footer-dark-blue sv-skip-spacer sv-template-layout">
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column-logo lst-footer-dark-blue-column sv-skip-spacer">
+                                <DIV class="sv-script-portlet sv-portlet lst-header-logo sv-skip-spacer">
+                                    <DIV ></DIV><IMG alt="Länsstyrelsen Uppsala" src="https://diarium.lansstyrelsen.se/img/logga_neg.png">
+                                </DIV>
+                            </DIV>
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column ielayoutfix sv-template-layout c5780">
+                                <DIV class="sv-text-portlet sv-use-margins sv-skip-spacer sv-template-portlet&#10">
+                                   
+                                    <DIV class="sv-text-portlet-content">
+                                        <H2 class="sv-font-vit-rubrik-h2" id="h-Besoksadress">Kontakt</H2>
+                                    </DIV>
+                                </DIV>
+                                <DIV class="sv-text-portlet sv-use-margins" >
+                                   
+                                    <DIV class="sv-text-portlet-content">           
+                                        <p class="sv-font-vit-brodtext"><a href="http://www.lansstyrelsen.se">Alla länsstyrelser</a></p>
+                                    </DIV>
+                                </DIV>
+                                
+                            </DIV>
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column sv-template-layout"
+                                 id="svid10_44f26481161466409d374d6">
+                             
+                            </DIV>
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column ielayoutfix sv-template-layout" >
+                              
+                                <DIV class="sv-html-portlet sv-portlet">
+                                    <DIV id="TillbakatillstartHTML"><!-- Tillbaka till start - HTML --></DIV>
+                                    <DIV class="lst-to-top-div">
+                                        <A tabindex="0" title="Till toppen" href="https://diarium.lansstyrelsen.se#0">
+                                            <DIV class="lst-to-top"></DIV>
+                                        </A>
+                                    </DIV>
+                                </DIV>
+                            </DIV>
+                        </DIV>
+                    </DIV>
+                </DIV>
+            </DIV>
+        </FOOTER>
+
+    </DIV>
+ 
+    <SCRIPT src="https://diarium.lansstyrelsen.se/Scripts/lst/tillbakaTillStart.js"></SCRIPT>
+
+
+        </form>
+</BODY>
+</HTML>

@@ -1,0 +1,474 @@
+
+<!DOCTYPE HTML>
+<HTML class="sv-no-js" lang="sv">
+<HEAD><meta content="IE=11.0000" http-equiv="X-UA-Compatible" /><meta charset="UTF-8" /><title>
+	Länsstyrelsernas diarium
+</title><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, shrink-to-fit=no" /><meta name="dcterms.identifier" content="&lt;%= Server.HtmlEncode(GetAppRootUrl(false)) %>" /><meta name="dcterms.language" content="sv" /><meta name="dcterms.format" content="text/html" /><meta name="dcterms.type" content="text" /><link href="../Styles/lst/lst-responsive-grids.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/lst-spacing.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/lst.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/lst(1).css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/lst_static-min.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/css.css" rel="stylesheet" type="text/css" media="all" /><link href="../Styles/lst/css(1).css" rel="stylesheet" type="text/css" media="all" /><link href="../Styles/lst/sv-template-asset.css" rel="stylesheet" type="text/css" /><link href="../Content/themes/base/jquery-ui.min.css" rel="stylesheet" /><link href="../Content/bootstrap.min.css" rel="stylesheet" /><link href="../Content/footable.bootstrap.min.css" rel="stylesheet" type="text/css" /><link href="../Styles/FormPipe.css" rel="stylesheet" type="text/css" /><link href="../Content/font-awesome.min.css" rel="stylesheet" /><link rel="icon" href="data:;base64,=" />
+
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/jquery-3.5.0.min.js"></script>
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/jquery-ui-i18n.min.js" ></script>
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/bootstrap.min.js"></script> 
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/moment.min.js"></script>
+    <script src="https://diarium.lansstyrelsen.se/Scripts/footable2.min.js"></script>
+    <SCRIPT src="https://diarium.lansstyrelsen.se/Scripts/lst/lst_cookie_banner.js"></SCRIPT>
+    <SCRIPT src="https://diarium.lansstyrelsen.se/Scripts/lst/TabFocus.js"></SCRIPT>
+
+    <meta content="Webbdiariet" property="og:title" /><meta content="- Länsstyrelsernas webbdiarium" property="og:description" /><meta name="description" content="Länsstyrelsernas webbdiarium" />
+
+    <!-- Matomo -->
+<script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function () {
+        var u = "https://analytics.lansstyrelsen.se/";
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '72']);
+        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+    })();
+</script>
+<!-- End Matomo Code -->
+
+</HEAD>
+<BODY class="sv-responsive">
+    <form method="post" action="./CaseSearchResult.aspx?query=oJ%2fYw8gzqEqkNIX1ShhaGWnWcYgyyBdrYHcfG3urKk8%2f9Zkiokzp0729kvmEyalIedPQBOMNpj63vV+7vy551JfDJvn3xy5BW70PT%2f+vPLD9uq4jbc+f%2fNeC1MhP1ZVvWD4FoxnBr5y5sHs3eHq3BdShWRzY+bNQZf9uy0EYRXvjWV6QWSLv2IWfYlZEpRgPzWAtKr01xkSF9Dec196mhA%3d%3d" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="9DDA1863" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAhKYumqHLvNK8c6gZyLOH+0hIA1KOq4cjsxVdluKaJo+GOLMG5v5lWTSVy/C323mwShmO2lM7xJ2JMMGjzLAva5bUPDsjJy33xZ1QxjilgxYN/nCqH/zcsts5Tf6J7PRQI1FLQs0vWb27o4WfKiri8QRMZwm4L5KrZLiHD3DTQlw3GQ8vavr4BYfiVm65/zKcjonavLHfUj0tGsBAfD7Wm3" />
+    <DIV class="sv-layout" >
+        <DIV class="sv-vertical sv-layout sv-hide-sv-bp-tablet sv-hide-sv-bp-phone ielayoutfix sv-template-layout c5765">
+            <DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-skip-spacer sv-template-layout">
+                <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                    <NAV class="sv-layout sv-skip-spacer sv-column-5 sv-template-layout" >
+                    </NAV>
+                    
+                </DIV>
+            </DIV>
+        </DIV>
+        <DIV class="sv-vertical sv-layout sv-template-layout">
+            <DIV class="sv-vertical sv-layout sv-view sv-skip-spacer sv-template-layout" >
+                <DIV class="sv-script-portlet sv-portlet sv-skip-spacer">
+                    <DIV id="Cookiebanner"><!-- Cookiebanner --></DIV>
+                    <DIV class="lst-cookie-banner--hide lst-sidepadding" id="lst-cookie-banner" aria-label="Cookie banner">
+                        <DIV class="lst-cookie-banner__container">
+                            <DIV class="lst-cookie-banner__information">
+                                <P>
+                                    Den här webbplatsen använder kakor (cookies) för att ge dig en bättre
+                                    upplevelse av webbplatsen. En del av dessa kakor är tredjepartskakor. Genom att
+                                    använda vår webbplats accepterar du att kakor används.          <A class="lst-cookie-banner__readmore"  href="https://diarium.lansstyrelsen.se/about-cookies.aspx">
+                                        Läs
+                                        mer om kakor och hur du kan stänga av dem.
+                                    </A>
+                                </P>
+                            </DIV>
+                            <DIV class="lst-cookie-banner__actions">
+                                <A class="lst-cookie-banner__close"
+                                   href="https://diarium.lansstyrelsen.se#">
+                                    Stäng<IMG class="lst-cookie-banner__icon" alt="Stäng cookie" src="https://diarium.lansstyrelsen.se/Content/lst/kryss_black.svg">
+                                </A>
+                            </DIV>
+                        </DIV>
+                    </DIV>
+                </DIV>
+            </DIV>
+        </DIV>
+        
+        
+        <HEADER class="sv-vertical sv-layout sv-template-layout" >
+            <DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst_header-parent lst-sidepadding sv-skip-spacer sv-template-layout c5795">
+                <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                    <DIV class="sv-layout sv-skip-spacer sv-column-7 sv-template-layout" >
+                        <DIV class="sv-script-portlet sv-portlet lst-header-logo sv-skip-spacer">
+                            <DIV id="LoggaSkript"><!-- Logga - Skript --></DIV><A href="https://diarium.lansstyrelsen.se/">
+                                <IMG alt="Länsstyrelsernas diarium, till startsidan" src="https://diarium.lansstyrelsen.se/img/lst_topplogo.gif">
+                            </A>
+                        </DIV>
+                    </DIV>
+                    <DIV class="sv-layout isGlobal sv-column-5 sv-template-layout">
+                    </DIV>
+                </DIV>
+            </DIV>
+        </HEADER>
+        <DIV class="sv-vertical sv-layout sv-visible-sv-bp-tablet sv-visible-sv-bp-phone ielayoutfix sv-template-layout c5771"
+             id="svid10_2baa5e3e161e6f2218922cb5">
+           
+            <DIV class="sv-layout" >
+                <DIV id="menu"><!-- menu --></DIV>
+                <DIV class="sv-script-portlet sv-portlet sv-skip-spacer ">
+                    <DIV id="lstmobilemenu2"><!-- lst-mobile-menu-2 --></DIV>
+                  
+                </DIV>
+            </DIV>
+        </DIV>
+       
+        <DIV class="sv-vertical sv-layout sv-hide-sv-bp-tablet sv-hide-sv-bp-phone sv-template-layout">
+            <DIV class="sv-vertical sv-layout sv-view sv-skip-spacer sv-template-layout" >
+                
+                <div class="sv-vertical sv-layout lst-topnav--blue ielayoutfix sv-template-layout c5809" >
+                    <div class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-skip-spacer sv-template-layout" >
+                        <div class="sv-row sv-layout sv-hide-sv-bp-tablet sv-hide-sv-bp-phone sv-skip-spacer sv-template-layout" >
+                            <div class="sv-layout sv-skip-spacer sv-column-12 sv-template-layout" ></div>
+                        </div>
+                    </div>
+                </div>
+            </DIV>
+        </DIV>
+        
+        <main class="sv-vertical sv-layout lst-changes-background sv-template-layout">
+            <DIV >
+                <DIV class="sv-layout sv-skip-spacer sv-template-portlet&#10;" >
+                    <DIV id="Hallarefornavigationutanmus"><!-- Hållare för navigation utan mus --></DIV>
+                    <DIV class="sv-html-portlet sv-portlet sv-skip-spacer">
+                        <DIV id="HarlandarduomduhopparovernavigationHTML"><!-- Här landar du om du hoppar över navigation - HTML --></DIV>
+                        <DIV id="hopptillinnehall"></DIV>
+                    </DIV>
+                </DIV>
+
+                 <div class="PortalContent" >
+                                    <!-- Menu -->
+                                    
+                                    
+                                    <!-- Main -->
+                                    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <div class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-template-layout">
+        <div class="sv-row sv-layout sv-skip-spacer sv-template-layout">
+            <div class="sv-spacer-1_8emvt sv-layout sv-skip-spacer sv-column-12 sv-template-layout">
+
+
+                <h2>Diarium för Länsstyrelsen i Blekinge län</h2>
+                <div class="large-search__search-hit-count">
+                    <h3>Sökresultat:&nbsp;<span id="SearchPlaceHolder_lblCaseCount">1-50 av 4317</span></h3>
+                    <br />
+                </div>
+
+
+                <div>
+	<table class="table" cellspacing="0" rules="all" border="1" id="SearchPlaceHolder_caseGridView">
+		<thead>
+			<tr>
+				<th scope="col">Diarienummer</th><th data-breakpoints="xs" scope="col">Status</th><th data-breakpoints="xs" scope="col" nowrap="nowrap">In/Upp-datum</th><th scope="col">&#196;renderubrik</th><th data-breakpoints="xs sm" scope="col">Avsändare/mottagare</th><th data-breakpoints="xs sm" scope="col">Postort</th><th data-breakpoints="xs sm" scope="col">Kommun</th><th data-breakpoints="xs sm" scope="col" nowrap="nowrap">Beslutsdatum</th>
+			</tr>
+		</thead><tbody>
+			<tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=926388" target="_self">3220-2012</a></td><td>Avslutat</td><td nowrap="nowrap">2010-12-21</td><td>Ans&#246;kan om fastst&#228;llande av vattenskyddsomr&#229;de f&#246;r Saleboda vattent&#228;kt, Karlskrona kommun</td><td>
+                                Karlskrona kommun
+                            </td><td>Karlskrona</td><td>&nbsp;</td><td nowrap="nowrap">2024-11-14</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=1613121" target="_self">1021-2015</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2015-03-10</td><td>Utredning om bildande av naturreservatet Kr&#229;kenabben</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=1751823" target="_self">3146-2015</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2015-09-04</td><td>F&#246;rfr&#229;gan om huvudmannaskap f&#246;r huvudstudie vid f.d. Asarumsterminalen - Viking Timber i Karlshamnskommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>KARLSHAMN</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=2125202" target="_self">4752-2016</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2016-12-05</td><td>Ans&#246;kan om fastst&#228;llande av vattenskyddsomr&#229;de och skyddsf&#246;reskrifter f&#246;r Ringam&#229;la vattent&#228;kt i Karlshamn kommun. </td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>Karlshamn</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=2202150" target="_self">1170-2017</a></td><td>Avslutat</td><td nowrap="nowrap">2017-03-07</td><td>Beslut om bildande av J&#228;msunda naturreservat</td><td>
+                                Länsstyrelsen i Blekinge
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">2024-12-03</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=2396678" target="_self">4603-2017</a></td><td>Avslutat</td><td nowrap="nowrap">2017-10-31</td><td>Ett rikt odlingslandskap 2014-2024, Ett kompetensutvecklingsprojekt inom Landsbygdsprogrammet 2014-2020. Projektet drivs av L&#228;nsstyrelsen i Blekinge. Kontakt person Sofia Persson.</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>Karlskrona</td><td>&nbsp;</td><td nowrap="nowrap">2024-09-30</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=2535687" target="_self">1841-2018</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2018-04-05</td><td>Medel fr&#229;n Anslag 2:4 till L&#228;nsstyrelser 2019-2022, sammanh&#229;llet projekt</td><td>
+                                MSB Myndigheten för samhällsskydd och beredskap
+                            </td><td>Karlstad</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=2555313" target="_self">2171-2018</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2018-04-25</td><td>Ans&#246;kan om statligt bidrag f&#246;r det lokala naturv&#229;rdsprojektet &quot;LONA&quot; V&#229;tmark &#197;ryd i Karlshamns kommun </td><td>
+                                Karlshamns kommun 
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=2741189" target="_self">5492-2018</a></td><td>Avslutat</td><td nowrap="nowrap">2018-11-21</td><td>Ans&#246;kan om investeringsst&#246;d f&#246;r hyresbost&#228;der (2016:881) i Olofstr&#246;ms kommun</td><td>
+                                Sölvegårds Fastigheter AB (Hus A, D)
+                            </td><td>Karlshamn</td><td>Olofstr&#246;m</td><td nowrap="nowrap">2024-09-26</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=2901271" target="_self">2230-2019</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2019-05-06</td><td>Ans&#246;kan om tillst&#229;nd till ingrepp i fornl&#228;mning f&#246;r forskningsunders&#246;kning av skeppsvrak Gripshunden vid Stora Ek&#246;n i Ronneby kommun</td><td>
+                                Södertörns Högskola
+                            </td><td>Huddinge</td><td>Ronneby</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=2907156" target="_self">2314-2019</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2019-05-10</td><td>Ans&#246;kan om fastst&#228;llande av vattenskyddsomr&#229;de och skyddsf&#246;reskrifter &#214;stra Listerlandet</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3164451" target="_self">901-2020</a></td><td>Avslutat</td><td nowrap="nowrap">2020-02-17</td><td>Beg&#228;ran om tillsyn f&#246;r vattenverksamheten i samband med utfyllnad m.m. p&#229; fastigheten M&#246;rrums-Bj&#246;rken&#228;s i Karlshamns kommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>Karlshamn</td><td nowrap="nowrap">2024-11-26</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3185505" target="_self">1302-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-03-09</td><td>Utredning om bildande av naturreservat i &#214;rseryd, Ronneby kommun.</td><td>
+                                Parason
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3222129" target="_self">1954-2020</a></td><td>Avslutat</td><td nowrap="nowrap">2020-04-15</td><td>&#197;terf&#246;rvisat f&#246;r ny handl&#228;ggning om att bedriva verksamhet vid Kl&#229;vbens vattenkraftstation i Ronneby kommun, M&#229;l nr M 2802-19</td><td>
+                                Mark- och miljödomstolen vid Växjö Tingsrätt
+                            </td><td>V&#228;xj&#246;</td><td>Ronneby</td><td nowrap="nowrap">2024-11-11</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3222327" target="_self">1963-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-04-15</td><td>Beslut om bidrag f&#246;r Regional milj&#246;&#246;vervakning f&#246;r budget&#229;ret 2020 fr&#229;n anslag 1:2, Milj&#246;&#246;vervakning mm</td><td>
+                                Naturvårdsverket 
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3245073" target="_self">2364-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-05-07</td><td>Beg&#228;ran om tillsyn av vattenverksamhet samt strandskydd, Karlshamns kommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>Karlshamn</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3249686" target="_self">2429-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-05-04</td><td>Beg&#228;ran om tillsyn av vattenverksamhet, Karlskrona kommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>Karlskrona</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3265801" target="_self">2699-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-05-29</td><td>Beg&#228;ran om tillsyn av vattenverksamhet p&#229; Senoren i Karlskrona kommun</td><td>
+                                Anonym
+                            </td><td>&nbsp;</td><td>Karlskrona</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3313764" target="_self">3361-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-07-01</td><td>Markuppl&#229;telseavtal p&#229; Naturv&#229;rdsverkets fastigheter</td><td>
+                                Naturvårdsverket
+                            </td><td>Stockholm</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3392767" target="_self">4210-2020</a></td><td>Avslutat</td><td nowrap="nowrap">2020-08-26</td><td>Inbjudan till samr&#229;d ang&#229;ende fastigheten Nordstr&#246;m i Karlskrona kommun</td><td>
+                                Karlskrona kommun
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">2024-09-10</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3403975" target="_self">4376-2020</a></td><td>Avslutat</td><td nowrap="nowrap">2020-09-24</td><td>Rapport om  Projekt &quot;Implementering av Blekinges Mat &amp; Livsmedelsstrategi&quot; </td><td>
+                                Länsstyrelsen Blekinge län
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">2024-10-03</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3403977" target="_self">4377-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-09-24</td><td>Rapport om Projekt &quot;Terroiratlas&quot;</td><td>
+                                Länsstyrelsen Blekinge län
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3468259" target="_self">5385-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-11-23</td><td>Ans&#246;kan om fastst&#228;llande av vattenskyddsomr&#229;de f&#246;r V&#228;stra Listerlandet</td><td>
+                                Sölvesborg Energi
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3468462" target="_self">5389-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-11-16</td><td>Ans&#246;kan om statligt bidrag f&#246;r det lokala naturv&#229;rdsprojektet (LONA) Hittaut 2021 i Karlshamns kommun</td><td>
+                                Karlshamns kommun
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3469663" target="_self">5413-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-11-23</td><td>Ans&#246;kan om statligt bidrag till lokala naturv&#229;rdsprojekt (LONA) &quot;Hjalmar Sterns park&quot; i S&#246;lvesborgs kommun </td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3470020" target="_self">5421-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-11-23</td><td>Ans&#246;kan om fastst&#228;llande av vattenskyddsomr&#229;de f&#246;r Tors&#246;</td><td>
+                                Torsö Sölvesborg Energi
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3470025" target="_self">5423-2020</a></td><td>Avslutat</td><td nowrap="nowrap">2020-11-23</td><td>Ans&#246;kan om fastst&#228;llande av vattenskyddsomr&#229;de f&#246;r V&#228;stra N&#228;s</td><td>
+                                Sölvesborg Energi
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">2024-09-24</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3475351" target="_self">5506-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-12-01</td><td>Ans&#246;kan om statligt bidrag f&#246;r det lokala naturv&#229;rdsprojektet &quot;Information om kommunala naturv&#229;rdsomr&#229;den&quot; i Olofstr&#246;ms kommun</td><td>
+                                Olofströms kommun
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3497401" target="_self">5941-2020</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2020-12-21</td><td>Beslut om bidrag fr&#229;n anslag 1:11 &#197;tg&#228;rder f&#246;r havs- och vattenmilj&#246; f&#246;r restaurering av akvatiska milj&#246;er</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3548314" target="_self">850-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-02-11</td><td>Remiss om &#229;tg&#228;rdsprogram f&#246;r tumlare, remissutkast f&#246;r synpunkter, svar senast 26 mars 2021</td><td>
+                                Havs- och vattenmyndigheten
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3585090" target="_self">1486-2021</a></td><td>Avslutat</td><td nowrap="nowrap">2021-03-15</td><td>Beslut om &#228;ndring och utvidgning av naturreservatet Valje</td><td>
+                                Sölvesborgs kommun m.fl enligt sändlista
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">2024-06-18</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3598058" target="_self">1675-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-03-24</td><td>Projekt LIFE RestoRED LIFE19 NAT/SE/000172</td><td>
+                                Länsstyrelsen Blekinge
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3599134" target="_self">1684-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-03-24</td><td>Beg&#228;ran om  inh&#228;mtning av tillsynsplaner </td><td>
+                                Säkerhetspolisen
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3613534" target="_self">1891-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-04-07</td><td>Anm&#228;lan om rensning utmed Hammarby&#229;n v&#228;ster om J&#228;mj&#246; i Karlskrona kommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>Karlskrona</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3641951" target="_self">2293-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-04-28</td><td>Beslut om utvidgning av naturreservatet V&#228;stra N&#228;snabben</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3646158" target="_self">2351-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-04-29</td><td>Information om ut&#246;kning av brygga Karlshamns kommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3649502" target="_self">2395-2021</a></td><td>Avslutat</td><td nowrap="nowrap">2020-05-25</td><td>Utredning om utvidgning av Mulatorps naturreservat i Olofstr&#246;ms kommun</td><td>
+                                Länsstyrelsen Blekinge
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">2024-10-22</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3665235" target="_self">2626-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-05-11</td><td>Beslut om bidrag till Regional milj&#246;&#246;vervakning f&#246;r budget&#229;ret 2021 fr&#229;n anslag 1:2, Milj&#246;&#246;vervakning mm</td><td>
+                                Naturvårdsverket
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3668893" target="_self">2662-2021</a></td><td>Avslutat</td><td nowrap="nowrap">2021-05-19</td><td>Anm&#228;lan om milj&#246;tillsyn avst&#228;ngning av markvattenfl&#246;det genom V&#228;byn&#228;sv&#228;gen i samband med framdragning av VA och fiberledningar, V&#228;byn&#228;s, Ronneby kommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>Br&#228;kne-Hoby</td><td>Ronneby</td><td nowrap="nowrap">2024-07-23</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3675350" target="_self">2732-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-05-24</td><td>Ans&#246;kan om fastst&#228;llande av vattenskyddsomr&#229;de S&#246;lvesborgshalv&#246;n</td><td>
+                                Sölvesborgshalvön Sölvesborgs Energi
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3693569" target="_self">3012-2021</a></td><td>Avslutat</td><td nowrap="nowrap">2021-06-08</td><td>Ans&#246;kan om Natura 2000 tillst&#229;nd f&#246;r anl&#228;ggande av en v&#228;g, J&#228;msunda i Karlskrona kommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>Tving</td><td>Karlskrona</td><td nowrap="nowrap">2024-09-20</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3704394" target="_self">3167-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-06-15</td><td>Tj&#228;nsteanteckning om start av &#228;rende</td><td>
+                                E.ON
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3714373" target="_self">3295-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-06-22</td><td>Beg&#228;ran om tillsyn</td><td>
+                                Saxemara Båtvarv
+                            </td><td>&nbsp;</td><td>Ronneby</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3721792" target="_self">3410-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-06-29</td><td>Beg&#228;ran om tillsyn av vattenverksamhet p&#229; hassl&#246; Sandvik i Karlskrona kommun</td><td>
+                                Anonym
+                            </td><td>&nbsp;</td><td>Karlskrona</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3722381" target="_self">3418-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-06-29</td><td>Ans&#246;kan om medel till f&#246;rankring av satellitbaserad biogeografisk &#246;vervakning</td><td>
+                                HaV
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3725786" target="_self">3452-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-06-30</td><td>Ans&#246;kan om tillst&#229;nd att &#246;verf&#246;ra och hantera spr&#228;ng&#228;mnen</td><td>
+                                Räddningstjänsten östra Blekinge
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3744771" target="_self">3707-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-07-16</td><td>Information om bouppteckning</td><td>
+                                Skatteverket
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3773412" target="_self">4084-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-08-25</td><td>Information om bouppteckning, del av fastigheterna Tockatorp och Tockatorp, Karlskrona kommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr>
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3807891" target="_self">4596-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-09-22</td><td>Beg&#228;ran</td><td>
+                                anonym
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr><tr bgcolor="#EEEEEE">
+				<td nowrap="nowrap"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=3813824" target="_self">4679-2021</a></td><td>Handl&#228;ggning</td><td nowrap="nowrap">2021-09-30</td><td>Tillsyn av gr&#228;nsmarkeringar inom naturreservatet H&#228;stholmen-Ytter&#246;n, Karlskrona kommun</td><td>
+                                Länsstyrelsen / Björn SKåve
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td nowrap="nowrap">&nbsp;</td>
+			</tr>
+		</tbody><tfoot>
+			<tr>
+				<td colspan="8"><table>
+					<tr>
+						<td><span>1</span></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$2&#39;)">2</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$3&#39;)">3</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$4&#39;)">4</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$5&#39;)">5</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$6&#39;)">...</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$Last&#39;)">&gt;&gt;</a></td>
+					</tr>
+				</table></td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+
+                <div class="buttonAreafoot">
+
+                    <input type="submit" name="ctl00$SearchPlaceHolder$btnBack" value="Tillbaka" id="SearchPlaceHolder_btnBack" class="LstBtn" />
+                    <input type="button" class="LstBtn" style="margin-left: 10px; width: 110px;" value="Skriv ut" onclick="window.print();" />
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">  
+
+        jQuery(function ($) {
+            $('.table').footable();
+        });
+    </script>
+
+                                </div>
+
+                
+            </DIV>
+        </main>
+        <DIV class="sv-html-portlet sv-portlet lst-changes-background">
+            <DIV id="SidfotsdekorationHTML"><!-- Sidfotsdekoration - HTML --></DIV>
+            <DIV class="lst-footer-decoration"></DIV>
+        </DIV>
+        
+        
+      <FOOTER class="sv-vertical sv-layout ielayoutfix sv-template-layout c5785" >
+            <DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-skip-spacer sv-template-layout">
+                <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                    <DIV class="sv-layout sv-skip-spacer sv-column-12 sv-template-layout" >
+                        <DIV class="sv-vertical sv-layout lst-footer-dark-blue sv-skip-spacer sv-template-layout">
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column-logo lst-footer-dark-blue-column sv-skip-spacer">
+                                <DIV class="sv-script-portlet sv-portlet lst-header-logo sv-skip-spacer">
+                                    <DIV ></DIV><IMG alt="Länsstyrelsen Uppsala" src="https://diarium.lansstyrelsen.se/img/logga_neg.png">
+                                </DIV>
+                            </DIV>
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column ielayoutfix sv-template-layout c5780">
+                                <DIV class="sv-text-portlet sv-use-margins sv-skip-spacer sv-template-portlet&#10">
+                                   
+                                    <DIV class="sv-text-portlet-content">
+                                        <H2 class="sv-font-vit-rubrik-h2" id="h-Besoksadress">Kontakt</H2>
+                                    </DIV>
+                                </DIV>
+                                <DIV class="sv-text-portlet sv-use-margins" >
+                                   
+                                    <DIV class="sv-text-portlet-content">           
+                                        <p class="sv-font-vit-brodtext"><a href="http://www.lansstyrelsen.se">Alla länsstyrelser</a></p>
+                                    </DIV>
+                                </DIV>
+                                
+                            </DIV>
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column sv-template-layout"
+                                 id="svid10_44f26481161466409d374d6">
+                             
+                            </DIV>
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column ielayoutfix sv-template-layout" >
+                              
+                                <DIV class="sv-html-portlet sv-portlet">
+                                    <DIV id="TillbakatillstartHTML"><!-- Tillbaka till start - HTML --></DIV>
+                                    <DIV class="lst-to-top-div">
+                                        <A tabindex="0" title="Till toppen" href="https://diarium.lansstyrelsen.se#0">
+                                            <DIV class="lst-to-top"></DIV>
+                                        </A>
+                                    </DIV>
+                                </DIV>
+                            </DIV>
+                        </DIV>
+                    </DIV>
+                </DIV>
+            </DIV>
+        </FOOTER>
+
+    </DIV>
+ 
+    <SCRIPT src="https://diarium.lansstyrelsen.se/Scripts/lst/tillbakaTillStart.js"></SCRIPT>
+
+
+        </form>
+</BODY>
+</HTML>

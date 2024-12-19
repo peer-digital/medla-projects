@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Industrial Projects</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Color system */
+            --bg-primary: #1E1E1E;
+            --bg-secondary: #252525;
+            --bg-elevated: #2D2D2D;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --border-color: #404040;
+            --accent-primary: #007AFF;
+            --accent-success: #28A745;
+            --accent-warning: #FFC107;
+            --accent-danger: #DC3545;
+            
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            
+            /* Border radius */
+            --radius-sm: 4px;
+            --radius-md: 6px;
+            --radius-lg: 8px;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+        }
+        
+        .card-body {
+            padding: var(--spacing-md);
+        }
+
+        /* Table styles */
+        .table {
+            color: var(--text-primary);
+            --bs-table-bg: var(--bg-secondary);
+            --bs-table-striped-bg: var(--bg-elevated);
+            --bs-table-striped-color: var(--text-primary);
+            --bs-table-hover-bg: var(--bg-elevated);
+            --bs-table-hover-color: var(--text-primary);
+            border-color: var(--border-color);
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: var(--bg-elevated) !important;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            padding: 1rem var(--spacing-sm);
+            vertical-align: middle;
+        }
+
+        .table td {
+            border-color: var(--border-color);
+            padding: 1rem var(--spacing-sm);
+            vertical-align: middle;
+        }
+
+        /* Form controls */
+        .form-control, .form-select {
+            background-color: var(--bg-elevated);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bg-elevated);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+            box-shadow: none;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .btn-outline-secondary {
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--bg-elevated);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        /* Dropdowns */
+        .dropdown-menu {
+            background-color: var(--bg-elevated);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: var(--spacing-xs);
+        }
+
+        .dropdown-item {
+            color: var(--text-primary);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-sm);
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        /* Existing utility classes with updated styling */
+        .case-title {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .case-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        /* Table layout classes */
+        .title-cell {
+            max-width: 400px;
+            min-width: 300px;
+        }
+
+        .title-cell .case-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .location-cell, .category-cell {
+            width: 150px;
+        }
+
+        .date-cell {
+            width: 120px;
+            white-space: nowrap;
+        }
+
+        .date-cell .case-meta {
+            margin-top: 0.25rem;
+            white-space: nowrap;
+        }
+
+        .status-cell {
+            width: 100px;
+        }
+
+        .actions-cell {
+            width: 50px;
+            text-align: right;
+        }
+
+        /* Case details section */
+        .case-details {
+            background-color: var(--bg-elevated);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+        }
+
+        /* Document list */
+        .document-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: var(--radius-sm);
+            background-color: var(--bg-secondary);
+        }
+
+        .document-item {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .document-item:last-child {
+            border-bottom: none;
+        }
+
+        .document-item a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .document-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Pagination */
+        .pagination {
+            margin-top: var(--spacing-lg);
+        }
+
+        .page-link {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .page-link:hover {
+            background-color: var(--bg-elevated);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* Progress bars */
+        .progress {
+            background-color: var(--bg-elevated);
+        }
+
+        .progress-bar {
+            background-color: var(--accent-primary);
+        }
+
+        .btn-group {
+            gap: 0.75rem;
+        }
+
+        .btn-group .btn {
+            box-shadow: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-danger {
+            background-color: var(--accent-danger);
+            border-color: var(--accent-danger);
+        }
+
+        .btn-success {
+            background-color: var(--accent-success);
+            border-color: var(--accent-success);
+        }
+
+        .btn-info {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        /* Header section */
+        .page-header {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        /* Filter section */
+        .filter-section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            padding: 1.25rem;
+        }
+
+        .filter-section .row {
+            margin: 0 -0.5rem;
+        }
+
+        .filter-section .col-md-2,
+        .filter-section .col-md-3,
+        .filter-section .col-md-4 {
+            padding: 0 0.5rem;
+        }
+
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .filter-section .col-md-2 {
+                width: 25%;
+            }
+            .filter-section .col-md-3 {
+                width: 50%;
+            }
+            .filter-section .show-column {
+                width: 25%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .filter-section .col-md-2,
+            .filter-section .col-md-3,
+            .filter-section .show-column {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .filter-section .card {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .filter-section .card-body {
+            padding: 0;
+        }
+
+        .filter-section .form-label {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .filter-section .form-select,
+        .filter-section .form-control {
+            height: 2.5rem;
+            font-size: 0.875rem;
+            padding: 0.5rem 0.75rem;
+            background-color: var(--bg-elevated);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .filter-section .input-group-text {
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+            background-color: var(--bg-elevated);
+        }
+
+        .filter-section .input-group .form-control {
+            padding-left: 0.75rem;
+            border-left: 1px solid var(--border-color) !important;
+        }
+
+        .filter-section .input-group .form-control:focus {
+            border-left: 1px solid var(--accent-primary) !important;
+            box-shadow: none;
+        }
+
+        .filter-section .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .filter-section .form-check-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .filter-section .form-check-input {
+            background-color: var(--bg-elevated);
+            border-color: var(--border-color);
+            margin: 0;
+        }
+
+        .filter-section .form-check-input:checked {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* Date cell improvements */
+        .date-cell {
+            width: 120px;
+            white-space: nowrap;
+        }
+
+        .date-cell .case-meta {
+            margin-top: 0;
+            white-space: nowrap;
+            color: var(--text-secondary);
+        }
+
+        /* Table cell vertical alignment */
+        .table td {
+            border-color: var(--border-color);
+            padding: 1rem var(--spacing-sm);
+            vertical-align: middle;
+        }
+
+        .table td > div:not(:last-child) {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Custom text selection */
+        ::selection {
+            background: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        /* Filter section improvements */
+        .filter-section .form-label {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .filter-section .form-control,
+        .filter-section .form-select {
+            height: 2.5rem;
+            font-size: 0.875rem;
+            padding: 0.5rem 0.75rem;
+            background-color: var(--bg-elevated);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+        }
+
+        /* Checkbox alignment improvements */
+        .filter-section .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0;
+            white-space: nowrap;
+        }
+
+        .filter-section .form-check-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0;
+        }
+
+        /* Apply button alignment */
+        .filter-section .col-md-1 {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-section .col-md-1 button {
+            margin-top: auto;
+            height: 2.5rem;
+        }
+
+        /* Table header improvements */
+        .table th {
+            padding: 0.75rem var(--spacing-sm);
+            background-color: var(--bg-elevated) !important;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Date cell improvements */
+        .date-cell .case-meta {
+            margin-top: 0;
+            line-height: 1.2;
+            white-space: nowrap;
+            color: var(--text-secondary);
+        }
+
+        /* Category confidence text */
+        .category-cell .case-meta {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            line-height: 1.2;
+        }
+
+        /* Button icon consistency */
+        .btn i {
+            color: inherit;
+            font-size: inherit;
+        }
+
+        /* Ensure text visibility in dark mode */
+        .text-muted {
+            color: var(--text-secondary) !important;
+        }
+
+        .small {
+            color: var(--text-secondary);
+        }
+
+        .dropdown-item {
+            color: var(--text-primary);
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .btn-link {
+            color: var(--text-primary);
+        }
+
+        .btn-link:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Ensure form control text is visible */
+        .form-control::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        /* Ensure disabled text is visible but distinct */
+        .form-control:disabled,
+        .form-control[readonly],
+        .form-select:disabled {
+            background-color: var(--bg-secondary);
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        /* Ensure alert text is visible */
+        .alert {
+            color: var(--text-primary);
+            background-color: var(--bg-elevated);
+            border-color: var(--border-color);
+        }
+
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            border-color: var(--accent-success);
+            color: #98E2AB;
+        }
+
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            border-color: var(--accent-danger);
+            color: #F8B9B9;
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            border-color: var(--accent-warning);
+            color: #FFE083;
+        }
+
+        /* Ensure pagination text is visible */
+        .page-link {
+            color: var(--text-primary);
+        }
+
+        .page-link:hover {
+            color: var(--text-primary);
+            background-color: var(--bg-elevated);
+        }
+
+        .page-item.disabled .page-link {
+            color: var(--text-secondary);
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+        }
+
+        /* Ensure button text is visible */
+        .btn {
+            color: var(--text-primary);
+        }
+
+        .btn-outline-secondary {
+            color: var(--text-secondary);
+        }
+
+        .btn-outline-secondary:hover {
+            color: var(--text-primary);
+        }
+
+        /* Ensure expanded details text is visible */
+        .case-details dt {
+            color: var(--text-secondary);
+        }
+
+        .case-details dd {
+            color: var(--text-primary);
+        }
+
+        /* Category cell improvements */
+        .category-cell > div:first-child {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .category-cell .case-meta {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            line-height: 1.2;
+        }
+
+        /* Date cell improvements */
+        .date-cell > div:first-child {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .date-cell .case-meta {
+            margin-top: 0;
+            line-height: 1.2;
+            white-space: nowrap;
+            color: var(--text-secondary);
+        }
+
+        /* Not categorized text */
+        .text-muted:not(.case-meta) {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Loading states and animations */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .loading {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(
+                90deg,
+                var(--bg-secondary) 0%,
+                var(--bg-elevated) 50%,
+                var(--bg-secondary) 100%
+            );
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
+
+        /* Tooltips */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-4px);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        [data-tooltip]:after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            border: 4px solid transparent;
+            border-top-color: var(--bg-elevated);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        [data-tooltip]:hover:before,
+        [data-tooltip]:hover:after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Focus states */
+        :focus-visible {
+            outline: 2px solid var(--accent-primary);
+            outline-offset: 2px;
+            border-radius: var(--radius-sm);
+        }
+
+        /* Animations */
+        .case-details {
+            transition: all 0.3s ease;
+        }
+
+        .expand-button {
+            transition: transform 0.2s ease;
+        }
+
+        .expand-button.expanded {
+            transform: rotate(180deg);
+        }
+
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1050;
+        }
+
+        .toast {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            min-width: 300px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--accent-success);
+        }
+
+        .toast-error {
+            border-left: 4px solid var(--accent-danger);
+        }
+
+        .toast-warning {
+            border-left: 4px solid var(--accent-warning);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-subtext {
+            font-size: 0.875rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Sortable columns */
+        .table th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .table th.sortable:hover {
+            background-color: var(--bg-secondary) !important;
+        }
+
+        .table th.sortable:after {
+            content: '↕';
+            margin-left: 0.5rem;
+            opacity: 0.3;
+        }
+
+        .table th.sortable.asc:after {
+            content: '↑';
+            opacity: 1;
+        }
+
+        .table th.sortable.desc:after {
+            content: '↓';
+            opacity: 1;
+        }
+
+        /* Status indicators - removing unused styles */
+        .status-indicator {
+            display: none;  /* or just remove this block entirely */
+        }
+
+        .status-indicator-success {
+            display: none;  /* or just remove this block entirely */
+        }
+
+        .status-indicator-primary {
+            display: none;  /* or just remove this block entirely */
+        }
+
+        /* Real-time search */
+        .search-input {
+            position: relative;
+        }
+
+        .search-input .input-group-text {
+            border-top-left-radius: var(--radius-md);
+            border-bottom-left-radius: var(--radius-md);
+            border-right: none;
+        }
+
+        .search-input .form-control {
+            border-top-right-radius: var(--radius-md);
+            border-bottom-right-radius: var(--radius-md);
+            border-left: none;
+            padding-right: 2.5rem;
+        }
+
+        .search-input .form-control:focus {
+            border-color: var(--border-color);
+            box-shadow: none;
+        }
+
+        .search-input .form-control:focus + .input-group-text {
+            border-color: var(--border-color);
+        }
+
+        .search-input .spinner-border {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1rem;
+            display: none;
+        }
+
+        .search-input.searching .spinner-border {
+            display: block;
+        }
+
+        /* Checkbox styling */
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0;
+        }
+
+        .form-check-input {
+            float: none;
+            margin: 0;
+            background-color: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            position: relative;
+            border-radius: 3px;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .form-check-input:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+        }
+
+        .form-check-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            user-select: none;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .form-check:hover .form-check-input:not(:checked) {
+            border-color: var(--accent-primary);
+        }
+
+        .form-check:hover .form-check-label {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast container for notifications -->
+    <div class="toast-container"></div>
+
+    <div class="container-fluid mt-4">
+        <div class="page-header">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h1 class="page-title">Green Industrial Projects</h1>
+                    </div>
+                    <div class="col-auto">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger" onclick="resetDatabase()" data-tooltip="Reset the entire database">
+                                <i class="bi bi-trash me-2"></i>Reset Database
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="fetchAllCases()" data-tooltip="Fetch all available cases">
+                                <i class="bi bi-cloud-download me-2"></i>Fetch All Cases
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="fetchBookmarkedDetails()" data-tooltip="Update details for bookmarked cases">
+                                <i class="bi bi-star me-2"></i>Update Bookmarked
+                            </button>
+                            <button type="button" class="btn btn-info" onclick="batchCategorize()" data-tooltip="Automatically categorize uncategorized cases">
+                                <i class="bi bi-tags me-2"></i>Batch Categorize
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Admin Status Alert -->
+        <div id="adminAlert" class="alert" style="display: none;" role="alert"></div>
+        
+        <!-- Task Progress -->
+        <div id="taskProgress" class="row mb-4" style="display: none;">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title d-flex justify-content-between">
+                            <span id="taskTitle">Batch Categorization Progress</span>
+                            <small id="taskStatus" class="text-muted"></small>
+                        </h5>
+                        <div class="progress mb-3">
+                            <div id="taskProgressBar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                                role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="taskStats" class="small text-muted">
+                                    Processing cases: <span id="processedCount">0</span>/<span id="totalCount">0</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <div id="taskTime" class="small text-muted">
+                                    Estimated time remaining: <span id="timeRemaining">Calculating...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="taskErrors" class="mt-3" style="display: none;">
+                            <h6 class="text-danger">Errors:</h6>
+                            <ul class="list-unstyled small"></ul>
+                        </div>
+                        <div id="taskCategories" class="mt-3" style="display: none;">
+                            <h6>Categorization Results:</h6>
+                            <ul class="list-unstyled small"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="filter-section">
+            <div class="card">
+                <div class="card-body">
+                    <form method="GET" class="row g-3" id="filterForm">
+                        <div class="col-md-2">
+                            <label class="form-label" data-tooltip="Filter by county">Län</label>
+                            <select name="lan" class="form-select" onchange="this.form.submit()">
+                                <option value="">All</option>
+                                {% for lan in lans %}
+                                <option value="{{ lan }}" {% if selected_lan == lan %}selected{% endif %}>{{ lan }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" data-tooltip="Current status of the case">Status</label>
+                            <select name="status" class="form-select" onchange="this.form.submit()">
+                                <option value="">All</option>
+                                {% for status in statuses %}
+                                <option value="{{ status }}" {% if selected_status == status %}selected{% endif %}>{{ status }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" data-tooltip="Main category of the project">Category</label>
+                            <select name="category" class="form-select" onchange="this.form.submit()">
+                                <option value="">All</option>
+                                {% for category in categories %}
+                                <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" data-tooltip="Search in case titles">Search</label>
+                            <div class="input-group search-input">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search text-secondary"></i>
+                                </span>
+                                <input type="text" name="search" class="form-control" value="{{ search_query }}" 
+                                       placeholder="Search titles (↵)" id="searchInput">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Searching...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 show-column">
+                            <label class="form-label" data-tooltip="Show only bookmarked cases">Show</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" name="bookmarked" id="bookmarkedCheck"
+                                       {% if show_bookmarked %}checked{% endif %} onchange="this.form.submit()">
+                                <label class="form-check-label" for="bookmarkedCheck">Only Bookmarked</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cases List -->
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table" id="casesTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px"></th>
+                                <th class="title-cell sortable" data-sort="title">Title</th>
+                                <th class="location-cell sortable" data-sort="location">Location</th>
+                                <th class="category-cell sortable" data-sort="category">Category</th>
+                                <th class="date-cell sortable" data-sort="date">Date</th>
+                                <th class="status-cell sortable" data-sort="status">Status</th>
+                                <th class="actions-cell">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if cases %}
+                                {% for case in cases %}
+                                <tr class="case-row" data-case-id="{{ case.id }}">
+                                    <td>
+                                        {% if case.is_bookmarked %}
+                                        <button class="btn btn-link p-0 expand-button" onclick="toggleDetails('{{ case.id }}')">
+                                            <i class="bi bi-chevron-down"></i>
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                    <td class="title-cell">
+                                        <div class="case-title">{{ case.title }}</div>
+                                        {% if case.sender %}
+                                        <div class="case-meta">{{ case.sender }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td class="location-cell">
+                                        <div>{{ case.municipality }}</div>
+                                        <div class="case-meta">{{ case.lan }}</div>
+                                    </td>
+                                    <td class="category-cell">
+                                        {% if case.primary_category %}
+                                        <div>{{ case.primary_category }}</div>
+                                        {% if case.category_confidence %}
+                                        <div class="case-meta">{{ "%.0f"|format(case.category_confidence * 100) }}% confidence</div>
+                                        {% endif %}
+                                        {% else %}
+                                        <div class="text-muted">Not categorized</div>
+                                        {% endif %}
+                                    </td>
+                                    <td class="date-cell">
+                                        <div>{{ case.date.strftime('%Y-%m-%d') }}</div>
+                                        {% if case.decision_date %}
+                                        <div class="case-meta">Decision: {{ case.decision_date.strftime('%Y-%m-%d') }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td class="status-cell">
+                                        <span class="badge {% if case.status == 'Avslutat' %}bg-success{% else %}bg-primary{% endif %} status-badge">
+                                            {{ case.status }}
+                                        </span>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="dropdown action-menu">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <button type="button" class="dropdown-item" onclick="toggleBookmark('{{ case.id }}')">
+                                                        <i class="bi {% if case.is_bookmarked %}bi-star-fill text-warning{% else %}bi-star{% endif %}"></i>
+                                                        {% if case.is_bookmarked %}Bookmarked{% else %}Bookmark{% endif %}
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ case.url }}" target="_blank">
+                                                        <i class="bi bi-box-arrow-up-right"></i>
+                                                        View Case
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="dropdown-item" onclick="categorizeCase('{{ case.id }}')">
+                                                        <i class="bi bi-tags"></i>
+                                                        {% if case.primary_category %}Recategorize{% else %}Categorize{% endif %}
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% if case.is_bookmarked %}
+                                <tr class="case-details-row" id="details-{{ case.id }}" style="display: none;">
+                                    <td colspan="7">
+                                        <div class="case-details">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h5>Case Details</h5>
+                                                    <dl class="row">
+                                                        <dt class="col-sm-4">Case ID</dt>
+                                                        <dd class="col-sm-8">{{ case.id }}</dd>
+                                                        
+                                                        <dt class="col-sm-4">Sender</dt>
+                                                        <dd class="col-sm-8">{{ case.sender or 'N/A' }}</dd>
+                                                        
+                                                        <dt class="col-sm-4">Status</dt>
+                                                        <dd class="col-sm-8">{{ case.status }}</dd>
+                                                        
+                                                        <dt class="col-sm-4">Municipality</dt>
+                                                        <dd class="col-sm-8">{{ case.municipality or 'N/A' }}</dd>
+                                                        
+                                                        <dt class="col-sm-4">Decision Date</dt>
+                                                        <dd class="col-sm-8">{{ case.decision_date.strftime('%Y-%m-%d') if case.decision_date else 'N/A' }}</dd>
+
+                                                        {% if case.primary_category %}
+                                                        <dt class="col-sm-4">Category</dt>
+                                                        <dd class="col-sm-8">
+                                                            {{ case.primary_category }}
+                                                            <div class="small text-muted">
+                                                                Confidence: {{ "%.0f"|format(case.category_confidence * 100) }}%
+                                                                {% if case.last_categorized_at %}
+                                                                <br>Last updated: {{ case.last_categorized_at.strftime('%Y-%m-%d') }}
+                                                                {% endif %}
+                                                            </div>
+                                                            {% if case.category_metadata and case.category_metadata.reasoning %}
+                                                            <div class="small text-muted mt-1">
+                                                                {{ case.category_metadata.reasoning }}
+                                                            </div>
+                                                            {% endif %}
+                                                        </dd>
+                                                        {% endif %}
+                                                    </dl>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h5>Documents</h5>
+                                                    {% if case.documents %}
+                                                    <div class="document-list">
+                                                        {% for doc in case.documents %}
+                                                        <div class="document-item">
+                                                            <div class="d-flex justify-content-between align-items-start">
+                                                                <div>
+                                                                    <a href="{{ doc.url }}" target="_blank" class="text-decoration-none">{{ doc.title }}</a>
+                                                                    <div class="document-date">{{ doc.date }}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    <p class="text-muted">No documents available</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">
+                                            <i class="bi bi-search"></i>
+                                        </div>
+                                        <div class="empty-state-text">No cases found</div>
+                                        <div class="empty-state-subtext">
+                                            Try adjusting your filters or search criteria to find what you're looking for.
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if pagination.total_pages > 1 %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if pagination.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ pagination.current_page - 1 }}{% if selected_lan %}&lan={{ selected_lan }}{% endif %}{% if show_bookmarked %}&bookmarked=on{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% set window_size = 2 %}
+                {% set window_start = [pagination.current_page - window_size, 1] | max %}
+                {% set window_end = [pagination.current_page + window_size, pagination.total_pages] | min %}
+
+                {% if window_start > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if selected_lan %}&lan={{ selected_lan }}{% endif %}{% if show_bookmarked %}&bookmarked=on{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}">1</a>
+                    </li>
+                    {% if window_start > 2 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endif %}
+                
+                {% for page in range(window_start, window_end + 1) %}
+                <li class="page-item {% if page == pagination.current_page %}active{% endif %}">
+                    <a class="page-link" href="?page={{ page }}{% if selected_lan %}&lan={{ selected_lan }}{% endif %}{% if show_bookmarked %}&bookmarked=on{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}">{{ page }}</a>
+                </li>
+                {% endfor %}
+                
+                {% if window_end < pagination.total_pages %}
+                    {% if window_end < pagination.total_pages - 1 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pagination.total_pages }}{% if selected_lan %}&lan={{ selected_lan }}{% endif %}{% if show_bookmarked %}&bookmarked=on{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}">{{ pagination.total_pages }}</a>
+                    </li>
+                {% endif %}
+                
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ pagination.current_page + 1 }}{% if selected_lan %}&lan={{ selected_lan }}{% endif %}{% if show_bookmarked %}&bookmarked=on{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Save filter state to localStorage
+        function saveFilterState() {
+            const form = document.getElementById('filterForm');
+            const formData = new FormData(form);
+            const state = {};
+            for (let [key, value] of formData.entries()) {
+                state[key] = value;
+            }
+            localStorage.setItem('filterState', JSON.stringify(state));
+        }
+
+        // Load filter state from localStorage
+        function loadFilterState() {
+            const savedState = localStorage.getItem('filterState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                const form = document.getElementById('filterForm');
+                Object.entries(state).forEach(([key, value]) => {
+                    const input = form.elements[key];
+                    if (input) {
+                        if (input.type === 'checkbox') {
+                            input.checked = value === 'on';
+                        } else {
+                            input.value = value;
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize filter state
+        document.addEventListener('DOMContentLoaded', loadFilterState);
+        document.getElementById('filterForm').addEventListener('submit', saveFilterState);
+
+        // Update search behavior to trigger on Enter
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+        
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                clearTimeout(searchTimeout);
+                const searchContainer = this.closest('.search-input');
+                searchContainer.classList.remove('searching');
+                this.form.submit();
+            }
+        });
+
+        searchInput.addEventListener('input', function() {
+            const searchContainer = this.closest('.search-input');
+            searchContainer.classList.add('searching');
+            
+            clearTimeout(searchTimeout);
+            // Only show the spinner, don't auto-submit
+            setTimeout(() => {
+                searchContainer.classList.remove('searching');
+            }, 500);
+        });
+
+        // Sortable columns
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.addEventListener('click', function() {
+                const sort = this.dataset.sort;
+                const currentOrder = this.classList.contains('asc') ? 'desc' : 'asc';
+                
+                // Remove sorting classes from all headers
+                document.querySelectorAll('th.sortable').forEach(header => {
+                    header.classList.remove('asc', 'desc');
+                });
+                
+                // Add sorting class to clicked header
+                this.classList.add(currentOrder);
+                
+                // Get the current URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                
+                // Update or add the sort parameters
+                urlParams.set('sort', sort);
+                urlParams.set('order', currentOrder);
+                
+                // Preserve other filter parameters from the form
+                const form = document.getElementById('filterForm');
+                const formData = new FormData(form);
+                for (let [key, value] of formData.entries()) {
+                    if (value) {
+                        urlParams.set(key, value);
+                    }
+                }
+                
+                // Navigate to the new URL with sort parameters
+                window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
+            });
+        });
+
+        // Initialize sort indicators on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sort = urlParams.get('sort');
+            const order = urlParams.get('order');
+            
+            if (sort && order) {
+                const header = document.querySelector(`th.sortable[data-sort="${sort}"]`);
+                if (header) {
+                    header.classList.add(order);
+                }
+            }
+        });
+
+        // Toast notifications
+        function showToast(message, type = 'success') {
+            const toastContainer = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : 'exclamation-circle'}"></i>
+                <div>${message}</div>
+            `;
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Replace alert with toast
+        function showAlert(message, type) {
+            showToast(message, type);
+        }
+
+        // Optimistic UI updates
+        async function toggleBookmark(caseId) {
+            const row = document.querySelector(`tr[data-case-id="${caseId}"]`);
+            const button = row.querySelector('.dropdown-item i.bi-star, .dropdown-item i.bi-star-fill');
+            const isCurrentlyBookmarked = button.classList.contains('bi-star-fill');
+            
+            // Optimistically update UI
+            button.classList.toggle('bi-star');
+            button.classList.toggle('bi-star-fill');
+            button.classList.toggle('text-warning');
+            button.parentElement.textContent = isCurrentlyBookmarked ? 'Bookmark' : 'Bookmarked';
+            
+            try {
+                const response = await fetch(`/bookmark/${caseId}`, {
+                    method: 'POST'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to update bookmark');
+                }
+                
+                showToast(isCurrentlyBookmarked ? 'Bookmark removed' : 'Case bookmarked', 'success');
+            } catch (error) {
+                // Revert UI on error
+                button.classList.toggle('bi-star');
+                button.classList.toggle('bi-star-fill');
+                button.classList.toggle('text-warning');
+                button.parentElement.textContent = isCurrentlyBookmarked ? 'Bookmarked' : 'Bookmark';
+                showToast('Failed to update bookmark', 'error');
+            }
+        }
+
+        // Existing functions with toast notifications
+        async function categorizeCase(caseId) {
+            try {
+                const response = await fetch(`/api/v1/categorize/${caseId}`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showToast('Case categorized successfully', 'success');
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    showToast(data.detail || 'Failed to categorize case', 'error');
+                }
+            } catch (error) {
+                showToast('Error categorizing case', 'error');
+            }
+        }
+
+        // Task monitoring with improved UI feedback
+        function updateProgress(data) {
+            const progressBar = document.getElementById('taskProgressBar');
+            const taskTitle = document.getElementById('taskTitle');
+            const taskStatus = document.getElementById('taskStatus');
+            const taskMessage = document.getElementById('taskMessage');
+            const taskErrors = document.getElementById('taskErrors');
+
+            progressBar.style.width = `${data.progress}%`;
+            taskTitle.textContent = `Task Progress (${data.progress}%)`;
+            taskStatus.textContent = data.status;
+            taskMessage.textContent = data.message;
+
+            if (data.errors && data.errors.length > 0) {
+                taskErrors.innerHTML = data.errors.map(e => 
+                    `<div>${new Date(e.time).toLocaleTimeString()}: ${e.error}</div>`
+                ).join('');
+            }
+
+            if (data.status === 'completed' || data.status === 'failed') {
+                clearInterval(taskMonitorInterval);
+                activeTaskId = null;
+                progressBar.classList.remove('progress-bar-animated');
+                
+                if (data.status === 'completed') {
+                    progressBar.classList.add('bg-success');
+                    showToast(data.message, 'success');
+                } else {
+                    progressBar.classList.add('bg-danger');
+                    showToast('Task failed: ' + data.message, 'error');
+                }
+
+                setTimeout(() => {
+                    document.getElementById('taskProgress').style.display = 'none';
+                    if (data.status === 'completed') {
+                        window.location.reload();
+                    }
+                }, 2000);
+            }
+        }
+
+        // Initialize tooltips
+        document.querySelectorAll('[data-tooltip]').forEach(element => {
+            element.addEventListener('mouseenter', function(e) {
+                const tooltip = this.getAttribute('data-tooltip');
+                if (tooltip) {
+                    const rect = this.getBoundingClientRect();
+                    const tooltipEl = document.createElement('div');
+                    tooltipEl.className = 'tooltip';
+                    tooltipEl.textContent = tooltip;
+                    document.body.appendChild(tooltipEl);
+                    
+                    const tooltipRect = tooltipEl.getBoundingClientRect();
+                    tooltipEl.style.left = rect.left + (rect.width - tooltipRect.width) / 2 + 'px';
+                    tooltipEl.style.top = rect.top - tooltipRect.height - 8 + 'px';
+                }
+            });
+        });
+
+        async function batchCategorize() {
+            // Show progress UI
+            const progressDiv = document.getElementById('taskProgress');
+            const progressBar = document.getElementById('taskProgressBar');
+            const taskStatus = document.getElementById('taskStatus');
+            const processedCount = document.getElementById('processedCount');
+            const totalCount = document.getElementById('totalCount');
+            const timeRemaining = document.getElementById('timeRemaining');
+            const taskErrors = document.getElementById('taskErrors');
+            const taskCategories = document.getElementById('taskCategories');
+            
+            progressDiv.style.display = 'block';
+            taskErrors.style.display = 'none';
+            taskCategories.style.display = 'none';
+            taskErrors.querySelector('ul').innerHTML = '';
+            taskCategories.querySelector('ul').innerHTML = '';
+            
+            try {
+                // Create EventSource for SSE
+                const eventSource = new EventSource('/api/v1/categorize/batch/stream');
+                
+                eventSource.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    
+                    // Update UI with progress data
+                    processedCount.textContent = data.processed;
+                    totalCount.textContent = data.total_cases;
+                    updateProgressBar(data);
+                    
+                    // Show any errors
+                    if (data.errors && data.errors.length > 0) {
+                        taskErrors.style.display = 'block';
+                        const errorList = taskErrors.querySelector('ul');
+                        errorList.innerHTML = ''; // Clear existing errors
+                        data.errors.forEach(error => {
+                            const li = document.createElement('li');
+                            li.textContent = error;
+                            li.className = 'text-danger';
+                            errorList.appendChild(li);
+                        });
+                    }
+                    
+                    // Show categorization results
+                    if (Object.keys(data.categories).length > 0) {
+                        taskCategories.style.display = 'block';
+                        const categoryList = taskCategories.querySelector('ul');
+                        categoryList.innerHTML = ''; // Clear existing categories
+                        Object.entries(data.categories).forEach(([category, count]) => {
+                            const li = document.createElement('li');
+                            li.textContent = `${category}: ${count} cases`;
+                            categoryList.appendChild(li);
+                        });
+                    }
+                    
+                    // Handle completion states
+                    if (data.status === 'completed') {
+                        showCompletionStatus(data);
+                        eventSource.close();
+                        setTimeout(() => window.location.reload(), 3000);
+                    } else if (data.status === 'quota_exceeded') {
+                        showQuotaExceededStatus(data);
+                        eventSource.close();
+                    } else if (data.status === 'failed') {
+                        showFailedStatus(data);
+                        eventSource.close();
+                    } else if (data.status === 'completed_with_errors') {
+                        showCompletedWithErrorsStatus(data);
+                        eventSource.close();
+                        setTimeout(() => window.location.reload(), 3000);
+                    }
+                };
+                
+                eventSource.onerror = function(error) {
+                    console.error('SSE Error:', error);
+                    eventSource.close();
+                    showToast('Error during batch categorization', 'error');
+                    taskStatus.textContent = 'Error';
+                    taskStatus.className = 'text-danger';
+                };
+                
+            } catch (error) {
+                showToast(error.message || 'Error during batch categorization', 'error');
+                taskStatus.textContent = 'Error';
+                taskStatus.className = 'text-danger';
+            }
+        }
+        
+        function updateProgressBar(data) {
+            const progressBar = document.getElementById('taskProgressBar');
+            const taskStatus = document.getElementById('taskStatus');
+            const timeRemaining = document.getElementById('timeRemaining');
+            
+            // Update progress bar
+            progressBar.style.width = `${data.progress_percentage}%`;
+            progressBar.setAttribute('aria-valuenow', data.progress_percentage);
+            
+            // Update time remaining
+            if (data.estimated_time_remaining !== null) {
+                const minutes = Math.floor(data.estimated_time_remaining / 60);
+                const seconds = data.estimated_time_remaining % 60;
+                timeRemaining.textContent = `${minutes}m ${seconds}s`;
+            } else if (data.status === 'completed' || data.status === 'completed_with_errors') {
+                timeRemaining.textContent = `Completed in ${Math.floor(data.total_time / 60)}m ${data.total_time % 60}s`;
+            } else {
+                timeRemaining.textContent = 'Calculating...';
+            }
+        }
+        
+        function showCompletionStatus(data) {
+            const taskStatus = document.getElementById('taskStatus');
+            const progressBar = document.getElementById('taskProgressBar');
+            
+            taskStatus.textContent = 'Completed';
+            taskStatus.className = 'text-success';
+            progressBar.classList.remove('progress-bar-animated');
+            progressBar.classList.add('bg-success');
+            showToast('Batch categorization completed successfully', 'success');
+        }
+        
+        function showQuotaExceededStatus(data) {
+            const taskStatus = document.getElementById('taskStatus');
+            const progressBar = document.getElementById('taskProgressBar');
+            
+            taskStatus.textContent = 'API Quota Exceeded';
+            taskStatus.className = 'text-warning';
+            progressBar.classList.remove('progress-bar-animated');
+            progressBar.classList.add('bg-warning');
+            showToast('API quota exceeded. Process stopped.', 'warning');
+        }
+        
+        function showFailedStatus(data) {
+            const taskStatus = document.getElementById('taskStatus');
+            const progressBar = document.getElementById('taskProgressBar');
+            
+            taskStatus.textContent = 'Failed';
+            taskStatus.className = 'text-danger';
+            progressBar.classList.remove('progress-bar-animated');
+            progressBar.classList.add('bg-danger');
+            showToast('Batch categorization failed', 'error');
+        }
+        
+        function showCompletedWithErrorsStatus(data) {
+            const taskStatus = document.getElementById('taskStatus');
+            const progressBar = document.getElementById('taskProgressBar');
+            
+            taskStatus.textContent = 'Completed with Errors';
+            taskStatus.className = 'text-warning';
+            progressBar.classList.remove('progress-bar-animated');
+            progressBar.classList.add('bg-warning');
+            showToast('Batch categorization completed with some errors', 'warning');
+        }
+    </script>
+</body>
+</html> 
