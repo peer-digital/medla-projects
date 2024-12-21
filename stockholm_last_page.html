@@ -1,0 +1,398 @@
+
+<!DOCTYPE HTML>
+<HTML class="sv-no-js" lang="sv">
+<HEAD><meta content="IE=11.0000" http-equiv="X-UA-Compatible" /><meta charset="UTF-8" /><title>
+	Länsstyrelsernas diarium
+</title><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, shrink-to-fit=no" /><meta name="dcterms.identifier" content="&lt;%= Server.HtmlEncode(GetAppRootUrl(false)) %>" /><meta name="dcterms.language" content="sv" /><meta name="dcterms.format" content="text/html" /><meta name="dcterms.type" content="text" /><link href="../Styles/lst/lst-responsive-grids.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/lst-spacing.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/lst.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/lst(1).css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/lst_static-min.css" rel="stylesheet" type="text/css" media="print,screen,speech" /><link href="../Styles/lst/css.css" rel="stylesheet" type="text/css" media="all" /><link href="../Styles/lst/css(1).css" rel="stylesheet" type="text/css" media="all" /><link href="../Styles/lst/sv-template-asset.css" rel="stylesheet" type="text/css" /><link href="../Content/themes/base/jquery-ui.min.css" rel="stylesheet" /><link href="../Content/bootstrap.min.css" rel="stylesheet" /><link href="../Content/footable.bootstrap.min.css" rel="stylesheet" type="text/css" /><link href="../Styles/FormPipe.css" rel="stylesheet" type="text/css" /><link href="../Content/font-awesome.min.css" rel="stylesheet" /><link rel="icon" href="data:;base64,=" />
+
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/jquery-3.5.0.min.js"></script>
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/jquery-ui-i18n.min.js" ></script>
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/bootstrap.min.js"></script> 
+    <script type="text/javascript" src="https://diarium.lansstyrelsen.se/Scripts/moment.min.js"></script>
+    <script src="https://diarium.lansstyrelsen.se/Scripts/footable2.min.js"></script>
+    <SCRIPT src="https://diarium.lansstyrelsen.se/Scripts/lst/lst_cookie_banner.js"></SCRIPT>
+    <SCRIPT src="https://diarium.lansstyrelsen.se/Scripts/lst/TabFocus.js"></SCRIPT>
+
+    <meta content="Webbdiariet" property="og:title" /><meta content="- Länsstyrelsernas webbdiarium" property="og:description" /><meta name="description" content="Länsstyrelsernas webbdiarium" />
+
+    <!-- Matomo -->
+<script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function () {
+        var u = "https://analytics.lansstyrelsen.se/";
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '72']);
+        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+    })();
+</script>
+<!-- End Matomo Code -->
+
+</HEAD>
+<BODY class="sv-responsive">
+    <form method="post" action="./CaseSearchResult.aspx?query=oJ%2fYw8gzqEr9ngHRvOS%2f2ldmWTfvgjFlqUZFUYhPZnwUx8MwAuFzFTiAb1%2f7bMntiEZH+fFgiW5ALWxF1I5vxEiAYmdEdOahK%2fpYQOCJNpfkyPdhkzSmVM3bVjEX4C8r4yu97P3JRoF%2fT%2fhZDj30FP1N9QtHTaYHz9E+PJN%2fhCP2uicaAXbQuFDAY47PgQSvV3Eauy6DO+MjoDJHiICdtA%3d%3d" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="9DDA1863" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAgan7Rlj+CpbH6hnNxfjeaYWcCMmTdAxJK10O8nIJ3AMFrUNMfQTjsGIlxWoALWnVNjDNedg5nt9OwOkZTh97KOPDInqvDOnlPYcZnkjx6/oq4MdN3/Jq6Vi2zbW0xbZPUHNufIBcgWA0ncp0cv0y+8RMZwm4L5KrZLiHD3DTQlw+l8eJtJ1x9h9mwnUbH0hHtEOtI/c9pyeB9rRfoo1HRK" />
+</div>
+    <DIV class="sv-layout" >
+        <DIV class="sv-vertical sv-layout sv-hide-sv-bp-tablet sv-hide-sv-bp-phone ielayoutfix sv-template-layout c5765">
+            <DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-skip-spacer sv-template-layout">
+                <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                    <NAV class="sv-layout sv-skip-spacer sv-column-5 sv-template-layout" >
+                    </NAV>
+                    
+                </DIV>
+            </DIV>
+        </DIV>
+        <DIV class="sv-vertical sv-layout sv-template-layout">
+            <DIV class="sv-vertical sv-layout sv-view sv-skip-spacer sv-template-layout" >
+                <DIV class="sv-script-portlet sv-portlet sv-skip-spacer">
+                    <DIV id="Cookiebanner"><!-- Cookiebanner --></DIV>
+                    <DIV class="lst-cookie-banner--hide lst-sidepadding" id="lst-cookie-banner" aria-label="Cookie banner">
+                        <DIV class="lst-cookie-banner__container">
+                            <DIV class="lst-cookie-banner__information">
+                                <P>
+                                    Den här webbplatsen använder kakor (cookies) för att ge dig en bättre
+                                    upplevelse av webbplatsen. En del av dessa kakor är tredjepartskakor. Genom att
+                                    använda vår webbplats accepterar du att kakor används.          <A class="lst-cookie-banner__readmore"  href="https://diarium.lansstyrelsen.se/about-cookies.aspx">
+                                        Läs
+                                        mer om kakor och hur du kan stänga av dem.
+                                    </A>
+                                </P>
+                            </DIV>
+                            <DIV class="lst-cookie-banner__actions">
+                                <A class="lst-cookie-banner__close"
+                                   href="https://diarium.lansstyrelsen.se#">
+                                    Stäng<IMG class="lst-cookie-banner__icon" alt="Stäng cookie" src="https://diarium.lansstyrelsen.se/Content/lst/kryss_black.svg">
+                                </A>
+                            </DIV>
+                        </DIV>
+                    </DIV>
+                </DIV>
+            </DIV>
+        </DIV>
+        
+        
+        <HEADER class="sv-vertical sv-layout sv-template-layout" >
+            <DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst_header-parent lst-sidepadding sv-skip-spacer sv-template-layout c5795">
+                <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                    <DIV class="sv-layout sv-skip-spacer sv-column-7 sv-template-layout" >
+                        <DIV class="sv-script-portlet sv-portlet lst-header-logo sv-skip-spacer">
+                            <DIV id="LoggaSkript"><!-- Logga - Skript --></DIV><A href="https://diarium.lansstyrelsen.se/">
+                                <IMG alt="Länsstyrelsernas diarium, till startsidan" src="https://diarium.lansstyrelsen.se/img/lst_topplogo.gif">
+                            </A>
+                        </DIV>
+                    </DIV>
+                    <DIV class="sv-layout isGlobal sv-column-5 sv-template-layout">
+                    </DIV>
+                </DIV>
+            </DIV>
+        </HEADER>
+        <DIV class="sv-vertical sv-layout sv-visible-sv-bp-tablet sv-visible-sv-bp-phone ielayoutfix sv-template-layout c5771"
+             id="svid10_2baa5e3e161e6f2218922cb5">
+           
+            <DIV class="sv-layout" >
+                <DIV id="menu"><!-- menu --></DIV>
+                <DIV class="sv-script-portlet sv-portlet sv-skip-spacer ">
+                    <DIV id="lstmobilemenu2"><!-- lst-mobile-menu-2 --></DIV>
+                  
+                </DIV>
+            </DIV>
+        </DIV>
+       
+        <DIV class="sv-vertical sv-layout sv-hide-sv-bp-tablet sv-hide-sv-bp-phone sv-template-layout">
+            <DIV class="sv-vertical sv-layout sv-view sv-skip-spacer sv-template-layout" >
+                
+                <div class="sv-vertical sv-layout lst-topnav--blue ielayoutfix sv-template-layout c5809" >
+                    <div class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-skip-spacer sv-template-layout" >
+                        <div class="sv-row sv-layout sv-hide-sv-bp-tablet sv-hide-sv-bp-phone sv-skip-spacer sv-template-layout" >
+                            <div class="sv-layout sv-skip-spacer sv-column-12 sv-template-layout" ></div>
+                        </div>
+                    </div>
+                </div>
+            </DIV>
+        </DIV>
+        
+        <main class="sv-vertical sv-layout lst-changes-background sv-template-layout">
+            <DIV >
+                <DIV class="sv-layout sv-skip-spacer sv-template-portlet&#10;" >
+                    <DIV id="Hallarefornavigationutanmus"><!-- Hållare för navigation utan mus --></DIV>
+                    <DIV class="sv-html-portlet sv-portlet sv-skip-spacer">
+                        <DIV id="HarlandarduomduhopparovernavigationHTML"><!-- Här landar du om du hoppar över navigation - HTML --></DIV>
+                        <DIV id="hopptillinnehall"></DIV>
+                    </DIV>
+                </DIV>
+
+                 <div class="PortalContent" >
+                                    <!-- Menu -->
+                                    
+                                    
+                                    <!-- Main -->
+                                    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <div class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-template-layout">
+        <div class="sv-row sv-layout sv-skip-spacer sv-template-layout">
+            <div class="sv-spacer-1_8emvt sv-layout sv-skip-spacer sv-column-12 sv-template-layout">
+
+
+                <h2>Diarium för Länsstyrelsen i Stockholms län</h2>
+                <div class="large-search__search-hit-count">
+                    <h3>Sökresultat:&nbsp;<span id="SearchPlaceHolder_lblCaseCount">34751-34775 av 34775</span></h3>
+                    <br />
+                </div>
+
+
+                <div>
+	<table class="table" cellspacing="0" rules="all" border="1" id="SearchPlaceHolder_caseGridView" style="border-collapse:collapse;">
+		<thead>
+			<tr>
+				<th scope="col">Diarienummer</th><th data-breakpoints="xs" scope="col">Status</th><th data-breakpoints="xs" scope="col" style="white-space:nowrap;">In/Upp-datum</th><th scope="col">&#196;renderubrik</th><th data-breakpoints="xs sm" scope="col">Avsändare/mottagare</th><th data-breakpoints="xs sm" scope="col">Postort</th><th data-breakpoints="xs sm" scope="col">Kommun</th><th data-breakpoints="xs sm" scope="col" style="white-space:nowrap;">Beslutsdatum</th>
+			</tr>
+		</thead><tbody>
+			<tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4980964" target="_self">67007-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-16</td><td>&#214;verl&#228;mnande av tvist om gravs&#228;ttning</td><td>
+                                Gustavsberg-Ingarö församling
+                            </td><td>Gustavsberg</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4980965" target="_self">67008-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-13</td><td>&#214;verklagande av kommuns beslut 2024-12-09 om livsmedelskontroll r&#246;rande f&#246;rel&#228;ggande, S&#246;dert&#228;lje kommun</td><td>
+                                Coop Butiker och Stormarknader AB
+                            </td><td>Stockholm</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4980987" target="_self">67010-2024</a></td><td>Avslutat</td><td style="white-space:nowrap;">2024-12-17</td><td>Beslut om avsteg fr&#229;n L&#228;nsstyrelsens interna ink&#246;ps- och upphandlingspolicy, Natursk&#246;tsel 2025</td><td>
+                                Länsstyrelsen Stockholm
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td style="white-space:nowrap;">2024-12-17</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4980991" target="_self">67011-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>Ans&#246;kan om bidrag till kulturhistoriskt v&#228;rdefull bebyggelse, Svindersvik, Nacka kommun</td><td>
+                                Stiftelsen Nordiska museet 
+                            </td><td>Stockholm</td><td>Nacka</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4981082" target="_self">67030-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>Avtal om r&#229;dgivning Greppa N&#228;ringen- till&#228;ggsavtal </td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4981083" target="_self">67031-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-13</td><td>Ans&#246;kan om f&#246;rordnande av ordf&#246;rande i Bussler och Bussler AB:s Pensionsstiftelse</td><td>
+                                Bussler och Bussler AB:s Pensionsstiftelse
+                            </td><td>G&#214;TEBORG</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4981046" target="_self">67021-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>&#214;verenskommelse om s&#228;kerhetsskydd</td><td>
+                                Länsstyrelsen i Stockholms län
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4981048" target="_self">67022-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>L&#246;negaranti vid konkurs</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4981050" target="_self">67023-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-11</td><td>Ans&#246;kan fr&#229;n utl&#228;ndsk myndighet om bist&#229;nd med delgivning fr&#229;n Tyskland</td><td>
+                                Amtsgericht Hamburg-Altona-Gem, Mahngericht Hamburg u, Mecklenburg- Vorpommern
+                            </td><td>Hamburg</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4981052" target="_self">67024-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>L&#246;negaranti vid konkurs</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4981013" target="_self">67014-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-13</td><td>Beg&#228;ran om r&#229;d och upplysning</td><td>
+                                Gustaf och Augusta Hazelius Stiftelse till Södertälje kyrka
+                            </td><td>S&#214;DERT&#196;LJE</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4981014" target="_self">67015-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>Meddelande om L&#228;nsstyrelsens arbete kring livsmedelsberedskap</td><td>
+                                Länsstyrelsen Stockholm
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4986152" target="_self">67842-2024</a></td><td>Avslutat</td><td style="white-space:nowrap;">2024-09-12</td><td>Anm&#228;lan om att tidigare godk&#228;nd person avslutar anst&#228;llning i auktoriserat delgivningsf&#246;retag</td><td>
+                                Intrum Delgivningsservice AB
+                            </td><td>Stockholm </td><td>&nbsp;</td><td style="white-space:nowrap;">2024-12-20</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983287" target="_self">67400-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-16</td><td>Anm&#228;lan om registertecknare f&#246;r Logen 10 Viktor Rydberg 100F Sparb&#246;ssefondens Fromma Stiftelse</td><td>
+                                Logen 10 Viktor Rydberg 100F Sparbössefondens Fromma Stiftelse
+                            </td><td>STOCKHOLM</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983321" target="_self">67411-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>Beg&#228;ran om yttrande &#246;ver f&#246;rslag till vattentj&#228;nstplan f&#246;r Sigtuna kommun</td><td>
+                                Sigtuna kommun
+                            </td><td>&nbsp;</td><td>Sigtuna</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983324" target="_self">67412-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>Samr&#229;d om detaljplan f&#246;r N&#228;ckrosen 14 och N&#228;ckrosen 24 i stadsdelen Solhem, Stockholms kommun, S-DP 2024-01796</td><td>
+                                Stockholms kommun
+                            </td><td>Stockholm</td><td>Stockholm</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983328" target="_self">67413-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-16</td><td>Anm&#228;lan om &#228;ndring av registeruppgifter f&#246;r Stiftelsen Aff&#228;rsv&#228;rlden</td><td>
+                                Stiftelsen Affärsvärlden
+                            </td><td>STOCKHOLM</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983295" target="_self">67402-2024</a></td><td>Avslutat</td><td style="white-space:nowrap;">2024-12-17</td><td>Beg&#228;ran om samr&#229;d om betydande milj&#246;p&#229;verkan f&#246;r detaljplan Medicinaren 19 inom kommundelen Flemingsberg, Huddinge kommun</td><td>
+                                Huddinge kommun
+                            </td><td>Huddinge</td><td>Huddinge</td><td style="white-space:nowrap;">2024-12-20</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983302" target="_self">67404-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>Anm&#228;lan f&#246;r samr&#229;d i efterhand om avverkning skyddsv&#228;rda tr&#228;d i efterhand i Kungliga nationalstadsparken, Hagaparken, Solna kommun</td><td>
+                                Statens Fastighetsverk, Ulriksdal
+                            </td><td>&nbsp;</td><td>Solna</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983303" target="_self">67405-2024</a></td><td>Avslutat</td><td style="white-space:nowrap;">2024-12-16</td><td>Anm&#228;lan om &#228;ndring av registeruppgifter f&#246;r </td><td>
+                                Stiftelsen Wira Bruk
+                            </td><td>&#197;KERSBERGA</td><td>&nbsp;</td><td style="white-space:nowrap;">2024-12-19</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983306" target="_self">67406-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>Beslut i djurskyddsorgan f&#246;r f&#246;rs&#246;ksdjur, till&#228;ggsans&#246;kan om &#228;ndring av etiskt godk&#228;nnande av djurf&#246;rs&#246;k</td><td>
+                                Lunds universitets Djurskyddsorgan
+                            </td><td>&nbsp;</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983356" target="_self">67415-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-16</td><td>Anm&#228;lan om &#228;ndring av registeruppgifter f&#246;r Visions pensionsstiftelse, styrelsens sammans&#228;ttning</td><td>
+                                Visions pensionsstiftelse
+                            </td><td>G&#246;teborg</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983414" target="_self">67427-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-11-11</td><td>Ans&#246;kan fr&#229;n utl&#228;ndsk myndighet om bist&#229;nd med delgivning fr&#229;n Tyskland</td><td>
+                                Amtsgericht Bergisch Gladbach
+                            </td><td>Bergisch Gladbach</td><td>&nbsp;</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr><tr style="background-color:#EEEEEE;">
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983405" target="_self">67425-2024</a></td><td>Avslutat</td><td style="white-space:nowrap;">2024-12-12</td><td>Anm&#228;lan om bristande tillsyn &#246;ver hund, S&#246;dert&#228;lje kommun</td><td>
+                                <div class="PerPres">Personuppgift</div>
+                            </td><td>J&#228;rna</td><td>&nbsp;</td><td style="white-space:nowrap;">2024-12-19</td>
+			</tr><tr>
+				<td style="white-space:nowrap;"><a class="sv-font-brodtext-med-bla-lankning" href="CaseInfo.aspx?caseID=4983386" target="_self">67420-2024</a></td><td>Handl&#228;ggning</td><td style="white-space:nowrap;">2024-12-17</td><td>Anm&#228;lan enligt 11 kap 9 a &#167; Milj&#246;balken om vattenverksamhet f&#246;r anl&#228;ggning av storskalig ekologisk odling av gr&#246;nsaker p&#229; friland i v&#228;xthus, S&#246;dert&#228;lje kommun</td><td>
+                                Peace, Love and Farming AB
+                            </td><td>Gnesta</td><td>S&#246;dert&#228;lje</td><td style="white-space:nowrap;">&nbsp;</td>
+			</tr>
+		</tbody><tfoot>
+			<tr>
+				<td colspan="8"><table>
+					<tr>
+						<td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$First&#39;)">&lt;&lt;</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$691&#39;)">...</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$692&#39;)">692</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$693&#39;)">693</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$694&#39;)">694</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$SearchPlaceHolder$caseGridView&#39;,&#39;Page$695&#39;)">695</a></td><td><span>696</span></td>
+					</tr>
+				</table></td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+
+                <div class="buttonAreafoot">
+
+                    <input type="submit" name="ctl00$SearchPlaceHolder$btnBack" value="Tillbaka" id="SearchPlaceHolder_btnBack" class="LstBtn" />
+                    <input type="button" class="LstBtn" style="margin-left: 10px; width: 110px;" value="Skriv ut" onclick="window.print();" />
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">  
+
+        jQuery(function ($) {
+            $('.table').footable();
+        });
+    </script>
+
+                                </div>
+
+                
+            </DIV>
+        </main>
+        <DIV class="sv-html-portlet sv-portlet lst-changes-background">
+            <DIV id="SidfotsdekorationHTML"><!-- Sidfotsdekoration - HTML --></DIV>
+            <DIV class="lst-footer-decoration"></DIV>
+        </DIV>
+        
+        
+      <FOOTER class="sv-vertical sv-layout ielayoutfix sv-template-layout c5785" >
+            <DIV class="sv-fixed-fluid-grid sv-grid-standard-1140px sv-layout lst-sidepadding sv-skip-spacer sv-template-layout">
+                <DIV class="sv-row sv-layout sv-skip-spacer sv-template-layout" >
+                    <DIV class="sv-layout sv-skip-spacer sv-column-12 sv-template-layout" >
+                        <DIV class="sv-vertical sv-layout lst-footer-dark-blue sv-skip-spacer sv-template-layout">
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column-logo lst-footer-dark-blue-column sv-skip-spacer">
+                                <DIV class="sv-script-portlet sv-portlet lst-header-logo sv-skip-spacer">
+                                    <DIV ></DIV><IMG alt="Länsstyrelsen Uppsala" src="https://diarium.lansstyrelsen.se/img/logga_neg.png">
+                                </DIV>
+                            </DIV>
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column ielayoutfix sv-template-layout c5780">
+                                <DIV class="sv-text-portlet sv-use-margins sv-skip-spacer sv-template-portlet&#10">
+                                   
+                                    <DIV class="sv-text-portlet-content">
+                                        <H2 class="sv-font-vit-rubrik-h2" id="h-Besoksadress">Kontakt</H2>
+                                    </DIV>
+                                </DIV>
+                                <DIV class="sv-text-portlet sv-use-margins" >
+                                   
+                                    <DIV class="sv-text-portlet-content">           
+                                        <p class="sv-font-vit-brodtext"><a href="http://www.lansstyrelsen.se">Alla länsstyrelser</a></p>
+                                    </DIV>
+                                </DIV>
+                                
+                            </DIV>
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column sv-template-layout"
+                                 id="svid10_44f26481161466409d374d6">
+                             
+                            </DIV>
+                            <DIV class="sv-vertical sv-layout lst-footer-dark-blue-column ielayoutfix sv-template-layout" >
+                              
+                                <DIV class="sv-html-portlet sv-portlet">
+                                    <DIV id="TillbakatillstartHTML"><!-- Tillbaka till start - HTML --></DIV>
+                                    <DIV class="lst-to-top-div">
+                                        <A tabindex="0" title="Till toppen" href="https://diarium.lansstyrelsen.se#0">
+                                            <DIV class="lst-to-top"></DIV>
+                                        </A>
+                                    </DIV>
+                                </DIV>
+                            </DIV>
+                        </DIV>
+                    </DIV>
+                </DIV>
+            </DIV>
+        </FOOTER>
+
+    </DIV>
+ 
+    <SCRIPT src="https://diarium.lansstyrelsen.se/Scripts/lst/tillbakaTillStart.js"></SCRIPT>
+
+
+        </form>
+</BODY>
+</HTML>

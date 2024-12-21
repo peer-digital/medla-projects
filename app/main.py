@@ -1,3 +1,5 @@
+# app/main.py
+
 from fastapi import FastAPI, Request, Query, Depends
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -7,15 +9,14 @@ from app.routers import projects, categorization
 from sqlalchemy.orm import Session
 from app.models.models import Case, Bookmark
 from typing import Optional
-from sqlalchemy import func
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 from app.services.categorization import CategorizationService
 
 # Load environment variables
 load_dotenv()
 
-# Create database tables
+# Create database tables if they don’t exist
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Green Industrial Projects Tracker")
@@ -52,30 +53,31 @@ async def serve_frontend(
     
     # Apply filters
     if lan:
-        query = query.filter(Case.lan == lan)
+        query = query.filter(Case.lan == lan)        # Make sure 'lan' exists in your Case model
     if status:
         query = query.filter(Case.status == status)
     if search:
         query = query.filter(Case.title.ilike(f"%{search}%"))
     if bookmarked:
-        query = query.join(Bookmark)
+        # Join with Bookmark to filter only bookmarked cases
+        query = query.join(Bookmark).filter(Bookmark.case_id == Case.id)
     if category:
         query = query.filter(Case.primary_category == category)
     if subcategory:
         query = query.filter(Case.sub_category == subcategory)
     
-    # Apply sorting
-    if sort:
-        # Define the column to sort by
-        sort_column = getattr(Case, {
-            'title': 'title',
-            'location': 'municipality',  # Using municipality for location sorting
-            'category': 'primary_category',
-            'date': 'date',
-            'status': 'status'
-        }.get(sort, 'date'))  # Default to date if invalid sort column
-        
-        # Apply the sort order
+    # Sorting logic
+    # Update the dict to match actual model fields if needed
+    sort_map = {
+        'title': 'title',
+        'location': 'municipality',  # or whatever field you actually use for “location”
+        'category': 'primary_category',
+        'date': 'date',
+        'status': 'status'
+    }
+    
+    if sort and sort in sort_map:
+        sort_column = getattr(Case, sort_map[sort])
         if order == 'desc':
             query = query.order_by(sort_column.desc())
         else:
@@ -91,20 +93,22 @@ async def serve_frontend(
     # Get paginated results
     cases = query.offset((page - 1) * per_page).limit(per_page).all()
     
-    # Get unique län and statuses for filters
-    lans = db.query(Case.lan).distinct().all()
+    # Distinct values for filters
+    lans = db.query(Case.lan).distinct().all()       # if your Case model has a 'lan' column
     statuses = db.query(Case.status).distinct().all()
     
-    # Get categories and subcategories
+    # Categories from your categorization service
     categories = categorization_service.categories
     
-    # Get all subcategories for the selected category
-    subcategories = ["N/A"]  # Since we're not using subcategories anymore
+    # If you have subcategories, fetch or define them
+    # For now, you said subcategories are not in use, so we set a placeholder
+    subcategories_list = ["N/A"]
     
     # Add is_bookmarked flag to cases
+    # For large data sets, consider a different approach, but for smaller sets this is fine
     bookmarked_cases = {b.case_id for b in db.query(Bookmark.case_id).all()}
     for case in cases:
-        case.is_bookmarked = case.id in bookmarked_cases
+        case.is_bookmarked = (case.id in bookmarked_cases)
     
     return templates.TemplateResponse("index.html", {
         "request": request,
@@ -112,10 +116,10 @@ async def serve_frontend(
         "lans": [lan[0] for lan in lans],
         "statuses": [status[0] for status in statuses],
         "categories": categories,
-        "subcategories": subcategories,
+        "subcategories": subcategories_list,
         "category_data": {
             "categories": categories,
-            "subcategories": {"N/A": ["N/A"]}  # Simplified subcategory structure
+            "subcategories": {"N/A": ["N/A"]}  # Simplified
         },
         "selected_lan": lan,
         "selected_status": status,
@@ -135,4 +139,4 @@ async def serve_frontend(
 
 # Include API routers
 app.include_router(projects.router, prefix="/api/v1")
-app.include_router(categorization.router, prefix="/api/v1") 
+app.include_router(categorization.router, prefix="/api/v1")

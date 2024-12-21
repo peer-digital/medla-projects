@@ -6,6 +6,7 @@
     <title>Green Industrial Projects</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
     <style>
         :root {
             /* Color system */
@@ -968,8 +969,8 @@
                             <button type="button" class="btn btn-danger" onclick="resetDatabase()" data-tooltip="Reset the entire database">
                                 <i class="bi bi-trash me-2"></i>Reset Database
                             </button>
-                            <button type="button" class="btn btn-primary" onclick="fetchAllCases()" data-tooltip="Fetch all available cases">
-                                <i class="bi bi-cloud-download me-2"></i>Fetch All Cases
+                            <button type="button" class="btn btn-primary" onclick="fetchAllCases()" data-tooltip="Fetch new cases and updates">
+                                <i class="bi bi-cloud-download"></i> Fetch Cases
                             </button>
                             <button type="button" class="btn btn-success" onclick="fetchBookmarkedDetails()" data-tooltip="Update details for bookmarked cases">
                                 <i class="bi bi-star me-2"></i>Update Bookmarked
@@ -1063,7 +1064,7 @@
                                 <span class="input-group-text">
                                     <i class="bi bi-search text-secondary"></i>
                                 </span>
-                                <input type="text" name="search" class="form-control" value="{{ search_query }}" 
+                                <input type="text" name="search" class="form-control" value="{{ search_query if search_query and search_query != 'None' else '' }}" 
                                        placeholder="Search titles (↵)" id="searchInput">
                                 <div class="spinner-border text-primary" role="status">
                                     <span class="visually-hidden">Searching...</span>
@@ -1083,177 +1084,92 @@
             </div>
         </div>
 
-        <!-- Cases List -->
-        <div class="row">
-            <div class="col-12">
-                <div class="table-responsive">
-                    <table class="table" id="casesTable">
-                        <thead>
-                            <tr>
-                                <th style="width: 40px"></th>
-                                <th class="title-cell sortable" data-sort="title">Title</th>
-                                <th class="location-cell sortable" data-sort="location">Location</th>
-                                <th class="category-cell sortable" data-sort="category">Category</th>
-                                <th class="date-cell sortable" data-sort="date">Date</th>
-                                <th class="status-cell sortable" data-sort="status">Status</th>
-                                <th class="actions-cell">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if cases %}
-                                {% for case in cases %}
-                                <tr class="case-row" data-case-id="{{ case.id }}">
-                                    <td>
-                                        {% if case.is_bookmarked %}
-                                        <button class="btn btn-link p-0 expand-button" onclick="toggleDetails('{{ case.id }}')">
-                                            <i class="bi bi-chevron-down"></i>
-                                        </button>
-                                        {% endif %}
-                                    </td>
-                                    <td class="title-cell">
-                                        <div class="case-title">{{ case.title }}</div>
-                                        {% if case.sender %}
-                                        <div class="case-meta">{{ case.sender }}</div>
-                                        {% endif %}
-                                    </td>
-                                    <td class="location-cell">
-                                        <div>{{ case.municipality }}</div>
-                                        <div class="case-meta">{{ case.lan }}</div>
-                                    </td>
-                                    <td class="category-cell">
-                                        {% if case.primary_category %}
-                                        <div>{{ case.primary_category }}</div>
-                                        {% if case.category_confidence %}
-                                        <div class="case-meta">{{ "%.0f"|format(case.category_confidence * 100) }}% confidence</div>
-                                        {% endif %}
-                                        {% else %}
-                                        <div class="text-muted">Not categorized</div>
-                                        {% endif %}
-                                    </td>
-                                    <td class="date-cell">
-                                        <div>{{ case.date.strftime('%Y-%m-%d') }}</div>
-                                        {% if case.decision_date %}
-                                        <div class="case-meta">Decision: {{ case.decision_date.strftime('%Y-%m-%d') }}</div>
-                                        {% endif %}
-                                    </td>
-                                    <td class="status-cell">
-                                        <span class="badge {% if case.status == 'Avslutat' %}bg-success{% else %}bg-primary{% endif %} status-badge">
-                                            {{ case.status }}
-                                        </span>
-                                    </td>
-                                    <td class="actions-cell">
-                                        <div class="dropdown action-menu">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bi bi-three-dots"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li>
-                                                    <button type="button" class="dropdown-item" onclick="toggleBookmark('{{ case.id }}')">
-                                                        <i class="bi {% if case.is_bookmarked %}bi-star-fill text-warning{% else %}bi-star{% endif %}"></i>
-                                                        {% if case.is_bookmarked %}Bookmarked{% else %}Bookmark{% endif %}
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="{{ case.url }}" target="_blank">
-                                                        <i class="bi bi-box-arrow-up-right"></i>
-                                                        View Case
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <button type="button" class="dropdown-item" onclick="categorizeCase('{{ case.id }}')">
-                                                        <i class="bi bi-tags"></i>
-                                                        {% if case.primary_category %}Recategorize{% else %}Categorize{% endif %}
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% if case.is_bookmarked %}
-                                <tr class="case-details-row" id="details-{{ case.id }}" style="display: none;">
-                                    <td colspan="7">
-                                        <div class="case-details">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h5>Case Details</h5>
-                                                    <dl class="row">
-                                                        <dt class="col-sm-4">Case ID</dt>
-                                                        <dd class="col-sm-8">{{ case.id }}</dd>
-                                                        
-                                                        <dt class="col-sm-4">Sender</dt>
-                                                        <dd class="col-sm-8">{{ case.sender or 'N/A' }}</dd>
-                                                        
-                                                        <dt class="col-sm-4">Status</dt>
-                                                        <dd class="col-sm-8">{{ case.status }}</dd>
-                                                        
-                                                        <dt class="col-sm-4">Municipality</dt>
-                                                        <dd class="col-sm-8">{{ case.municipality or 'N/A' }}</dd>
-                                                        
-                                                        <dt class="col-sm-4">Decision Date</dt>
-                                                        <dd class="col-sm-8">{{ case.decision_date.strftime('%Y-%m-%d') if case.decision_date else 'N/A' }}</dd>
+        <!-- No cases found message -->
+        <div id="noResults" class="text-center py-5" {% if cases %}style="display: none;"{% endif %}>
+            <div class="empty-state">
+                <i class="bi bi-search fs-1 text-muted mb-3"></i>
+                <h3>No cases found</h3>
+                <p class="text-muted">Try adjusting your filters or search criteria to find what you're looking for.</p>
+            </div>
+        </div>
 
-                                                        {% if case.primary_category %}
-                                                        <dt class="col-sm-4">Category</dt>
-                                                        <dd class="col-sm-8">
-                                                            {{ case.primary_category }}
-                                                            <div class="small text-muted">
-                                                                Confidence: {{ "%.0f"|format(case.category_confidence * 100) }}%
-                                                                {% if case.last_categorized_at %}
-                                                                <br>Last updated: {{ case.last_categorized_at.strftime('%Y-%m-%d') }}
-                                                                {% endif %}
-                                                            </div>
-                                                            {% if case.category_metadata and case.category_metadata.reasoning %}
-                                                            <div class="small text-muted mt-1">
-                                                                {{ case.category_metadata.reasoning }}
-                                                            </div>
-                                                            {% endif %}
-                                                        </dd>
-                                                        {% endif %}
-                                                    </dl>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <h5>Documents</h5>
-                                                    {% if case.documents %}
-                                                    <div class="document-list">
-                                                        {% for doc in case.documents %}
-                                                        <div class="document-item">
-                                                            <div class="d-flex justify-content-between align-items-start">
-                                                                <div>
-                                                                    <a href="{{ doc.url }}" target="_blank" class="text-decoration-none">{{ doc.title }}</a>
-                                                                    <div class="document-date">{{ doc.date }}</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                    {% else %}
-                                                    <p class="text-muted">No documents available</p>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% endfor %}
+        <!-- Cases table -->
+        <div class="table-responsive" {% if not cases %}style="display: none;"{% endif %}>
+            <table id="casesTable" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="title-cell">TITLE <i class="bi bi-arrow-down-up"></i></th>
+                        <th class="location-cell">LOCATION <i class="bi bi-arrow-down-up"></i></th>
+                        <th class="category-cell">CATEGORY <i class="bi bi-arrow-down-up"></i></th>
+                        <th class="date-cell">DATE <i class="bi bi-arrow-down-up"></i></th>
+                        <th class="status-cell">STATUS <i class="bi bi-arrow-down-up"></i></th>
+                        <th class="actions-cell">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for case in cases %}
+                    <tr data-case-id="{{ case.id }}">
+                        <td class="title-cell">
+                            <a href="{{ case.url }}" target="_blank" class="case-title">{{ case.title }}</a>
+                            <div class="case-meta">ID: {{ case.id }}</div>
+                        </td>
+                        <td class="location-cell">{{ case.municipality or "N/A" }}</td>
+                        <td class="category-cell">
+                            {{ case.primary_category or "Not categorized" }}
+                        </td>
+                        <td class="date-cell">
+                            {% if case.date %}
+                            {{ case.date.strftime('%Y-%m-%d') }}
                             {% else %}
-                            <tr>
-                                <td colspan="7">
-                                    <div class="empty-state">
-                                        <div class="empty-state-icon">
-                                            <i class="bi bi-search"></i>
-                                        </div>
-                                        <div class="empty-state-text">No cases found</div>
-                                        <div class="empty-state-subtext">
-                                            Try adjusting your filters or search criteria to find what you're looking for.
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            N/A
                             {% endif %}
-                        </tbody>
-                    </table>
-                </div>
+                            {% if case.decision_date %}
+                            <div class="case-meta">Decision: {{ case.decision_date.strftime('%Y-%m-%d') }}</div>
+                            {% endif %}
+                        </td>
+                        <td class="status-cell">
+                            {% if case.status == "Approved" %}
+                            <span class="status-badge bg-success">{{ case.status }}</span>
+                            {% elif case.status == "Pending" %}
+                            <span class="status-badge bg-warning">{{ case.status }}</span>
+                            {% else %}
+                            <span class="status-badge bg-secondary">{{ case.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="actions-cell">
+                            <div class="dropdown">
+                                <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{{ case.url }}" target="_blank">View on Länsstyrelsen</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" onclick="toggleBookmark('{{ case.id }}')">
+                                            {% if case.is_bookmarked %}
+                                            <i class="bi bi-bookmark-fill"></i> Remove bookmark
+                                            {% else %}
+                                            <i class="bi bi-bookmark"></i> Add bookmark
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" onclick="fetchCaseDetails('{{ case.id }}')">
+                                            <i class="bi bi-arrow-clockwise"></i> Refresh details
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Case count -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div id="caseCount" class="text-muted">
+                {{ cases|length }} cases found
             </div>
         </div>
 
@@ -1306,6 +1222,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
     <script>
         // Save filter state to localStorage
         function saveFilterState() {
@@ -1698,6 +1615,186 @@
             progressBar.classList.remove('progress-bar-animated');
             progressBar.classList.add('bg-warning');
             showToast('Batch categorization completed with some errors', 'warning');
+        }
+
+        async function fetchAllCases() {
+            // Show progress UI
+            const progressDiv = document.getElementById('taskProgress');
+            const progressBar = document.getElementById('taskProgressBar');
+            const taskStatus = document.getElementById('taskStatus');
+            const processedCount = document.getElementById('processedCount');
+            const totalCount = document.getElementById('totalCount');
+            const timeRemaining = document.getElementById('timeRemaining');
+            
+            progressDiv.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressBar.classList.add('progress-bar-animated');
+            taskStatus.textContent = 'Starting...';
+            
+            try {
+                // Start the fetch process
+                const response = await fetch('/api/v1/admin/fetch-cases', {
+                    method: 'POST'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to start case fetching');
+                }
+                
+                const data = await response.json();
+                const taskId = data.task_id;
+                
+                // Create EventSource for SSE
+                const eventSource = new EventSource(`/api/v1/task-status/${taskId}`);
+                
+                eventSource.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    
+                    // Update progress UI
+                    processedCount.textContent = data.processed_cases || 0;
+                    totalCount.textContent = data.total_cases || 'Unknown';
+                    
+                    const progress = data.progress_percentage || 0;
+                    progressBar.style.width = `${progress}%`;
+                    progressBar.setAttribute('aria-valuenow', progress);
+                    
+                    // Update status message
+                    taskStatus.textContent = data.message || data.status || 'Processing...';
+                    
+                    // Update time remaining
+                    if (data.estimated_time_remaining) {
+                        const minutes = Math.floor(data.estimated_time_remaining / 60);
+                        const seconds = data.estimated_time_remaining % 60;
+                        timeRemaining.textContent = `${minutes}m ${seconds}s`;
+                    }
+                    
+                    // Update table if we have new cases
+                    if (data.cases) {
+                        updateCasesTable(data.cases);
+                    }
+                    
+                    // Handle completion
+                    if (data.status === 'completed') {
+                        eventSource.close();
+                        progressBar.classList.remove('progress-bar-animated');
+                        progressBar.classList.add('bg-success');
+                        showToast('Successfully fetched all cases', 'success');
+                        
+                        // If we have final cases data, update the table one last time
+                        if (data.cases) {
+                            updateCasesTable(data.cases);
+                        } else {
+                            // If no cases in the final message, fetch the updated list
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1500);
+                        }
+                    } else if (data.status === 'failed') {
+                        eventSource.close();
+                        progressBar.classList.remove('progress-bar-animated');
+                        progressBar.classList.add('bg-danger');
+                        showToast('Failed to fetch cases: ' + (data.error || 'Unknown error'), 'error');
+                    }
+                };
+                
+                eventSource.onerror = function(error) {
+                    console.error('SSE Error:', error);
+                    eventSource.close();
+                    progressBar.classList.remove('progress-bar-animated');
+                    progressBar.classList.add('bg-danger');
+                    showToast('Error during case fetching', 'error');
+                };
+                
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                progressBar.classList.remove('progress-bar-animated');
+                progressBar.classList.add('bg-danger');
+                showToast(error.message || 'Error during case fetching', 'error');
+            }
+        }
+
+        // Helper function to format time duration
+        function formatDuration(seconds) {
+            if (seconds < 60) {
+                return `${seconds}s`;
+            }
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}m ${remainingSeconds}s`;
+        }
+
+        // Helper function to update table with new cases
+        function updateCasesTable(cases) {
+            const tableBody = document.querySelector('#casesTable tbody');
+            const noResults = document.getElementById('noResults');
+            const tableContainer = document.querySelector('.table-responsive');
+            
+            if (!cases || cases.length === 0) {
+                tableContainer.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            tableContainer.style.display = 'block';
+            noResults.style.display = 'none';
+            
+            // Update case count
+            const caseCount = document.getElementById('caseCount');
+            if (caseCount) {
+                caseCount.textContent = `${cases.length} cases found`;
+            }
+            
+            // Clear existing rows
+            tableBody.innerHTML = '';
+            
+            // Add new rows
+            cases.forEach(function(caseData) {
+                const row = document.createElement('tr');
+                row.dataset.caseId = caseData.id;
+                
+                row.innerHTML = `
+                    <td class="title-cell">
+                        <a href="${caseData.url}" target="_blank" class="case-title">${caseData.title}</a>
+                        <div class="case-meta">ID: ${caseData.id}</div>
+                    </td>
+                    <td class="location-cell">${caseData.municipality || "N/A"}</td>
+                    <td class="category-cell">
+                        ${caseData.primary_category || "Not categorized"}
+                    </td>
+                    <td class="date-cell">
+                        ${caseData.date ? new Date(caseData.date).toLocaleDateString() : "N/A"}
+                        ${caseData.decision_date ? `<div class="case-meta">Decision: ${new Date(caseData.decision_date).toLocaleDateString()}</div>` : ''}
+                    </td>
+                    <td class="status-cell">
+                        <span class="status-badge bg-${caseData.status === "Approved" ? "success" : caseData.status === "Pending" ? "warning" : "secondary"}">
+                            ${caseData.status}
+                        </span>
+                    </td>
+                    <td class="actions-cell">
+                        <div class="dropdown">
+                            <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="${caseData.url}" target="_blank">View on Länsstyrelsen</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="toggleBookmark('${caseData.id}')">
+                                        <i class="bi bi-bookmark${caseData.is_bookmarked ? '-fill' : ''}"></i>
+                                        ${caseData.is_bookmarked ? 'Remove bookmark' : 'Add bookmark'}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="fetchCaseDetails('${caseData.id}')">
+                                        <i class="bi bi-arrow-clockwise"></i> Refresh details
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
         }
     </script>
 </body>

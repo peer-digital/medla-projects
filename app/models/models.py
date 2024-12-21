@@ -37,13 +37,14 @@ class Case(Base):
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    last_updated_from_source = Column(DateTime(timezone=True))  # Track when the case was last updated from Länsstyrelsen
     
     bookmarks = relationship("Bookmark", back_populates="case")
 
 class Bookmark(Base):
     __tablename__ = "bookmarks"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
     case_id = Column(String, ForeignKey("cases.id"))
     notes = Column(Text)
     is_green_industry = Column(Boolean, default=True)
@@ -51,4 +52,16 @@ class Bookmark(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
-    case = relationship("Case", back_populates="bookmarks") 
+    case = relationship("Case", back_populates="bookmarks")
+
+class FetchStatus(Base):
+    __tablename__ = "fetch_status"
+    
+    lan = Column(String, primary_key=True)
+    last_successful_fetch = Column(DateTime(timezone=True))
+    last_page_fetched = Column(Integer, default=0)
+    total_pages = Column(Integer)
+    error_count = Column(Integer, default=0)
+    last_error = Column(String)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now()) 

@@ -1,4 +1,4 @@
-from typing import List, Any, Optional, Dict, Tuple
+from typing import List, Any, Optional, Dict, Tuple, Union
 import aiohttp
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
@@ -201,124 +201,204 @@ class LansstyrelsenCollector(BaseDataCollector):
         
         return details
 
-    async def _get_next_page_data(self, html_content: str) -> Optional[Dict[str, str]]:
+    async def _get_next_page_data(self, html_content: str) -> dict:
         """Extract the next page data from the HTML content"""
         soup = BeautifulSoup(html_content, 'html.parser')
         
-        # Find the current page number
+        # Find the pagination footer
         pagination = soup.find('tfoot')
         if not pagination:
+            logger.info("No pagination found")
             return None
             
-        # Find the current page span and next page link
+        # Find the current page number
         current_page_span = pagination.find('span')
         if not current_page_span:
+            logger.info("No current page span found")
             return None
             
         current_page = int(current_page_span.text)
-        next_page_link = pagination.find('a', text=str(current_page + 1))
+        logger.info(f"Current page: {current_page}")
         
-        if next_page_link and 'href' in next_page_link.attrs:
-            href = next_page_link['href']
-            if 'javascript:__doPostBack' in href:
-                # Extract the target and argument
-                target = href.split("'")[1]
-                argument = f"Page${current_page + 1}"
-                
-                # Get the ASP.NET form fields
-                viewstate = soup.find('input', {'name': '__VIEWSTATE'})
-                viewstategenerator = soup.find('input', {'name': '__VIEWSTATEGENERATOR'})
-                eventvalidation = soup.find('input', {'name': '__EVENTVALIDATION'})
-                
-                if viewstate and viewstategenerator and eventvalidation:
-                    return {
-                        '__VIEWSTATE': viewstate['value'],
-                        '__VIEWSTATEGENERATOR': viewstategenerator['value'],
-                        '__EVENTVALIDATION': eventvalidation['value'],
-                        '__EVENTTARGET': target,
-                        '__EVENTARGUMENT': argument
-                    }
+        # Find all page links
+        page_links = pagination.find_all('a')
+        if not page_links:
+            logger.info("No page links found")
+            return None
         
+        # Check if we have a "next" page link or ellipsis link
+        next_page_link = None
+        for link in page_links:
+            # Look for direct next page link
+            if link.text.strip() == str(current_page + 1):
+                next_page_link = link
+                break
+            # Look for ellipsis link
+            elif link.text.strip() == "..." and 'Page$' in link.get('href', ''):
+                next_page_link = link
+                break
+        
+        # If we don't have a next page link, we've reached the end
+        if not next_page_link:
+            logger.info(f"No link found for page {current_page + 1}")
+            return None
+        
+        # Get the href attribute
+        href = next_page_link.get('href', '')
+        if 'javascript:__doPostBack' not in href:
+            logger.info("No postback found in href")
+            return None
+        
+        logger.info(f"Found next page link: {href}")
+        
+        # Extract the target and argument
+        target = href.split("'")[1]
+        argument = href.split("'")[3]
+        
+        # Get the ASP.NET form fields
+        viewstate = soup.find('input', {'name': '__VIEWSTATE'})
+        viewstategenerator = soup.find('input', {'name': '__VIEWSTATEGENERATOR'})
+        eventvalidation = soup.find('input', {'name': '__EVENTVALIDATION'})
+        
+        if viewstate and viewstategenerator and eventvalidation:
+            return {
+                '__VIEWSTATE': viewstate['value'],
+                '__VIEWSTATEGENERATOR': viewstategenerator['value'],
+                '__EVENTVALIDATION': eventvalidation['value'],
+                '__EVENTTARGET': target,
+                '__EVENTARGUMENT': argument
+            }
+        
+        logger.info("Missing ASP.NET form fields")
         return None
 
-    async def fetch_data(self, lan: str = None, from_date: str = None, to_date: str = None) -> Dict[str, Any]:
-        """Fetch data from Länsstyrelsen for a specific län"""
-        # Handle lan parameter being a list
-        if isinstance(lan, list):
-            lan = lan[0] if lan else None
-            
-        if lan not in self.lan_queries:
-            logger.error(f"Unknown län name: {lan}")
-            return {"projects": []}
-        
+    async def fetch_data(self, lan: Union[str, List[str]], from_date: str = None, to_date: str = None, page: int = 1) -> Dict[str, Any]:
+        """
+        Fetch data for a specific län
+        Args:
+            lan: The län to fetch data for
+            from_date: Optional start date filter
+            to_date: Optional end date filter
+            page: The page number to fetch (1-based)
+        """
         try:
-            all_results = []
-            query = self.lan_queries[lan]
-            url = f"{self.base_url}/Case/CaseSearchResult.aspx?query={query}"
-            logger.debug(f"Fetching data from URL: {url}")
+            # Handle lan parameter being a list
+            if isinstance(lan, list):
+                lan = lan[0] if lan else None
+                
+            if lan not in self.lan_queries:
+                logger.error(f"Unknown län name: {lan}")
+                return {
+                    "source": self.source_name,
+                    "pagination": {
+                        "current_page": page,
+                        "total_pages": 0,
+                        "total_items": 0,
+                        "items_per_page": 50,
+                        "has_next": False,
+                        "has_previous": page > 1
+                    },
+                    "projects": []
+                }
+            
+            url = f"{self.base_url}/Case/CaseSearchResult.aspx?query={self.lan_queries[lan]}"
+            current_page = 1
+            html_content = None
             
             async with aiohttp.ClientSession() as session:
                 # Get the initial page
                 async with session.get(url, headers=self.headers) as response:
                     if response.status != 200:
-                        logger.error(f"Failed to fetch initial page for {lan}: {response.status}")
-                        return {"projects": []}
+                        logger.error(f"Failed to fetch initial page: {response.status}")
+                        return []
                     
-                    logger.debug(f"Response headers: {response.headers}")
                     html_content = await response.text()
-                    logger.debug(f"Response content (first 500 chars): {html_content[:500]}...")
+                
+                # If we need a page other than the first one, navigate to it
+                while current_page < page:
+                    next_page_data = await self._get_next_page_data(html_content)
+                    if not next_page_data:
+                        logger.info(f"No more pages found after page {current_page}")
+                        return {
+                            "source": self.source_name,
+                            "pagination": {
+                                "current_page": current_page,
+                                "total_pages": current_page,
+                                "total_items": current_page * 50,
+                                "items_per_page": 50,
+                                "has_next": False,
+                                "has_previous": current_page > 1
+                            },
+                            "projects": []
+                        }
                     
-                    # Parse the first page results
-                    page_results = await self._parse_search_results(html_content)
+                    # Add delay between requests
+                    await asyncio.sleep(random.uniform(1, 2))
                     
-                    # Add län to each result
-                    for result in page_results:
-                        result['lan'] = lan
-                    
-                    all_results.extend(page_results)
-                    logger.info(f"Found {len(page_results)} results on page 1")
-                    
-                    # Handle pagination
-                    page = 1
-                    while True:
-                        # Get next page data
-                        next_page_data = await self._get_next_page_data(html_content)
-                        if not next_page_data:
-                            logger.info(f"No more pages found after page {page}")
+                    # Make the POST request for the next page
+                    async with session.post(url, data=next_page_data, headers=self.headers) as post_response:
+                        if post_response.status != 200:
+                            logger.error(f"Failed to fetch page {current_page + 1}")
                             break
-                            
-                        # Add delay between requests
-                        await asyncio.sleep(random.uniform(1, 2))
                         
-                        # Make the POST request for the next page
-                        async with session.post(url, data=next_page_data, headers=self.headers) as post_response:
-                            if post_response.status != 200:
-                                logger.error(f"Failed to fetch page {page + 1} for {lan}: {post_response.status}")
-                                break
-                                
-                            html_content = await post_response.text()
-                            logger.debug(f"Page {page + 1} content (first 500 chars): {html_content[:500]}...")
-                            
-                            # Parse the results
-                            page_results = await self._parse_search_results(html_content)
-                            
-                            # Add län to each result
-                            for result in page_results:
-                                result['lan'] = lan
-                                
-                            all_results.extend(page_results)
-                            page += 1
-                            logger.info(f"Found {len(page_results)} results on page {page}")
-                            
-                            # Safety check - don't go beyond 100 pages
-                            if page >= 100:
-                                logger.warning(f"Reached maximum page limit (100) for {lan}")
-                                break
+                        html_content = await post_response.text()
+                        current_page += 1
+                
+                # Parse the current page results
+                results = await self._parse_search_results(html_content)
+                logger.info(f"Found {len(results)} results on page {current_page}")
+                
+                # Check if there's a next page
+                has_next = await self._get_next_page_data(html_content) is not None
+                
+                # Format results according to spec
+                formatted_results = []
+                for result in results:
+                    formatted_results.append({
+                        'id': result['id'],
+                        'case_id': result.get('case_id'),
+                        'title': result['title'],
+                        'date': result['date'].strftime('%Y-%m-%d') if result['date'] else None,
+                        'location': result['location'],
+                        'municipality': result['municipality'],
+                        'status': result['status'],
+                        'url': result['url'],
+                        'lan': lan,
+                        'sender': result.get('sender'),
+                        'decision_date': result['decision_date'].strftime('%Y-%m-%d') if result.get('decision_date') else None,
+                        'last_updated_from_source': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                        'details_fetched': False,
+                        'details_fetch_attempts': 0
+                    })
+                
+                # Return in the expected format with proper pagination
+                return {
+                    "source": self.source_name,
+                    "pagination": {
+                        "current_page": page,
+                        "total_pages": page if not has_next else page + 1,  # Minimum known pages
+                        "total_items": page * 50,  # Minimum known items
+                        "items_per_page": 50,
+                        "has_next": has_next,
+                        "has_previous": page > 1
+                    },
+                    "projects": formatted_results
+                }
             
-            return {"projects": all_results}
         except Exception as e:
             logger.error(f"Error fetching data for {lan}: {str(e)}")
-            return {"projects": []}
+            return {
+                "source": self.source_name,
+                "pagination": {
+                    "current_page": page,
+                    "total_pages": 0,
+                    "total_items": 0,
+                    "items_per_page": 50,
+                    "has_next": False,
+                    "has_previous": page > 1
+                },
+                "projects": []
+            }
 
     async def _parse_search_results(self, html: str) -> List[Dict[str, Any]]:
         """Parse search results HTML and extract case information"""
