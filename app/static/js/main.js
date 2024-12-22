@@ -60,8 +60,13 @@ async function fetchBookmarkedDetails() {
 }
 
 async function startPolling(taskId, initialMessage) {
+    // Store task info in localStorage
+    localStorage.setItem('activeTaskId', taskId);
+    localStorage.setItem('taskMessage', initialMessage);
+    
     let isRunning = true;
     let lastProcessed = 0;
+    let statusInterval, tableInterval;  // Declare intervals at function scope
     
     // Show progress UI
     const progressDiv = document.getElementById('taskProgress');
@@ -74,6 +79,14 @@ async function startPolling(taskId, initialMessage) {
     const taskErrors = document.getElementById('taskErrors');
     const tableContainer = document.querySelector('.table-responsive');
     const noResults = document.getElementById('noResults');
+    
+    // Function to clean up intervals and storage
+    function cleanup() {
+        if (statusInterval) clearInterval(statusInterval);
+        if (tableInterval) clearInterval(tableInterval);
+        localStorage.removeItem('activeTaskId');
+        localStorage.removeItem('taskMessage');
+    }
     
     progressDiv.style.display = 'block';
     taskErrors.style.display = 'none';
@@ -173,6 +186,7 @@ async function startPolling(taskId, initialMessage) {
             // Handle completion states
             if (data.status === 'completed') {
                 isRunning = false;
+                cleanup();
                 showToast('Task completed successfully', 'success');
                 progressBar.classList.remove('progress-bar-animated');
                 progressBar.classList.add('bg-success');
@@ -185,6 +199,7 @@ async function startPolling(taskId, initialMessage) {
                 return true;
             } else if (data.status === 'failed') {
                 isRunning = false;
+                cleanup();
                 showToast(data.error || 'Task failed', 'error');
                 progressBar.classList.remove('progress-bar-animated');
                 progressBar.classList.add('bg-danger');
@@ -199,6 +214,7 @@ async function startPolling(taskId, initialMessage) {
             console.error('Error checking task status:', error);
             showToast('Error checking task status', 'error');
             isRunning = false;
+            cleanup();
             progressBar.classList.remove('progress-bar-animated');
             progressBar.classList.add('bg-danger');
             setTimeout(() => {
@@ -209,22 +225,20 @@ async function startPolling(taskId, initialMessage) {
     }
 
     // Start polling loops
-    const statusInterval = setInterval(async () => {
+    statusInterval = setInterval(async () => {
         if (!isRunning) {
-            clearInterval(statusInterval);
-            clearInterval(tableInterval);
+            cleanup();
             return;
         }
         const isDone = await checkTaskStatus();
         if (isDone) {
-            clearInterval(statusInterval);
-            clearInterval(tableInterval);
+            cleanup();
         }
     }, 1000);
 
-    const tableInterval = setInterval(async () => {
+    tableInterval = setInterval(async () => {
         if (!isRunning) {
-            clearInterval(tableInterval);
+            cleanup();
             return;
         }
         await refreshTable();
@@ -254,4 +268,32 @@ function showToast(message, type = 'info') {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);
     }, 3000);
-} 
+}
+
+// Add initialization code at the bottom of the file
+document.addEventListener('DOMContentLoaded', async () => {
+    // Check for active task
+    const activeTaskId = localStorage.getItem('activeTaskId');
+    const taskMessage = localStorage.getItem('taskMessage');
+    
+    if (activeTaskId) {
+        try {
+            // Check if task is still running
+            const response = await fetch(`/api/v1/task-status/${activeTaskId}`);
+            const data = await response.json();
+            
+            if (data.status && !['completed', 'failed'].includes(data.status)) {
+                // Task is still running, restart polling
+                startPolling(activeTaskId, taskMessage || 'Processing...');
+            } else {
+                // Task is done, clean up
+                localStorage.removeItem('activeTaskId');
+                localStorage.removeItem('taskMessage');
+            }
+        } catch (error) {
+            console.error('Error checking task status:', error);
+            localStorage.removeItem('activeTaskId');
+            localStorage.removeItem('taskMessage');
+        }
+    }
+}); 
