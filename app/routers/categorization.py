@@ -1,62 +1,86 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import Dict
 from app.models.database import get_db
-from app.services.categorization import CategorizationService
 from app.models.models import Case
-import os
-from dotenv import load_dotenv
-from fastapi.responses import StreamingResponse
-import asyncio
+from app.services.categorization import CategorizationService
 import json
+import asyncio
 from typing import AsyncGenerator
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Get API key from environment
-api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    raise ValueError("OpenAI API key not configured. Please set OPENAI_API_KEY in your .env file")
-
 router = APIRouter()
-categorization_service = CategorizationService(api_key=api_key)
+categorization_service = CategorizationService()
 
-async def progress_generator(db: Session, batch_size: int = 50, min_confidence: float = 0.7) -> AsyncGenerator[str, None]:
-    """Generate SSE events for batch categorization progress."""
+async def stream_progress(db: Session) -> AsyncGenerator[str, None]:
+    """Stream progress updates as SSE events."""
     try:
-        for progress in categorization_service.batch_categorize_with_progress(db, batch_size, min_confidence):
-            # Convert the progress dict to a JSON string
-            yield f"data: {json.dumps(progress)}\n\n"
+        async for progress in categorization_service.batch_categorize_with_progress(db):
+            # Ensure all fields are properly initialized
+            progress_data = {
+                "processed": progress.get("processed", 0),
+                "successful": progress.get("successful", 0),
+                "failed": progress.get("failed", 0),
+                "total_cases": progress.get("total_cases", 0),
+                "status": progress.get("status", "in_progress"),
+                "progress_percentage": progress.get("progress_percentage", 0),
+                "categories": progress.get("categories", {}),
+                "errors": progress.get("errors", []),
+                "estimated_time_remaining": progress.get("estimated_time_remaining")
+            }
+            
+            yield f"data: {json.dumps(progress_data)}\n\n"
             await asyncio.sleep(0.1)  # Small delay to prevent overwhelming the client
+            
     except Exception as e:
         error_data = {
-            "status": "error",
-            "message": str(e)
+            "status": "failed",
+            "error": str(e),
+            "progress_percentage": 0
         }
         yield f"data: {json.dumps(error_data)}\n\n"
 
-@router.get("/categorize/batch/stream")
-async def stream_batch_categorize(
+@router.get("/batch/stream")
+async def stream_batch_categorization(
     batch_size: int = 50,
     min_confidence: float = 0.7,
     db: Session = Depends(get_db)
-) -> StreamingResponse:
-    """Stream batch categorization progress."""
+):
+    """Stream batch categorization progress as Server-Sent Events."""
     return StreamingResponse(
-        progress_generator(db, batch_size, min_confidence),
-        media_type="text/event-stream"
+        stream_progress(db),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
     )
 
-@router.post("/categorize/batch")
-def batch_categorize(
+@router.post("/{case_id}")
+async def categorize_case(case_id: str, db: Session = Depends(get_db)):
+    """Categorize a single case."""
+    try:
+        case = db.query(Case).filter(Case.id == case_id).first()
+        if not case:
+            raise HTTPException(status_code=404, detail="Case not found")
+        
+        updated_case = await categorization_service.categorize_case(case)
+        db.commit()
+        
+        return {"status": "success", "case_id": case_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/batch")
+async def batch_categorize(
     batch_size: int = 50,
     min_confidence: float = 0.7,
     db: Session = Depends(get_db)
 ) -> Dict:
     """Process a batch of cases for categorization."""
     try:
-        results = categorization_service.batch_categorize(
+        results = await categorization_service.batch_categorize(
             db=db,
             batch_size=batch_size,
             min_confidence=min_confidence
@@ -65,28 +89,4 @@ def batch_categorize(
     except ValueError as e:
         raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error during batch categorization: {str(e)}")
-
-@router.post("/categorize/{case_id}")
-def categorize_single_case(
-    case_id: str,
-    db: Session = Depends(get_db)
-) -> Dict:
-    """Categorize a single case by ID."""
-    case = db.query(Case).filter(Case.id == case_id).first()
-    if not case:
-        raise HTTPException(status_code=404, detail="Case not found")
-    
-    try:
-        updated_case = categorization_service.update_case_categorization(db, case)
-        return {
-            "id": updated_case.id,
-            "primary_category": updated_case.primary_category,
-            "sub_category": updated_case.sub_category,
-            "confidence": updated_case.category_confidence,
-            "metadata": updated_case.category_metadata
-        }
-    except ValueError as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error categorizing case: {str(e)}") 
+        raise HTTPException(status_code=500, detail=f"Error during batch categorization: {str(e)}") 

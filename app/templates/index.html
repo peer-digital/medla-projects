@@ -951,6 +951,66 @@
         .form-check:hover .form-check-label {
             color: var(--text-primary);
         }
+
+        /* Medla-specific styles */
+        .medla-suitable {
+            background-color: rgba(40, 167, 69, 0.05) !important;
+        }
+
+        .medla-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--accent-success);
+            margin-top: 0.25rem;
+        }
+
+        .phase-cell {
+            width: 120px;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 12px;
+            background-color: var(--bg-elevated);
+            color: var(--text-primary);
+        }
+
+        /* Update the filter section to include phase filter */
+        .filter-section .form-select,
+        .filter-section .form-control {
+            height: 2.5rem;
+            font-size: 0.875rem;
+            padding: 0.5rem 0.75rem;
+            background-color: var(--bg-elevated);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+        }
+
+        /* Add Medla filter checkbox */
+        .filter-section .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0;
+            white-space: nowrap;
+        }
+
+        .filter-section .form-check-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0;
+        }
+
+        /* Hide dropdown arrow */
+        .dropdown-toggle::after {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -1051,10 +1111,28 @@
                         </div>
                         <div class="col-md-2">
                             <label class="form-label" data-tooltip="Main category of the project">Category</label>
-                            <select name="category" class="form-select" onchange="this.form.submit()">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle form-select text-start" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Categories
+                                </button>
+                                <div class="dropdown-menu p-2" style="width: 100%">
+                                    {% for category in categories %}
+                                    <div class="form-check">
+                                        <input class="form-check-input category-checkbox" type="checkbox" name="category" value="{{ category }}" id="category{{ loop.index }}" {% if category in selected_categories %}checked{% endif %}>
+                                        <label class="form-check-label" for="category{{ loop.index }}">
+                                            {{ category }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" data-tooltip="Project phase">Phase</label>
+                            <select name="phase" class="form-select" onchange="this.form.submit()">
                                 <option value="">All</option>
-                                {% for category in categories %}
-                                <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+                                {% for phase in phases %}
+                                <option value="{{ phase }}" {% if selected_phase == phase %}selected{% endif %}>{{ phase }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -1072,11 +1150,16 @@
                             </div>
                         </div>
                         <div class="col-md-2 show-column">
-                            <label class="form-label" data-tooltip="Show only bookmarked cases">Show</label>
-                            <div class="form-check mt-2">
+                            <label class="form-label" data-tooltip="Show options">Show</label>
+                            <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="bookmarked" id="bookmarkedCheck"
-                                       {% if show_bookmarked %}checked{% endif %} onchange="this.form.submit()">
+                                       {% if show_bookmarked %}checked{% endif %}>
                                 <label class="form-check-label" for="bookmarkedCheck">Only Bookmarked</label>
+                            </div>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" name="medla_suitable" id="medlaSuitableCheck"
+                                       {% if show_medla_suitable %}checked{% endif %}>
+                                <label class="form-check-label" for="medlaSuitableCheck">Only Medla Projects</label>
                             </div>
                         </div>
                     </form>
@@ -1098,24 +1181,40 @@
             <table id="casesTable" class="table table-hover">
                 <thead>
                     <tr>
-                        <th class="title-cell">TITLE <i class="bi bi-arrow-down-up"></i></th>
-                        <th class="location-cell">LOCATION <i class="bi bi-arrow-down-up"></i></th>
-                        <th class="category-cell">CATEGORY <i class="bi bi-arrow-down-up"></i></th>
-                        <th class="date-cell">DATE <i class="bi bi-arrow-down-up"></i></th>
-                        <th class="status-cell">STATUS <i class="bi bi-arrow-down-up"></i></th>
+                        <th class="title-cell sortable" data-sort="title">TITLE</th>
+                        <th class="location-cell sortable" data-sort="location">LOCATION</th>
+                        <th class="category-cell sortable" data-sort="category">CATEGORY</th>
+                        <th class="phase-cell sortable" data-sort="phase">PHASE</th>
+                        <th class="date-cell sortable" data-sort="date">DATE</th>
+                        <th class="status-cell sortable" data-sort="status">STATUS</th>
                         <th class="actions-cell">ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for case in cases %}
-                    <tr data-case-id="{{ case.id }}">
+                    <tr data-case-id="{{ case.id }}" {% if case.is_medla_suitable %}class="medla-suitable"{% endif %}>
                         <td class="title-cell">
                             <a href="{{ case.url }}" target="_blank" class="case-title">{{ case.title }}</a>
                             <div class="case-meta">ID: {{ case.id }}</div>
+                            {% if case.is_medla_suitable %}
+                            <div class="medla-badge">
+                                <i class="bi bi-check-circle-fill text-success"></i> Medla Project
+                            </div>
+                            {% endif %}
                         </td>
                         <td class="location-cell">{{ case.municipality or "N/A" }}</td>
                         <td class="category-cell">
                             {{ case.primary_category or "Not categorized" }}
+                            {% if case.category_confidence %}
+                            <div class="case-meta">Confidence: {{ "%.0f"|format(case.category_confidence * 100) }}%</div>
+                            {% endif %}
+                        </td>
+                        <td class="phase-cell">
+                            {% if case.project_phase %}
+                            <span class="phase-badge">{{ case.project_phase }}</span>
+                            {% else %}
+                            <span class="text-muted">Unknown</span>
+                            {% endif %}
                         </td>
                         <td class="date-cell">
                             {% if case.date %}
@@ -1157,6 +1256,33 @@
                                             <i class="bi bi-arrow-clockwise"></i> Refresh details
                                         </a>
                                     </li>
+                                    {% if case.is_medla_suitable %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <div class="dropdown-item">
+                                            <strong>Medla Project Details</strong>
+                                            <div class="mt-2">
+                                                <div><strong>Phase:</strong> {{ case.project_phase or "Unknown" }}</div>
+                                                {% if case.potential_jobs %}
+                                                <div class="mt-2">
+                                                    <strong>Potential Job Types:</strong>
+                                                    <ul class="list-unstyled mb-0 mt-1">
+                                                        {% for job in case.potential_jobs %}
+                                                        <li><i class="bi bi-check2 text-success"></i> {{ job }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                                {% endif %}
+                                                {% if case.category_metadata and case.category_metadata.reasoning %}
+                                                <div class="mt-2">
+                                                    <strong>Analysis:</strong>
+                                                    <p class="mb-0 mt-1 small">{{ case.category_metadata.reasoning }}</p>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </td>
@@ -1230,7 +1356,11 @@
             const formData = new FormData(form);
             const state = {};
             for (let [key, value] of formData.entries()) {
-                state[key] = value;
+                if (key === 'medla_suitable' || key === 'bookmarked') {
+                    state[key] = value === 'on';
+                } else {
+                    state[key] = value;
+                }
             }
             localStorage.setItem('filterState', JSON.stringify(state));
         }
@@ -1245,7 +1375,7 @@
                     const input = form.elements[key];
                     if (input) {
                         if (input.type === 'checkbox') {
-                            input.checked = value === 'on';
+                            input.checked = value;
                         } else {
                             input.value = value;
                         }
@@ -1751,15 +1881,33 @@
             cases.forEach(function(caseData) {
                 const row = document.createElement('tr');
                 row.dataset.caseId = caseData.id;
+                if (caseData.is_medla_suitable) {
+                    row.classList.add('medla-suitable');
+                }
                 
                 row.innerHTML = `
                     <td class="title-cell">
                         <a href="${caseData.url}" target="_blank" class="case-title">${caseData.title}</a>
                         <div class="case-meta">ID: ${caseData.id}</div>
+                        ${caseData.is_medla_suitable ? `
+                        <div class="medla-badge">
+                            <i class="bi bi-check-circle-fill text-success"></i> Medla Project
+                        </div>
+                        ` : ''}
                     </td>
                     <td class="location-cell">${caseData.municipality || "N/A"}</td>
                     <td class="category-cell">
                         ${caseData.primary_category || "Not categorized"}
+                        ${caseData.category_confidence ? `
+                        <div class="case-meta">Confidence: ${Math.round(caseData.category_confidence * 100)}%</div>
+                        ` : ''}
+                    </td>
+                    <td class="phase-cell">
+                        ${caseData.project_phase ? `
+                        <span class="phase-badge">${caseData.project_phase}</span>
+                        ` : `
+                        <span class="text-muted">Unknown</span>
+                        `}
                     </td>
                     <td class="date-cell">
                         ${caseData.date ? new Date(caseData.date).toLocaleDateString() : "N/A"}
@@ -1788,6 +1936,33 @@
                                         <i class="bi bi-arrow-clockwise"></i> Refresh details
                                     </a>
                                 </li>
+                                ${caseData.is_medla_suitable ? `
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <div class="dropdown-item">
+                                        <strong>Medla Project Details</strong>
+                                        <div class="mt-2">
+                                            <div><strong>Phase:</strong> ${caseData.project_phase || "Unknown"}</div>
+                                            ${caseData.potential_jobs ? `
+                                            <div class="mt-2">
+                                                <strong>Potential Job Types:</strong>
+                                                <ul class="list-unstyled mb-0 mt-1">
+                                                    ${caseData.potential_jobs.map(job => `
+                                                        <li><i class="bi bi-check2 text-success"></i> ${job}</li>
+                                                    `).join('')}
+                                                </ul>
+                                            </div>
+                                            ` : ''}
+                                            ${caseData.category_metadata && caseData.category_metadata.reasoning ? `
+                                            <div class="mt-2">
+                                                <strong>Analysis:</strong>
+                                                <p class="mb-0 mt-1 small">${caseData.category_metadata.reasoning}</p>
+                                            </div>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                </li>
+                                ` : ''}
                             </ul>
                         </div>
                     </td>

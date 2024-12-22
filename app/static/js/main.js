@@ -1,3 +1,68 @@
+// Form submission handling
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('filterForm');
+    const checkboxes = form.querySelectorAll('input[type="checkbox"]:not(.category-checkbox)');
+    const selects = form.querySelectorAll('select');
+    
+    // Handle checkbox changes
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            form.submit();
+        });
+    });
+    
+    // Handle select changes
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            form.submit();
+        });
+    });
+    
+    // Handle search input
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                form.submit();
+            }
+        });
+    }
+
+    // Handle category multi-select
+    const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+    const categoryDropdownButton = document.getElementById('categoryDropdown');
+    
+    function updateCategoryButtonText() {
+        const selectedCategories = Array.from(categoryCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        
+        categoryDropdownButton.textContent = selectedCategories.length > 0
+            ? selectedCategories.join(', ')
+            : 'Categories';
+    }
+
+    categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function(e) {
+            e.stopPropagation(); // Prevent the dropdown from closing
+            updateCategoryButtonText();
+            form.submit();
+        });
+    });
+
+    // Prevent dropdown from closing when clicking inside
+    const categoryDropdown = document.querySelector('.dropdown-menu');
+    if (categoryDropdown) {
+        categoryDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+
+    // Initialize category button text
+    updateCategoryButtonText();
+});
+
 async function resetDatabase() {
     if (!confirm('Are you sure you want to reset the database? This action cannot be undone.')) {
         return;

@@ -630,3 +630,87 @@ async def fetch_case_details(
             status_code=500,
             detail=f"Error fetching case details: {str(e)}"
         ) 
+
+@router.get("/")
+def get_cases(
+    request: Request,
+    lan: str = None,
+    status: str = None,
+    category: str = None,
+    phase: str = None,
+    search: str = None,
+    bookmarked: bool = False,
+    medla_suitable: str = Query(None, description="Filter for Medla suitable projects"),
+    page: int = 1,
+    db: Session = Depends(get_db)
+):
+    """Get all cases with optional filters"""
+    try:
+        # Base query
+        query = db.query(Case)
+        
+        # Apply filters
+        if lan:
+            query = query.filter(Case.lan == lan)
+        if status:
+            query = query.filter(Case.status == status)
+        if category:
+            query = query.filter(Case.primary_category == category)
+        if phase:
+            query = query.filter(Case.project_phase == phase)
+        if search:
+            search_term = f"%{search}%"
+            query = query.filter(Case.title.ilike(search_term))
+        if bookmarked:
+            query = query.join(Bookmark).filter(Bookmark.case_id == Case.id)
+        if medla_suitable in ['true', 'True', 'on', True]:
+            query = query.filter(Case.is_medla_suitable == True)
+        
+        # Get distinct values for filters
+        lans = db.query(Case.lan).distinct().all()
+        statuses = db.query(Case.status).distinct().all()
+        categories = db.query(Case.primary_category).distinct().all()
+        phases = db.query(Case.project_phase).distinct().all()
+        
+        # Calculate pagination
+        page_size = 50
+        total_cases = query.count()
+        total_pages = (total_cases + page_size - 1) // page_size
+        
+        # Get paginated results
+        offset = (page - 1) * page_size
+        cases = query.order_by(Case.date.desc()).offset(offset).limit(page_size).all()
+        
+        # Create pagination info
+        pagination = {
+            "current_page": page,
+            "total_pages": total_pages,
+            "has_previous": page > 1,
+            "has_next": page < total_pages
+        }
+        
+        return templates.TemplateResponse(
+            "index.html",
+            {
+                "request": request,
+                "cases": cases,
+                "lans": [lan[0] for lan in lans if lan[0]],
+                "statuses": [status[0] for status in statuses if status[0]],
+                "categories": [cat[0] for cat in categories if cat[0]],
+                "phases": [phase[0] for phase in phases if phase[0]],
+                "selected_lan": lan,
+                "selected_status": status,
+                "selected_category": category,
+                "selected_phase": phase,
+                "search_query": search,
+                "show_bookmarked": bookmarked,
+                "show_medla_suitable": medla_suitable in ['true', 'True', 'on', True],
+                "pagination": pagination
+            }
+        )
+    except Exception as e:
+        logger.error(f"Error getting cases: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error getting cases: {str(e)}"
+        ) 

@@ -28,12 +28,17 @@ class Case(Base):
     last_fetch_attempt = Column(DateTime(timezone=True))  # Track when we last tried to fetch details
     
     # AI Categorization fields
-    primary_category = Column(String)  # Main category (e.g., "Energy", "Manufacturing", "Infrastructure")
-    sub_category = Column(String)  # Sub-category (e.g., "Solar", "Wind", "Battery Production")
+    primary_category = Column(String)  # Main category (e.g., "Wind Power", "Solar Power", "Hydrogen Production")
+    sub_category = Column(String)  # Sub-category for future use
     category_confidence = Column(Float)  # Confidence score of the categorization
     category_version = Column(Integer, default=1)  # Version of the categorization model/iteration
     category_metadata = Column(JSON)  # Additional category-related metadata and reasoning
     last_categorized_at = Column(DateTime(timezone=True))  # When the case was last categorized
+    
+    # Medla-specific fields
+    project_phase = Column(String)  # Planning, Construction, Operational, Maintenance, Decommissioning
+    is_medla_suitable = Column(Boolean, default=False)  # Whether this case is suitable for Medla
+    potential_jobs = Column(JSON)  # List of potential job types for this project as JSON
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
