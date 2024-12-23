@@ -73,245 +73,108 @@ async function resetDatabase() {
             method: 'POST'
         });
         
-        const data = await response.json();
-        
-        if (response.ok) {
-            showToast('Database reset started', 'info');
-            startPolling(data.task_id, 'Resetting database...');
-        } else {
-            showToast(data.detail || 'Failed to reset database', 'error');
+        if (!response.ok) {
+            throw new Error('Failed to reset database');
         }
+        
+        showToast('Database reset successfully', 'success');
+        setTimeout(() => {
+            window.location.reload();
+        }, 1500);
     } catch (error) {
-        showToast('Error resetting database', 'error');
+        console.error('Reset Error:', error);
+        showToast(error.message || 'Error resetting database', 'error');
     }
 }
 
 async function fetchAllCases() {
-    try {
-        const response = await fetch('/api/v1/admin/fetch-all-cases', {
-            method: 'POST'
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-            showToast('Started fetching all cases', 'info');
-            startPolling(data.task_id, 'Fetching cases...');
-        } else {
-            showToast(data.detail || 'Failed to start fetch', 'error');
-        }
-    } catch (error) {
-        showToast('Error starting fetch', 'error');
-    }
-}
-
-async function fetchBookmarkedDetails() {
-    try {
-        const response = await fetch('/api/v1/admin/fetch-bookmarked-details', {
-            method: 'POST'
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-            showToast('Started fetching bookmarked details', 'info');
-            startPolling(data.task_id, 'Fetching details...');
-        } else {
-            showToast(data.detail || 'Failed to start fetch', 'error');
-        }
-    } catch (error) {
-        showToast('Error starting fetch', 'error');
-    }
-}
-
-async function startPolling(taskId, initialMessage) {
-    // Store task info in localStorage
-    localStorage.setItem('activeTaskId', taskId);
-    localStorage.setItem('taskMessage', initialMessage);
-    
-    let isRunning = true;
-    let lastProcessed = 0;
-    let statusInterval, tableInterval;  // Declare intervals at function scope
-    
     // Show progress UI
     const progressDiv = document.getElementById('taskProgress');
     const progressBar = document.getElementById('taskProgressBar');
-    const taskTitle = document.getElementById('taskTitle');
     const taskStatus = document.getElementById('taskStatus');
     const processedCount = document.getElementById('processedCount');
     const totalCount = document.getElementById('totalCount');
     const timeRemaining = document.getElementById('timeRemaining');
-    const taskErrors = document.getElementById('taskErrors');
-    const tableContainer = document.querySelector('.table-responsive');
-    const noResults = document.getElementById('noResults');
-    
-    // Function to clean up intervals and storage
-    function cleanup() {
-        if (statusInterval) clearInterval(statusInterval);
-        if (tableInterval) clearInterval(tableInterval);
-        localStorage.removeItem('activeTaskId');
-        localStorage.removeItem('taskMessage');
-    }
     
     progressDiv.style.display = 'block';
-    taskErrors.style.display = 'none';
-    taskErrors.querySelector('ul').innerHTML = '';
-    taskTitle.textContent = initialMessage;
-    
-    // Initialize progress bar
-    progressBar.classList.add('progress-bar-animated');
-    progressBar.classList.remove('bg-success', 'bg-danger');
     progressBar.style.width = '0%';
-    progressBar.setAttribute('aria-valuenow', 0);
-
-    // Function to refresh the table with latest data
-    async function refreshTable() {
-        try {
-            const response = await fetch(window.location.href);
-            const text = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, 'text/html');
-            
-            // Update table body
-            const newTableBody = doc.querySelector('#casesTable tbody');
-            const currentTableBody = document.querySelector('#casesTable tbody');
-            if (newTableBody && currentTableBody) {
-                currentTableBody.innerHTML = newTableBody.innerHTML;
-            }
-            
-            // Update case count
-            const newCaseCount = doc.querySelector('#caseCount');
-            const currentCaseCount = document.getElementById('caseCount');
-            if (newCaseCount && currentCaseCount) {
-                currentCaseCount.textContent = newCaseCount.textContent;
-            }
-            
-            // Show/hide table and no results message
-            const hasResults = newTableBody && newTableBody.children.length > 0;
-            if (hasResults) {
-                tableContainer.style.display = 'block';
-                noResults.style.display = 'none';
-            } else {
-                tableContainer.style.display = 'none';
-                noResults.style.display = 'block';
-            }
-        } catch (error) {
-            console.error('Error refreshing table:', error);
+    progressBar.classList.add('progress-bar-animated');
+    taskStatus.textContent = 'Starting...';
+    
+    try {
+        // Start the fetch process
+        const response = await fetch('/api/v1/admin/fetch-cases', {
+            method: 'POST'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to start case fetching');
         }
-    }
-
-    // Function to check task status
-    async function checkTaskStatus() {
-        try {
-            const response = await fetch(`/api/v1/task-status/${taskId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch task status');
-            }
-            
-            const data = await response.json();
+        
+        const data = await response.json();
+        const taskId = data.task_id;
+        
+        // Create EventSource for SSE
+        const eventSource = new EventSource(`/api/v1/task-status/${taskId}`);
+        
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
             
             // Update progress UI
-            if (data.progress_percentage !== undefined) {
-                progressBar.style.width = `${data.progress_percentage}%`;
-                progressBar.setAttribute('aria-valuenow', data.progress_percentage);
+            processedCount.textContent = data.processed_cases || 0;
+            totalCount.textContent = data.total_cases || 'Unknown';
+            
+            const progress = data.progress_percentage || 0;
+            progressBar.style.width = `${progress}%`;
+            progressBar.setAttribute('aria-valuenow', progress);
+            
+            // Update status message
+            taskStatus.textContent = data.message || data.status || 'Processing...';
+            
+            // Update time remaining
+            if (data.estimated_time_remaining) {
+                const minutes = Math.floor(data.estimated_time_remaining / 60);
+                const seconds = data.estimated_time_remaining % 60;
+                timeRemaining.textContent = `${minutes}m ${seconds}s`;
             }
             
-            if (data.total_cases !== undefined) {
-                totalCount.textContent = data.total_cases;
-            }
+            // Update stats
+            updateStats({
+                total_cases_checked: data.total_cases,
+                medla_projects: data.medla_projects || 0
+            });
             
-            if (data.processed_cases !== undefined) {
-                processedCount.textContent = data.processed_cases;
-                
-                // Trigger table refresh if we have new cases
-                if (data.processed_cases > lastProcessed) {
-                    await refreshTable();
-                    lastProcessed = data.processed_cases;
-                }
-            }
-            
-            // Update task status
-            if (data.status) {
-                taskStatus.textContent = data.status;
-            }
-            
-            // Show any errors
-            if (data.errors && data.errors.length > 0) {
-                taskErrors.style.display = 'block';
-                const errorList = taskErrors.querySelector('ul');
-                errorList.innerHTML = ''; // Clear existing errors
-                data.errors.forEach(error => {
-                    const li = document.createElement('li');
-                    li.textContent = error;
-                    li.className = 'text-danger';
-                    errorList.appendChild(li);
-                });
-            }
-            
-            // Handle completion states
+            // Handle completion
             if (data.status === 'completed') {
-                isRunning = false;
-                cleanup();
-                showToast('Task completed successfully', 'success');
+                eventSource.close();
                 progressBar.classList.remove('progress-bar-animated');
                 progressBar.classList.add('bg-success');
-                
-                // Final refresh and cleanup
-                await refreshTable();
+                showToast('Successfully fetched all cases', 'success');
                 setTimeout(() => {
-                    progressDiv.style.display = 'none';
+                    window.location.reload();
                 }, 1500);
-                return true;
             } else if (data.status === 'failed') {
-                isRunning = false;
-                cleanup();
-                showToast(data.error || 'Task failed', 'error');
+                eventSource.close();
                 progressBar.classList.remove('progress-bar-animated');
                 progressBar.classList.add('bg-danger');
-                setTimeout(() => {
-                    progressDiv.style.display = 'none';
-                }, 1500);
-                return true;
+                showToast('Failed to fetch cases: ' + (data.error || 'Unknown error'), 'error');
             }
-            
-            return false;
-        } catch (error) {
-            console.error('Error checking task status:', error);
-            showToast('Error checking task status', 'error');
-            isRunning = false;
-            cleanup();
+        };
+        
+        eventSource.onerror = function(error) {
+            console.error('SSE Error:', error);
+            eventSource.close();
             progressBar.classList.remove('progress-bar-animated');
             progressBar.classList.add('bg-danger');
-            setTimeout(() => {
-                progressDiv.style.display = 'none';
-            }, 1500);
-            return true;
-        }
+            showToast('Error during case fetching', 'error');
+        };
+        
+    } catch (error) {
+        console.error('Fetch Error:', error);
+        progressBar.classList.remove('progress-bar-animated');
+        progressBar.classList.add('bg-danger');
+        showToast(error.message || 'Error during case fetching', 'error');
     }
-
-    // Start polling loops
-    statusInterval = setInterval(async () => {
-        if (!isRunning) {
-            cleanup();
-            return;
-        }
-        const isDone = await checkTaskStatus();
-        if (isDone) {
-            cleanup();
-        }
-    }, 1000);
-
-    tableInterval = setInterval(async () => {
-        if (!isRunning) {
-            cleanup();
-            return;
-        }
-        await refreshTable();
-    }, 2000);
-
-    // Initial checks
-    await checkTaskStatus();
-    await refreshTable();
 }
 
 // Helper function to show toast notifications
@@ -361,4 +224,53 @@ document.addEventListener('DOMContentLoaded', async () => {
             localStorage.removeItem('taskMessage');
         }
     }
-}); 
+});
+
+// Stats update functions
+function updateStats(data) {
+    function animateValue(element, value) {
+        if (!element) return;
+        
+        // Add updating class for scale animation
+        element.classList.add('updating');
+        
+        // Update the value
+        element.textContent = value;
+        
+        // Remove the class after animation
+        setTimeout(() => {
+            element.classList.remove('updating');
+        }, 200);
+    }
+
+    // Update total cases checked
+    const totalCasesValue = document.querySelector('.stat-item:nth-child(1) .stat-value');
+    if (totalCasesValue && data.total_cases_checked !== undefined) {
+        animateValue(totalCasesValue, data.total_cases_checked.toLocaleString());
+    }
+
+    // Update Medla projects count and percentage
+    const medlaProjectsValue = document.querySelector('.stat-item:nth-child(2) .stat-value');
+    if (medlaProjectsValue && data.medla_projects !== undefined) {
+        const percentage = data.total_cases_checked ? ((data.medla_projects / data.total_cases_checked) * 100).toFixed(1) : 0;
+        animateValue(medlaProjectsValue, `${data.medla_projects.toLocaleString()} (${percentage}%)`);
+    }
+
+    // Update last update time
+    const lastUpdateValue = document.querySelector('.stat-item:nth-child(3) .stat-value');
+    if (lastUpdateValue) {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString(undefined, {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        const dateStr = now.toLocaleDateString(undefined, {
+            month: 'short',
+            day: 'numeric'
+        });
+        animateValue(lastUpdateValue, `${timeStr}, ${dateStr}`);
+    }
+}
+
+// ... rest of existing code ... 

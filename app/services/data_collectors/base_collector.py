@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 from app.schemas.project import Project
+import logging
+
+logger = logging.getLogger(__name__)
 
 class BaseDataCollector(ABC):
     """Base class for all data collectors"""
@@ -19,11 +22,12 @@ class BaseDataCollector(ABC):
         pass
     
     async def collect(self) -> List[Project]:
-        """Main method to collect and process data"""
+        """Collect data from the source and return a list of standardized cases."""
+        logger.info(f"Collecting from {self.source_name}")
         try:
             raw_data = await self.fetch_data()
-            return await self.clean_data(raw_data)
+            cases = self.transform_data(raw_data)
+            return cases
         except Exception as e:
-            # In a production environment, this should be properly logged
-            print(f"Error collecting data from {self.source_name}: {str(e)}")
+            logger.error(f"Error collecting data from {self.source_name}: {str(e)}")
             return [] 

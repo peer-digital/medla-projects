@@ -9,17 +9,23 @@
     <link href="/static/css/style.css" rel="stylesheet">
     <style>
         :root {
-            /* Color system */
-            --bg-primary: #1E1E1E;
-            --bg-secondary: #252525;
-            --bg-elevated: #2D2D2D;
-            --text-primary: #FFFFFF;
-            --text-secondary: #B0B0B0;
-            --border-color: #404040;
-            --accent-primary: #007AFF;
-            --accent-success: #28A745;
-            --accent-warning: #FFC107;
-            --accent-danger: #DC3545;
+            /* Color system - more subtle and harmonious */
+            --bg-primary: #1A1B1E;
+            --bg-secondary: #222327;
+            --bg-elevated: #2A2B30;
+            --text-primary: #E6E7E9;
+            --text-secondary: #9A9BA0;
+            --border-color: #303136;
+            --accent-primary: #4B6BFD;
+            --accent-success: #3BA55C;
+            --accent-warning: #FAA356;
+            --accent-danger: #F06560;
+            
+            /* Opacity variants for backgrounds */
+            --accent-primary-bg: rgba(75, 107, 253, 0.08);
+            --accent-success-bg: rgba(59, 165, 92, 0.08);
+            --accent-warning-bg: rgba(250, 163, 86, 0.08);
+            --accent-danger-bg: rgba(240, 101, 96, 0.08);
             
             /* Spacing */
             --spacing-xs: 0.25rem;
@@ -245,11 +251,15 @@
 
         /* Progress bars */
         .progress {
-            background-color: var(--bg-elevated);
+            background-color: var(--bg-secondary);
+            height: 0.5rem;
+            border-radius: 999px;
+            overflow: hidden;
         }
 
         .progress-bar {
             background-color: var(--accent-primary);
+            border-radius: 999px;
         }
 
         .btn-group {
@@ -290,9 +300,9 @@
 
         /* Header section */
         .page-header {
-            padding: 1.5rem 0;
+            padding: 1rem 0;
+            margin-bottom: 1.5rem;
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 2rem;
         }
 
         .page-title {
@@ -753,39 +763,29 @@
         }
 
         .toast {
-            background: var(--bg-elevated);
+            background-color: var(--bg-elevated);
             border: 1px solid var(--border-color);
+            color: var(--text-primary);
             border-radius: var(--radius-md);
             padding: 1rem;
             margin-bottom: 0.5rem;
-            min-width: 300px;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .toast.toast-success {
+            border-left: 3px solid var(--accent-success);
         }
 
-        .toast-success {
-            border-left: 4px solid var(--accent-success);
+        .toast.toast-error {
+            border-left: 3px solid var(--accent-danger);
         }
 
-        .toast-error {
-            border-left: 4px solid var(--accent-danger);
+        .toast.toast-warning {
+            border-left: 3px solid var(--accent-warning);
         }
 
-        .toast-warning {
-            border-left: 4px solid var(--accent-warning);
+        .toast.toast-info {
+            border-left: 3px solid var(--accent-primary);
         }
 
         /* Empty state */
@@ -1011,33 +1011,180 @@
         .dropdown-toggle::after {
             display: none !important;
         }
+
+        /* Stats section - more subtle */
+        .stats-section {
+            display: flex;
+            gap: 2rem;
+            padding-right: 2rem;
+            border-right: 1px solid var(--border-color);
+            margin-right: 2rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .stat-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 24px;
+            width: 1px;
+            background-color: var(--border-color);
+        }
+
+        .stat-icon {
+            width: 2.75rem;
+            height: 2.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            font-size: 1.125rem;
+            transition: all 0.2s ease;
+        }
+
+        .stat-icon-cases {
+            background-color: var(--accent-primary-bg);
+            color: var(--accent-primary);
+        }
+
+        .stat-icon-medla {
+            background-color: var(--accent-success-bg);
+            color: var(--accent-success);
+        }
+
+        .stat-icon-time {
+            background-color: var(--accent-warning-bg);
+            color: var(--accent-warning);
+        }
+
+        /* Action button - more subtle */
+        .action-button {
+            background-color: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.625rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .action-button:hover {
+            background-color: var(--bg-secondary);
+            border-color: var(--accent-primary);
+        }
+
+        .action-dropdown-menu {
+            min-width: 200px;
+            padding: 0.5rem;
+            background-color: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 1rem;
+            color: var(--text-primary);
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+        }
+
+        .action-dropdown-item:hover {
+            background-color: var(--accent-primary-bg);
+            color: var(--accent-primary);
+        }
+
+        .action-dropdown-item i {
+            font-size: 1.125rem;
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        .action-dropdown-item.text-danger {
+            color: var(--text-primary);
+        }
+
+        .action-dropdown-item.text-danger:hover {
+            background-color: var(--accent-danger-bg);
+            color: var(--accent-danger);
+        }
     </style>
 </head>
 <body>
     <!-- Toast container for notifications -->
     <div class="toast-container"></div>
 
-    <div class="container-fluid mt-4">
+    <div class="container-fluid mt-3">
         <div class="page-header">
             <div class="container-fluid">
                 <div class="row align-items-center">
-                    <div class="col">
-                        <h1 class="page-title">Green Industrial Projects</h1>
-                    </div>
                     <div class="col-auto">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-danger" onclick="resetDatabase()" data-tooltip="Reset the entire database">
-                                <i class="bi bi-trash me-2"></i>Reset Database
+                        <h1 class="page-title mb-0">Green Industrial Projects</h1>
+                    </div>
+                    <div class="col d-flex align-items-center">
+                        <div class="stats-section">
+                            <div class="stat-item">
+                                <div class="stat-icon stat-icon-cases">
+                                    <i class="bi bi-search"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-value">{{ total_cases_checked|default(0) }}</div>
+                                    <div class="stat-label">Cases Checked</div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon stat-icon-medla">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-value">{{ medla_projects|default(0) }} ({{ medla_percentage|default('0%') }})</div>
+                                    <div class="stat-label">Medla Projects</div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon stat-icon-time">
+                                    <i class="bi bi-clock-history"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-value">{{ last_update|default('Never') }}</div>
+                                    <div class="stat-label">Last Update</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn action-button" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear-fill"></i>
+                                Actions
+                                <i class="bi bi-chevron-down ms-2"></i>
                             </button>
-                            <button type="button" class="btn btn-primary" onclick="fetchAllCases()" data-tooltip="Fetch new cases and updates">
-                                <i class="bi bi-cloud-download"></i> Fetch Cases
-                            </button>
-                            <button type="button" class="btn btn-success" onclick="fetchBookmarkedDetails()" data-tooltip="Update details for bookmarked cases">
-                                <i class="bi bi-star me-2"></i>Update Bookmarked
-                            </button>
-                            <button type="button" class="btn btn-info" onclick="batchCategorize()" data-tooltip="Automatically categorize uncategorized cases">
-                                <i class="bi bi-tags me-2"></i>Batch Categorize
-                            </button>
+                            <ul class="dropdown-menu action-dropdown-menu">
+                                <li>
+                                    <a class="action-dropdown-item" href="#" onclick="fetchAllCases()">
+                                        <i class="bi bi-cloud-download"></i>
+                                        Fetch Cases
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="action-dropdown-item text-danger" href="#" onclick="resetDatabase()">
+                                        <i class="bi bi-trash"></i>
+                                        Reset Database
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

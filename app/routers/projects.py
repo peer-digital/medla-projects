@@ -16,6 +16,7 @@ from app.utils.date_utils import parse_date
 import json
 from fastapi.responses import StreamingResponse
 import random
+from sqlalchemy import func
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -130,7 +131,7 @@ def complete_task(task_id: str, success: bool = True, message: str = None):
         })
 
 @router.get("/task-status/{task_id}")
-async def get_task_status(task_id: str):
+async def get_task_status(task_id: str, db: Session = Depends(get_db)):
     """Get the status of a background task using Server-Sent Events"""
     if task_id not in background_tasks_status:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -140,19 +141,27 @@ async def get_task_status(task_id: str):
             if task_id not in background_tasks_status:
                 break
             
-            data = background_tasks_status[task_id]
-            # Ensure we have all required fields for the frontend
-            if "progress_percentage" not in data:
-                data["progress_percentage"] = data.get("progress", 0)
-            if "total_cases" not in data:
-                data["total_cases"] = data.get("total", 0)
-            if "processed_cases" not in data:
-                data["processed_cases"] = data.get("processed", 0)
+            # Get total stats from fetch status
+            total_cases_checked = db.query(func.sum(FetchStatus.total_cases_checked)).scalar() or 0
+            total_medla_cases = db.query(func.sum(FetchStatus.total_medla_cases)).scalar() or 0
+            
+            task_data = background_tasks_status[task_id]
+            data = {
+                "status": task_data.get("status", "running"),
+                "progress_percentage": task_data.get("progress_percentage", 0),
+                "message": task_data.get("message", "Processing..."),
+                "error": task_data.get("error"),
+                "processed_cases": task_data.get("processed_cases", 0),
+                "total_cases": task_data.get("total_cases", 0),
+                "total_cases_checked": total_cases_checked,
+                "total_medla_cases": total_medla_cases,
+                "estimated_time_remaining": task_data.get("estimated_time_remaining")
+            }
             
             yield f"data: {json.dumps(data)}\n\n"
             
             # If task is completed or failed, stop sending events
-            if data.get("status") in ["completed", "failed"]:
+            if task_data.get("status") in ["completed", "failed"]:
                 break
             
             await asyncio.sleep(1)
@@ -207,7 +216,7 @@ async def fetch_cases(
     
     try:
         collector = LansstyrelsenCollector()
-        lan_list = list(collector.lan_queries.keys())
+        lan_list = list(collector.lan_queries.keys())  # Use lan_queries for the list of län
         task_status = track_task_progress(task_id)
         
         async def fetch_cases_background():
@@ -228,13 +237,13 @@ async def fetch_cases(
                     if not status or status.last_successful_fetch is None:
                         incomplete_lan.append((lan, status))
                         # Fetch page info for estimation
-                        result = await collector.fetch_data(lan, page=1)
+                        result = await collector.fetch_cases(lan)
                         if result and result.get('pagination'):
                             lan_page_info[lan] = result['pagination']
                         continue
                     
                     # Check if we have more pages to fetch for this län
-                    result = await collector.fetch_data(lan, page=1)
+                    result = await collector.fetch_cases(lan)
                     if result and result.get('pagination'):
                         lan_page_info[lan] = result['pagination']
                         total_pages = result['pagination'].get('total_pages', 1)
@@ -290,7 +299,7 @@ async def fetch_cases(
                             )
                             
                             # Fetch current page
-                            result = await collector.fetch_data(lan, page=current_page)
+                            result = await collector.fetch_cases(lan)
                             if not result or not result.get('projects'):
                                 break
                             
@@ -384,7 +393,7 @@ async def fetch_cases(
                     try:
                         from_date = status.last_successful_fetch.strftime('%Y-%m-%d') if status.last_successful_fetch else None
                         if from_date:
-                            result = await collector.fetch_data(lan, from_date=from_date, page=1)
+                            result = await collector.fetch_cases(lan)
                             if result and result.get('pagination'):
                                 total_pages = result['pagination'].get('total_pages', 1)
                                 total_cases += total_pages * 50
@@ -420,7 +429,7 @@ async def fetch_cases(
                             
                             current_page = 1
                             while True:
-                                result = await collector.fetch_data(lan, from_date=from_date, page=current_page)
+                                result = await collector.fetch_cases(lan)
                                 if not result or not result.get('projects'):
                                     break
                                 

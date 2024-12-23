@@ -8,12 +8,18 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from app.models.database import get_db
 from app.models.models import Case, FetchStatus
 from app.services.data_collectors.lansstyrelsen_collector import LansstyrelsenCollector
+from app.services.categorization import CategorizationService
 from app.utils.date_utils import parse_date
 import logging
 from sqlalchemy import or_
 
-logging.basicConfig(level=logging.INFO)
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+# Set debug level for other loggers
+logging.getLogger('app.services.data_collectors.lansstyrelsen_collector').setLevel(logging.DEBUG)
+logging.getLogger('app.utils.date_utils').setLevel(logging.WARNING)  # Keep this at WARNING to avoid noise
 
 def prepare_case_data(raw_data, lan):
     """Prepare case data by converting date fields and setting defaults"""
@@ -37,12 +43,19 @@ def prepare_case_data(raw_data, lan):
     parsed_dates = {}
     for field in date_fields:
         value = case_data.get(field)
-        parsed = parse_date(value)
-        if parsed is not None and isinstance(parsed, datetime):
-            parsed_dates[field] = parsed
+        if isinstance(value, datetime):
+            parsed_dates[field] = value
+        elif value:  # Only try to parse if we have a value
+            try:
+                parsed = parse_date(value)
+                parsed_dates[field] = parsed
+                logger.debug(f"Successfully parsed {field}: {parsed}")
+            except Exception as e:
+                logger.warning(f"Failed to parse {field} ({value}): {str(e)}")
+                parsed_dates[field] = None
         else:
             parsed_dates[field] = None
-        logger.debug(f"Converted {field}: {parsed_dates[field]} (type: {type(parsed_dates[field]) if parsed_dates[field] else 'None'})")
+        logger.debug(f"Final {field}: {parsed_dates[field]} (type: {type(parsed_dates[field]) if parsed_dates[field] else 'None'})")
 
     prepared_data = {
         'id': case_data.get('id'),
@@ -77,76 +90,114 @@ def prepare_case_data(raw_data, lan):
     if not prepared_data['title']:
         raise ValueError("Case title is required")
     if not prepared_data['date']:
-        raise ValueError(f"Invalid required date field: {case_data.get('date')}")
+        logger.warning(f"Case {prepared_data['id']} is missing date field")
 
     return prepared_data
 
 async def fetch_all_cases(resume: bool = True):
-    """Fetch all cases from all län with support for resuming and tracking updates"""
-    collector = LansstyrelsenCollector()
+    """
+    Fetch all cases from Länsstyrelsen, classify them, and save only Medla-suitable cases.
+    """
     db = next(get_db())
+    collector = LansstyrelsenCollector()
+    categorization_service = CategorizationService()
     current_batch = []
-    total_cases = 0
+    total_cases_checked = 0  # Track all cases we check
+    total_medla_cases = 0    # Track only Medla cases
     
     try:
-        # Get list of län
-        lan_list = list(collector.lan_queries.keys())
-        logger.info(f"Starting to fetch cases from {len(lan_list)} län")
-        
-        # Process each län
-        for lan in lan_list:
+        for lan in collector.lan_queries.keys():
             try:
-                # Get or create fetch status for this län
                 fetch_status = db.query(FetchStatus).filter(FetchStatus.lan == lan).first()
+                
                 if not fetch_status:
                     fetch_status = FetchStatus(lan=lan)
                     db.add(fetch_status)
                     db.commit()
                 
-                # If resuming and we have a last successful fetch, only get cases updated since then
-                from_date = None
                 if resume and fetch_status.last_successful_fetch:
-                    from_date = fetch_status.last_successful_fetch.strftime("%Y-%m-%d")
+                    # Only fetch cases newer than last successful fetch minus 1 day for safety
+                    start_date = fetch_status.last_successful_fetch - timedelta(days=1)
                 else:
-                    # Default to last 180 days for initial fetch
-                    from_date = (datetime.now() - timedelta(days=180)).strftime("%Y-%m-%d")
-                
-                to_date = datetime.now().strftime("%Y-%m-%d")
-                
-                logger.info(f"Fetching cases for {lan} from {from_date} to {to_date}...")
+                    start_date = None
                 
                 try:
-                    cases = await collector.fetch_data(lan)
+                    logger.info(f"Fetching cases for {lan}")
+                    result = await collector.fetch_cases(lan)
+                    cases = result.get('projects', [])
                     
                     # Process cases in batches
                     for case_data in cases:
-                        try:
-                            # Check if case exists and needs update
-                            existing_case = db.query(Case).filter(Case.id == case_data["id"]).first()
-                            
-                            if existing_case:
-                                # Check if case has been updated
-                                case_date = parse_date(case_data.get('date'))
-                                if not case_date or not existing_case.last_updated_from_source or case_date > existing_case.last_updated_from_source:
-                                    # Update existing case
-                                    prepared_data = prepare_case_data(case_data, lan)
-                                    for key, value in prepared_data.items():
-                                        setattr(existing_case, key, value)
-                                    db.add(existing_case)
-                            else:
-                                # Create new case
-                                prepared_data = prepare_case_data(case_data, lan)
-                                case = Case(**prepared_data)
-                                current_batch.append(case)
-                            
-                            # Commit in batches of 100
-                            if len(current_batch) >= 100:
-                                db.bulk_save_objects(current_batch)
-                                db.commit()
-                                total_cases += len(current_batch)
-                                logger.info(f"Committed batch of {len(current_batch)} cases for {lan}. Total cases: {total_cases}")
-                                current_batch = []
+                        total_cases_checked += 1  # Increment total cases checked
                         
+                        try:
+                            case_id = case_data.get("id")
+                            if not case_id:
+                                logger.warning(f"Skipping case due to missing ID in {lan}")
+                                continue
+                                
+                            case_date = parse_date(case_data.get('date'))
+                            if not case_date:
+                                logger.warning(f"Skipping case {case_id} due to invalid date in {lan}")
+                                continue
+                            
+                            # Check if case exists
+                            existing_case = db.query(Case).filter(Case.id == case_id).first()
+                            
+                            # Determine if case needs updating based on multiple factors
+                            needs_update = False
+                            if not existing_case:
+                                needs_update = True
+                                logger.debug(f"New case found: {case_id}")
+                            else:
+                                # Check date-based updates
+                                if case_date and (
+                                    not existing_case.last_updated_from_source or 
+                                    case_date > existing_case.last_updated_from_source
+                                ):
+                                    needs_update = True
+                                    logger.debug(f"Case {case_id} needs update due to newer date")
+                                
+                                # Check content-based updates (status, decision date, etc.)
+                                elif (
+                                    case_data.get('status') != existing_case.status or
+                                    case_data.get('decision_date') != existing_case.decision_date or
+                                    case_data.get('title') != existing_case.title or
+                                    case_data.get('description') != existing_case.description
+                                ):
+                                    needs_update = True
+                                    logger.debug(f"Case {case_id} needs update due to content changes")
+                            
+                            if needs_update:
+                                # Prepare case data
+                                prepared_data = prepare_case_data(case_data, lan)
+                                
+                                # Classify the case
+                                if existing_case:
+                                    case = existing_case
+                                    for key, value in prepared_data.items():
+                                        setattr(case, key, value)
+                                else:
+                                    case = Case(**prepared_data)
+                                
+                                # Perform classification
+                                case, success, error = await categorization_service._categorize_case(case)
+                                
+                                # Only save if it's a Medla-suitable case
+                                if case.is_medla_suitable:
+                                    total_medla_cases += 1  # Increment Medla cases counter
+                                    if existing_case:
+                                        db.add(case)
+                                    else:
+                                        current_batch.append(case)
+                                    
+                                    # Commit in batches of 100
+                                    if len(current_batch) >= 100:
+                                        db.bulk_save_objects(current_batch)
+                                        db.commit()
+                                        logger.info(f"Committed batch of {len(current_batch)} Medla-suitable cases for {lan}. Total Medla cases: {total_medla_cases}, Total checked: {total_cases_checked}")
+                                        current_batch = []
+                            
                         except Exception as e:
                             logger.error(f"Error processing case {case_data.get('id', 'unknown')}: {str(e)}")
                             logger.exception("Full traceback:")
@@ -156,17 +207,18 @@ async def fetch_all_cases(resume: bool = True):
                     if current_batch:
                         db.bulk_save_objects(current_batch)
                         db.commit()
-                        total_cases += len(current_batch)
-                        logger.info(f"Committed final batch of {len(current_batch)} cases for {lan}. Total cases: {total_cases}")
+                        logger.info(f"Committed final batch of {len(current_batch)} Medla-suitable cases for {lan}. Total Medla cases: {total_medla_cases}, Total checked: {total_cases_checked}")
                         current_batch = []
                     
-                    # Update fetch status
+                    # Update fetch status with counters
                     fetch_status.last_successful_fetch = datetime.now()
                     fetch_status.error_count = 0
                     fetch_status.last_error = None
+                    fetch_status.total_cases_checked = total_cases_checked
+                    fetch_status.total_medla_cases = total_medla_cases
                     db.commit()
                     
-                    logger.info(f"Completed processing {lan}. Added/updated {total_cases} cases so far.")
+                    logger.info(f"Completed processing {lan}. Total Medla cases: {total_medla_cases}, Total checked: {total_cases_checked}")
                 
                 except Exception as e:
                     error_msg = f"Error fetching cases for {lan}: {str(e)}"
@@ -184,7 +236,7 @@ async def fetch_all_cases(resume: bool = True):
                     current_batch = []
                 continue
         
-        logger.info(f"Completed fetching all cases. Added/updated {total_cases} cases in total.")
+        logger.info(f"Completed fetching all cases. Total Medla cases: {total_medla_cases}, Total checked: {total_cases_checked}")
     
     except Exception as e:
         logger.error(f"Error in fetch_all_cases: {str(e)}")
@@ -194,6 +246,11 @@ async def fetch_all_cases(resume: bool = True):
         raise
     finally:
         db.close()
+        
+    return {
+        "total_cases_checked": total_cases_checked,
+        "total_medla_cases": total_medla_cases
+    }
 
 if __name__ == "__main__":
     asyncio.run(fetch_all_cases()) 

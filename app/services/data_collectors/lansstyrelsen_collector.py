@@ -8,6 +8,8 @@ import random
 import asyncio
 from app.utils.date_utils import parse_date
 import re
+from dateutil import parser
+from urllib.parse import urljoin
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -25,15 +27,16 @@ class LansstyrelsenCollector(BaseDataCollector):
         super().__init__()
         self.source_name = "Länsstyrelsen"
         self.base_url = "https://diarium.lansstyrelsen.se"
+        self.search_url = f"{self.base_url}/Case/CaseSearchResult.aspx"
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9,sv;q=0.8',
+            'Connection': 'keep-alive',
+            'Referer': 'https://diarium.lansstyrelsen.se/Case/Search.aspx'
         }
-        # Mapping of case numbers to caseIDs
-        self.case_id_mapping = {
-            "13649-2014": "1366003",
-            # Add more mappings as we discover them
-        }
-        # Define län queries
+        # Define län queries with their serialized search strings
+        # IMPORTANT: These are serialized search queries - DO NOT MODIFY without testing
         self.lan_queries = {
             'Blekinge': 'oJ/Yw8gzqEqkNIX1ShhaGWnWcYgyyBdrYHcfG3urKk8/9Zkiokzp0729kvmEyalIedPQBOMNpj63vV+7vy551JfDJvn3xy5BW70PT/+vPLD9uq4jbc+f/NeC1MhP1ZVvWD4FoxnBr5y5sHs3eHq3BdShWRzY+bNQZf9uy0EYRXvjWV6QWSLv2IWfYlZEpRgPzWAtKr01xkSF9Dec196mhA==',
             'Dalarna': 'oJ/Yw8gzqEphSnIcwnpkaNnPA7kL1gRZ4QWHdOX8FhuAyrnC2x2a+OkcbZCs52SC3R3oiAIxQnHMw2sE1D8/a1ub05oRT59giuDlLUaoGEZC3B+Rovcz+AwllaLFRHaa7cURg9aanS3m4UVCSplh7QAfQ+mbp7wV13/W72P//kaBIhUvCHFyN9nkqBTI3OQpRf2Ct8DAi1ejgAeyncHoCQ==',
@@ -58,115 +61,115 @@ class LansstyrelsenCollector(BaseDataCollector):
             'Östergötland': 'oJ/Yw8gzqEoK6i/vq38qNznuSDQ9QTCQFWKiBr/AsnRjzxzD7mN2z+Ov5mv4ExfKCgwJkQbTP6pk+P8O0MOOK6Zk80+br+dnPelTwq1d88/CEYXoWEt6bq9SMXyz8idr+zB5i86p2CqE48kfJrofqaThXNIC8Bw8j8MiMNa96cU6XrIA7h13ylgRKJ/s1VVsCVPrga7RJkB2+NTa+PWeWH/r1G84IhZ6Sd6mP9mlmYE='
         }
     
-    def _parse_date(self, date_str: str) -> Optional[datetime]:
-        """Parse date string to datetime object"""
-        return parse_date(date_str)
+    def _parse_date(self, date_str: str) -> Optional[str]:
+        """Parse date string to ISO format"""
+        if not date_str or len(date_str) < 3:  # Skip single/double digit strings
+            return None
+            
+        try:
+            # Clean the date string
+            date_str = date_str.strip()
+            if date_str.isdigit():  # Skip numeric-only dates
+                return None
+                
+            # Parse the date
+            parsed_date = parser.parse(date_str, dayfirst=True)  # Swedish dates are day-first
+            return parsed_date.date().isoformat()
+        except (ValueError, TypeError):
+            return None
     
     async def fetch_case_details(self, case_number: str, case_id: str = None) -> Dict[str, Any]:
-        """
-        Fetch detailed information for a specific case
-        Args:
-            case_number: The case number (Diarienummer) e.g. "13649-2014"
-            case_id: The numeric ID from data-case-id attribute
-        """
+        """Fetch detailed information for a specific case"""
+        if not case_id:
+            return None
+        
         max_retries = 3
         base_delay = 2
-        
-        if not case_id:
-            logger.error(f"No case_id provided for case number: {case_number}")
-            return None
         
         async with aiohttp.ClientSession() as session:
             for attempt in range(max_retries):
                 try:
-                    # Calculate delay with exponential backoff and jitter
+                    # Calculate delay with exponential backoff
                     delay = base_delay * (2 ** attempt)
                     jitter = random.uniform(0, delay * 0.1)
-                    logger.info(f"Waiting {delay + jitter:.1f}s before attempt {attempt + 1}")
                     await asyncio.sleep(delay + jitter)
                     
-                    # Get case details using the case_id
+                    # Get case details with correct path
                     case_url = f"{self.base_url}/Case/CaseInfo.aspx?caseID={case_id}"
-                    logger.info(f"Getting case details from {case_url}")
-                    
                     async with session.get(case_url, headers=self.headers) as case_response:
-                        if case_response.status == 200:
-                            case_html = await case_response.text()
-                            case_soup = BeautifulSoup(case_html, 'html.parser')
-                            
-                            # Parse details
-                            tables = case_soup.find_all('table')
-                            if not tables:
-                                logger.error("No tables found in case details")
-                                continue
-                            
-                            # Parse overview details
-                            details = {}
-                            overview_table = tables[0]
-                            rows = overview_table.find_all('tr')
-                            logger.info(f"Found {len(rows)} rows in overview table")
-                            for row in rows:
-                                cells = row.find_all('td')
-                                if len(cells) == 2:
-                                    key = cells[0].get_text(strip=True)
-                                    value = cells[1].get_text(strip=True)
-                                    details[key] = value
-                            
-                            # Extract documents from the second table
-                            documents = []
-                            if len(tables) > 1:
-                                documents_table = tables[1]
-                                doc_rows = documents_table.find_all('tr')[1:]  # Skip header
-                                logger.info(f"Found {len(doc_rows)} document rows")
-                                for doc_row in doc_rows:
-                                    cells = doc_row.find_all('td')
-                                    if len(cells) >= 4:
-                                        doc_link = cells[1].find('a')
-                                        doc_url = f"{self.base_url}/{doc_link['href']}" if doc_link and 'href' in doc_link.attrs else None
-                                        document = {
-                                            'id': cells[0].get_text(strip=True),
-                                            'title': cells[1].get_text(strip=True),
-                                            'date': cells[2].get_text(strip=True),
-                                            'sender': cells[3].get_text(strip=True),
-                                            'url': doc_url
-                                        }
-                                        documents.append(document)
-                            
-                            # Parse dates
-                            decision_date = self._parse_date(details.get('Beslutsdatum'))
-                            
-                            # Create result
-                            result = {
-                                'id': details.get('Diarienummer', ''),
-                                'case_id': case_id,
-                                'diarium': details.get('Diarium', ''),
-                                'date': self._parse_date(details.get('In/Upp-datum', '')),
-                                'title': details.get('Ärenderubrik', ''),
-                                'status': details.get('Status', ''),
-                                'decision_date': decision_date,
-                                'sender': details.get('Avsändare/mottagare', ''),
-                                'municipality': details.get('Kommun', ''),
-                                'documents': documents,
-                                'url': case_url
-                            }
-                            
-                            # Verify we got the right case
-                            if result['id'] and case_number in result['id']:
-                                logger.info("Successfully parsed case details")
-                                return result
-                            else:
-                                logger.error(f"Found wrong case: {result['id']} (expected {case_number})")
-                                continue
+                        if case_response.status == 404:
+                            return None
+                        elif case_response.status != 200:
+                            if attempt == max_retries - 1:
+                                logger.error(f"Failed to get case {case_number} (status {case_response.status})")
+                            continue
+                        
+                        case_html = await case_response.text()
+                        case_soup = BeautifulSoup(case_html, 'html.parser')
+                        
+                        # Parse details
+                        tables = case_soup.find_all('table')
+                        if not tables:
+                            continue
+                        
+                        # Parse overview details
+                        details = {}
+                        overview_table = tables[0]
+                        rows = overview_table.find_all('tr')
+                        for row in rows:
+                            cells = row.find_all('td')
+                            if len(cells) == 2:
+                                key = cells[0].get_text(strip=True)
+                                value = cells[1].get_text(strip=True)
+                                details[key] = value
+                        
+                        # Extract documents
+                        documents = []
+                        if len(tables) > 1:
+                            documents_table = tables[1]
+                            doc_rows = documents_table.find_all('tr')[1:]  # Skip header
+                            for doc_row in doc_rows:
+                                cells = doc_row.find_all('td')
+                                if len(cells) >= 4:
+                                    doc_link = cells[1].find('a')
+                                    doc_url = f"{self.base_url}/{doc_link['href']}" if doc_link and 'href' in doc_link.attrs else None
+                                    document = {
+                                        'id': cells[0].get_text(strip=True),
+                                        'title': cells[1].get_text(strip=True),
+                                        'date': cells[2].get_text(strip=True),
+                                        'sender': cells[3].get_text(strip=True),
+                                        'url': doc_url
+                                    }
+                                    documents.append(document)
+                        
+                        # Parse dates
+                        decision_date = self._parse_date(details.get('Beslutsdatum'))
+                        
+                        # Create result
+                        result = {
+                            'id': details.get('Diarienummer', ''),
+                            'case_id': case_id,
+                            'diarium': details.get('Diarium', ''),
+                            'date': self._parse_date(details.get('In/Upp-datum', '')),
+                            'title': details.get('Ärenderubrik', ''),
+                            'status': details.get('Status', ''),
+                            'decision_date': decision_date,
+                            'sender': details.get('Avsändare/mottagare', ''),
+                            'municipality': details.get('Kommun', ''),
+                            'documents': documents,
+                            'url': case_url
+                        }
+                        
+                        # Verify we got the right case
+                        if result['id'] and case_number in result['id']:
+                            return result
                         else:
-                            logger.error(f"Failed to get case details: {case_response.status}")
                             continue
                 
                 except Exception as e:
-                    logger.error(f"Error on attempt {attempt + 1}: {str(e)}")
-                    if attempt < max_retries - 1:
-                        continue
-                    else:
-                        raise Exception(f"Max retries reached: {str(e)}")
+                    if attempt == max_retries - 1:
+                        logger.error(f"Error fetching case {case_number}: {str(e)}")
+                    continue
         
         return None
 
@@ -273,132 +276,63 @@ class LansstyrelsenCollector(BaseDataCollector):
         return None
 
     async def fetch_data(self, lan: Union[str, List[str]], from_date: str = None, to_date: str = None, page: int = 1) -> Dict[str, Any]:
-        """
-        Fetch data for a specific län
-        Args:
-            lan: The län to fetch data for
-            from_date: Optional start date filter
-            to_date: Optional end date filter
-            page: The page number to fetch (1-based)
-        """
         try:
-            # Handle lan parameter being a list
-            if isinstance(lan, list):
-                lan = lan[0] if lan else None
-                
-            if lan not in self.lan_queries:
-                logger.error(f"Unknown län name: {lan}")
-                return {
-                    "source": self.source_name,
-                    "pagination": {
-                        "current_page": page,
-                        "total_pages": 0,
-                        "total_items": 0,
-                        "items_per_page": 50,
-                        "has_next": False,
-                        "has_previous": page > 1
-                    },
-                    "projects": []
-                }
+            # Get the län query
+            lan_query = self.lan_queries.get(lan)
+            if not lan_query:
+                logger.error(f"Unknown län: {lan}")
+                return []
             
-            url = f"{self.base_url}/Case/CaseSearchResult.aspx?query={self.lan_queries[lan]}"
-            current_page = 1
-            html_content = None
+            # Build the search URL with the serialized query
+            url = f"{self.base_url}/Case/CaseSearchResult.aspx?query={lan_query}"
             
+            # Get initial form data
             async with aiohttp.ClientSession() as session:
-                # Get the initial page
                 async with session.get(url, headers=self.headers) as response:
                     if response.status != 200:
-                        logger.error(f"Failed to fetch initial page: {response.status}")
+                        logger.error(f"Failed to get form data: {response.status}")
                         return []
                     
-                    html_content = await response.text()
-                
-                # If we need a page other than the first one, navigate to it
-                while current_page < page:
-                    next_page_data = await self._get_next_page_data(html_content)
-                    if not next_page_data:
-                        logger.info(f"No more pages found after page {current_page}")
-                        return {
-                            "source": self.source_name,
-                            "pagination": {
-                                "current_page": current_page,
-                                "total_pages": current_page,
-                                "total_items": current_page * 50,
-                                "items_per_page": 50,
-                                "has_next": False,
-                                "has_previous": current_page > 1
-                            },
-                            "projects": []
-                        }
+                    html = await response.text()
                     
-                    # Add delay between requests
-                    await asyncio.sleep(random.uniform(1, 2))
+                    # Parse results
+                    results = self._parse_cases(html, lan)
                     
-                    # Make the POST request for the next page
-                    async with session.post(url, data=next_page_data, headers=self.headers) as post_response:
-                        if post_response.status != 200:
-                            logger.error(f"Failed to fetch page {current_page + 1}")
-                            break
-                        
-                        html_content = await post_response.text()
-                        current_page += 1
-                
-                # Parse the current page results
-                results = await self._parse_search_results(html_content)
-                logger.info(f"Found {len(results)} results on page {current_page}")
-                
-                # Check if there's a next page
-                has_next = await self._get_next_page_data(html_content) is not None
-                
-                # Format results according to spec
-                formatted_results = []
-                for result in results:
-                    formatted_results.append({
-                        'id': result['id'],
-                        'case_id': result.get('case_id'),
-                        'title': result['title'],
-                        'date': result['date'].strftime('%Y-%m-%d') if result['date'] else None,
-                        'location': result['location'],
-                        'municipality': result['municipality'],
-                        'status': result['status'],
-                        'url': result['url'],
-                        'lan': lan,
-                        'sender': result.get('sender'),
-                        'decision_date': result['decision_date'].strftime('%Y-%m-%d') if result.get('decision_date') else None,
-                        'last_updated_from_source': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                        'details_fetched': False,
-                        'details_fetch_attempts': 0
-                    })
-                
-                # Return in the expected format with proper pagination
-                return {
-                    "source": self.source_name,
-                    "pagination": {
-                        "current_page": page,
-                        "total_pages": page if not has_next else page + 1,  # Minimum known pages
-                        "total_items": page * 50,  # Minimum known items
-                        "items_per_page": 50,
-                        "has_next": has_next,
-                        "has_previous": page > 1
-                    },
-                    "projects": formatted_results
-                }
-            
+                    # Format results
+                    formatted_results = []
+                    for result in results:
+                        formatted_results.append({
+                            'id': result['id'],
+                            'case_id': result.get('case_id'),
+                            'title': result['title'],
+                            'date': result['date'].strftime('%Y-%m-%d') if result['date'] else None,
+                            'location': result['location'],
+                            'municipality': result['municipality'],
+                            'status': result['status'],
+                            'url': result['url'],
+                            'lan': lan,
+                            'sender': result.get('sender'),
+                            'decision_date': result['decision_date'].strftime('%Y-%m-%d') if result.get('decision_date') else None,
+                            'last_updated_from_source': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                            'details_fetched': False,
+                            'details_fetch_attempts': 0
+                        })
+                    
+                    return {
+                        "source": self.source_name,
+                        "pagination": {
+                            "current_page": 1,
+                            "total_pages": 1,
+                            "total_items": len(formatted_results),
+                            "items_per_page": 50,
+                            "has_next": False,
+                            "has_previous": False
+                        },
+                        "projects": formatted_results
+                    }
         except Exception as e:
-            logger.error(f"Error fetching data for {lan}: {str(e)}")
-            return {
-                "source": self.source_name,
-                "pagination": {
-                    "current_page": page,
-                    "total_pages": 0,
-                    "total_items": 0,
-                    "items_per_page": 50,
-                    "has_next": False,
-                    "has_previous": page > 1
-                },
-                "projects": []
-            }
+            logger.error(f"Error fetching {lan}: {str(e)}")
+            raise
 
     async def _parse_search_results(self, html: str) -> List[Dict[str, Any]]:
         """Parse search results HTML and extract case information"""
@@ -409,8 +343,26 @@ class LansstyrelsenCollector(BaseDataCollector):
             # Find the results table
             table = soup.find('table', {'id': 'SearchPlaceHolder_caseGridView'})
             if not table:
+                logger.warning("No results table found with ID 'SearchPlaceHolder_caseGridView'")
+                # Try alternative table IDs
+                table = soup.find('table', {'id': 'ctl00_SearchPlaceHolder_caseGridView'})
+                if not table:
+                    logger.warning("No results table found with ID 'ctl00_SearchPlaceHolder_caseGridView'")
+                    # Try finding any table with the expected structure
+                    tables = soup.find_all('table')
+                    logger.debug(f"Found {len(tables)} tables in HTML")
+                    for t in tables:
+                        logger.debug(f"Table attributes: {t.attrs}")
+                        if t.find('tr'):  # Check if table has rows
+                            headers = t.find_all('th')
+                            if headers and len(headers) >= 8:  # We expect at least 8 columns
+                                table = t
+                                logger.info("Found table by structure")
+                                break
+            
+            if not table:
                 logger.warning("No results table found in HTML")
-                logger.debug(f"HTML snippet: {html[:500]}...")
+                logger.debug(f"HTML snippet: {html[:1000]}")
                 return []
             
             # Find all rows except header and pagination
@@ -421,12 +373,14 @@ class LansstyrelsenCollector(BaseDataCollector):
                 if not row.find('th') and not row.find('td', attrs={'colspan': True}):
                     data_rows.append(row)
             
+            logger.debug(f"Found {len(data_rows)} data rows")
+            
             for row in data_rows:
                 try:
                     cells = row.find_all('td')
                     if len(cells) >= 8:  # We expect 8 columns based on the HTML
                         # Extract case ID and URL from first cell
-                        case_link = cells[0].find('a', class_='sv-font-brodtext-med-bla-lankning')
+                        case_link = cells[0].find('a')
                         if not case_link:
                             logger.debug("No case link found in first cell")
                             continue
@@ -482,3 +436,241 @@ class LansstyrelsenCollector(BaseDataCollector):
         except Exception as e:
             logger.error(f"Error parsing search results: {str(e)}")
             return []
+
+    async def fetch_cases(self, lan: str) -> Dict[str, Any]:
+        """Fetch cases from Länsstyrelsen for a specific län."""
+        try:
+            logger.info(f"Starting fetch for {lan}")
+            # Get initial form data
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.base_url, headers=self.headers) as response:
+                    if response.status != 200:
+                        logger.error(f"Failed to get initial form data (status {response.status})")
+                        return {"source": self.source_name, "pagination": None, "projects": []}
+                    html = await response.text()
+
+            # Get the län query
+            lan_query = self.lan_queries.get(lan)
+            if not lan_query:
+                logger.error(f"Unknown län: {lan}")
+                return {"source": self.source_name, "pagination": None, "projects": []}
+            
+            # Build the search URL with the serialized query
+            url = f"{self.base_url}/Case/CaseSearchResult.aspx?query={lan_query}"
+            logger.debug(f"Using search URL: {url}")
+            
+            # Send search request
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=self.headers) as response:
+                    if response.status != 200:
+                        logger.error(f"Failed to search cases (status {response.status})")
+                        return {"source": self.source_name, "pagination": None, "projects": []}
+                    html = await response.text()
+
+            # Parse cases
+            cases = self._parse_cases(html, lan)
+            logger.debug(f"Found {len(cases)} cases for {lan}")
+            
+            # Get pagination info
+            soup = BeautifulSoup(html, 'html.parser')
+            pagination_info = soup.find('span', {'id': 'SearchPlaceHolder_lblCaseCount'})
+            total_items = 0
+            if pagination_info:
+                match = re.search(r'av\s+(\d+)', pagination_info.text)
+                if match:
+                    total_items = int(match.group(1))
+                    logger.debug(f"Total items for {lan}: {total_items}")
+
+            total_pages = (total_items + 49) // 50  # Round up division by 50
+            logger.debug(f"Pagination info for {lan}: total_items={total_items}, total_pages={total_pages}")
+
+            return {
+                "source": self.source_name,
+                "pagination": {
+                    "current_page": 1,
+                    "total_pages": total_pages,
+                    "total_items": total_items,
+                    "items_per_page": 50,
+                    "has_next": total_items > 50,
+                    "has_previous": False
+                },
+                "projects": cases
+            }
+
+        except Exception as e:
+            logger.error(f"Error fetching cases for {lan}: {str(e)}")
+            return {"source": self.source_name, "pagination": None, "projects": []}
+
+    def _get_form_data(self, html: str) -> Dict[str, str]:
+        """Extract form data needed for pagination."""
+        soup = BeautifulSoup(html, 'html.parser')
+        form_data = {}
+        
+        # Get the ASP.NET form fields
+        for field in ['__VIEWSTATE', '__VIEWSTATEGENERATOR', '__EVENTVALIDATION', '__EVENTTARGET', '__EVENTARGUMENT']:
+            element = soup.find('input', {'name': field})
+            if element:
+                form_data[field] = element.get('value', '')
+        
+        # Add default form fields
+        form_data.update({
+            'ctl00$SearchPlaceHolder$tbFromDate': '',
+            'ctl00$SearchPlaceHolder$tbToDate': '',
+            'ctl00$SearchPlaceHolder$tbCaseNumber': '',
+            'ctl00$SearchPlaceHolder$tbCaseTitle': '',
+            'ctl00$SearchPlaceHolder$tbSender': '',
+            'ctl00$SearchPlaceHolder$tbLocation': '',
+            'ctl00$SearchPlaceHolder$ddlMunicipality': '',
+            'ctl00$SearchPlaceHolder$ddlStatus': '',
+            'ctl00$SearchPlaceHolder$ddlCaseType': '',
+            'ctl00$SearchPlaceHolder$ddlCaseSubType': '',
+            'ctl00$SearchPlaceHolder$ddlLaw': '',
+            'ctl00$SearchPlaceHolder$ddlLawChapter': '',
+            'ctl00$SearchPlaceHolder$ddlLawParagraph': '',
+            'ctl00$SearchPlaceHolder$ddlDecisionType': '',
+            'ctl00$SearchPlaceHolder$ddlDecisionMaker': '',
+            'ctl00$SearchPlaceHolder$ddlHandler': '',
+            'ctl00$SearchPlaceHolder$ddlUnit': '',
+            'ctl00$SearchPlaceHolder$ddlDepartment': '',
+            'ctl00$SearchPlaceHolder$ddlGroup': '',
+            'ctl00$SearchPlaceHolder$ddlSortOrder': 'RegistrationDateDesc'
+        })
+        
+        return form_data
+
+    def _parse_cases(self, html_content: str, lan: str) -> List[Dict[str, Any]]:
+        """Parse cases from the HTML content."""
+        soup = BeautifulSoup(html_content, 'html.parser')
+        
+        # Find the table with the cases
+        table = soup.find('table', {'id': 'SearchPlaceHolder_caseGridView'})
+        if not table:
+            logger.warning(f"No case table found for {lan}")
+            return []
+            
+        cases = []
+        rows = table.find_all('tr')[1:]  # Skip header row
+        
+        for row in rows:
+            try:
+                cells = row.find_all('td')
+                if len(cells) < 8:  # We expect at least 8 cells
+                    continue
+                    
+                # Extract case ID and URL from the first cell's link
+                case_link = cells[0].find('a')
+                if not case_link:
+                    continue
+                    
+                case_number = case_link.text.strip()
+                href = case_link.get('href', '')
+                case_url = f"{self.base_url}/Case/{href}" if href else None
+                
+                # Extract case_id from URL if available
+                case_id_match = re.search(r'caseID=(\d+)', case_url) if case_url else None
+                case_id = case_id_match.group(1) if case_id_match else case_number
+                logger.debug(f"Extracted case_id {case_id} from URL {case_url}")
+                
+                # Extract other fields
+                status = cells[1].text.strip()
+                date_str = cells[2].text.strip()
+                title = cells[3].text.strip()
+                sender = cells[4].text.strip()
+                city = cells[5].text.strip()
+                municipality = cells[6].text.strip()
+                
+                # Parse date with better error handling
+                date = None
+                try:
+                    if date_str and not date_str.isdigit():  # Skip if it's just a number
+                        date = datetime.strptime(date_str, '%Y-%m-%d')
+                except ValueError:
+                    logger.warning(f"Invalid date format: {date_str}")
+                    continue  # Skip cases without valid dates
+                
+                # Skip cases without required fields
+                if not case_id or not title or not date:
+                    logger.warning(f"Skipping case due to missing required fields: id={case_id}, title={title}, date={date}")
+                    continue
+                
+                # Create case object
+                case = {
+                    'id': case_id,
+                    'case_id': case_number,  # Store original case number
+                    'title': title,
+                    'date': date,
+                    'location': city,
+                    'municipality': municipality or lan,
+                    'status': status,
+                    'url': case_url,
+                    'lan': lan,
+                    'sender': sender
+                }
+                cases.append(case)
+                logger.debug(f"Successfully parsed case: {case_id} ({title})")
+                
+            except Exception as e:
+                logger.debug(f"Error parsing case row: {str(e)}")
+                continue
+        
+        logger.info(f"Successfully parsed {len(cases)} cases for {lan}")
+        return cases
+
+    def _has_next_page(self, html: str) -> bool:
+        """Check if there is a next page in the results."""
+        soup = BeautifulSoup(html, 'html.parser')
+        
+        # Find the pagination info
+        pagination_info = soup.find('span', {'id': 'ctl00_SearchPlaceHolder_lblCaseCount'})
+        if not pagination_info:
+            return False
+        
+        # Parse the pagination text (e.g., "1-50 av 34775")
+        pagination_text = pagination_info.text.strip()
+        match = re.search(r'(\d+)-(\d+)\s+av\s+(\d+)', pagination_text)
+        if not match:
+            return False
+        
+        start, end, total = map(int, match.groups())
+        return end < total
+
+    async def _fetch_case_details(self, session: aiohttp.ClientSession, url: str) -> Dict[str, Any]:
+        """Fetch additional details for a case."""
+        try:
+            async with session.get(url) as response:
+                response.raise_for_status()
+                html = await response.text()
+                return self._parse_case_details(html)
+        
+        except Exception as e:
+            logger.error(f"Error fetching case details from {url}: {str(e)}")
+            return {}
+
+    def _parse_case_details(self, html: str) -> Dict[str, Any]:
+        """Parse the case details page."""
+        soup = BeautifulSoup(html, 'html.parser')
+        details = {}
+        
+        try:
+            # Find the details table
+            table = soup.find('table', {'id': 'SearchPlaceHolder_caseDetailsView'})
+            if table:
+                for row in table.find_all('tr'):
+                    cells = row.find_all('td')
+                    if len(cells) == 2:
+                        key = cells[0].text.strip().lower()
+                        value = cells[1].text.strip()
+                        if key == 'status':
+                            details['status'] = value
+                        elif key == 'kommun':
+                            details['municipality'] = value
+                        elif key == 'beslutsdatum':
+                            details['decision_date'] = parse_date(value)
+                        elif key == 'beskrivning':
+                            details['description'] = value
+            
+            return details
+        
+        except Exception as e:
+            logger.error(f"Error parsing case details: {str(e)}")
+            return {}

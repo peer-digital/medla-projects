@@ -209,7 +209,7 @@ class LansstyrelsenCollector:
             # Reset session before request
             self._reset_session()
             
-            # Get the case URL
+            # Get the case URL with correct path
             case_url = f"{self.base_url}/Case/CaseInfo.aspx?caseID={case_id}"
             
             # Set up headers for request
